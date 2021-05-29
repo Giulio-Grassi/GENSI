@@ -1,24 +1,17 @@
-import logo from './logo.svg';
 import './App.css';
+import GensiForm from './components/gensiForm'
+import { Grommet, Box, Button, Grid, Text } from 'grommet';
+import { grommet } from 'grommet/themes';
+import ResponsiveHeader from './components/responsiveHeader'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Grommet full theme={grommet}>
+      <Box fill="vertical"> 
+        <ResponsiveHeader/>
+        <GensiForm></GensiForm>
+      </Box>
+    </Grommet>
   );
 }
 
