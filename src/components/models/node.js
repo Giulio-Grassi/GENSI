@@ -5,21 +5,21 @@ export class Node {
     this.fy = fy
   }
 
-  setX(fx){
+  setX = (fx) => {
     this.fx = fx
   }
-  setY(fy){
+  setY = (fy) => {
     this.fy = fy
   }
 
-  getX(){
+  getX = () => {
     return this.fx
   }
-  getY(){
+  getY = () => {
     return this.fy
   }
 
-  getName(){
+  getName = () => {
     return this.name
   }
 }

@@ -4,7 +4,7 @@ export class Question {
     this.text = text;
   }
 
-  getText(){
+  getText = () => {
     return this.text
   }
 }
