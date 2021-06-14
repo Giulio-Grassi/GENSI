@@ -10,18 +10,25 @@ import NodeCreationFunction from './nodeCreationFunction'
 import NodeRow from './nodeRow';
 import MCQ from './mcq'
 import ButtonFooter from './buttonFooter'
-import { Box } from 'grommet';  
+import { Box } from 'grommet';
+import { Node } from './models/node';
+import { Table } from './models/table';  
+import { Question } from './models/question';  
+
 
 export default function GensiForm() {
-    const [step, setStep] = React.useState(1)
+  const [step, setStep] = React.useState(1)
 
-//   const [nodes[], setNodes] = React.useState('');
-const [nodes, setNodes] = React.useState([{"id": "You", "fx" : 0, "fy" : 0}]); //fx and fy are attributes used by d3 to fix a node in positon
-const [links, setLinks] = React.useState([]);
-const [rowNodes, setRowNodes] = React.useState([]);
+  //   const [nodes[], setNodes] = React.useState('');
+  const [nodes, setNodes] = React.useState([new Node("You", 0, 0)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
+  const [questions, setQuestion] = React.useState([new Question(1, "WHO YOU LIKE THE MOST?")]); //React state containing the array of questions
+  const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
+  const [links, setLinks] = React.useState([]); //D3 links between the visual nodes.
+
+
   // Proceed to next step
   function nextStep(){
-      setStep(step + 1);
+    setStep(step + 1);
   };
 
   // Go back to prev step
@@ -32,7 +39,7 @@ const [rowNodes, setRowNodes] = React.useState([]);
   function createNode(nodeName) { //IMPORTANT AS ALL THE USESTATES NEED TO BE INITIALISED 
      setNodes(
         [...nodes,
-        {"id": nodeName}]
+        new Node(nodeName, 0, 0)]
         );
     const latestNodeIndex = nodes.length;  //MIGHT BE NOT SAFE DEPENDING ON THE UPDATE CYCLE. "-1" MAKES  IT DELAYED
     setLinks(
@@ -40,14 +47,16 @@ const [rowNodes, setRowNodes] = React.useState([]);
         {"source": 0, "target": latestNodeIndex}]
         ); //0 is the hardcoded value for "You"
 
-        console.log(nodes)
-        console.log(links)
+        console.log("NODES",nodes)
+        console.log("LINKS",links)
+  }
 
-    setRowNodes( [...rowNodes,
-      {"id": nodeName, "selected": false}]
-      );
-    
-
+  function populateTable(){
+    for(var i = 1; i<=questions.length; i++){
+      for(var k = 1; k<=nodes.length; k++){
+        table.insertRelation(i, k, false)
+      }
+    }
   }
 
   function renderPageBaseOnStep(){
@@ -71,8 +80,7 @@ const [rowNodes, setRowNodes] = React.useState([]);
               onNodeCreation={createNode}
             />
             <ButtonFooter
-            onNext = {nextStep}
-
+            onNext = {populateTable(),nextStep}
             /> 
             </Box>
             );
@@ -80,9 +88,10 @@ const [rowNodes, setRowNodes] = React.useState([]);
           return (
             <Box id="case 3 box" fill= "vertical">
             <NodeRow
-            nodes={rowNodes}
+            nodes={nodes}
+            questions={questions}
+            table={table}
             filterYou={true}
-            setNodes={setRowNodes}
             />
             <ButtonFooter
             onNext = {nextStep}
