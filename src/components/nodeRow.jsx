@@ -51,6 +51,8 @@ export default function NodeRow({
         console.log("width", dimensions.width)
         
         const svg = select(svgRef.current);
+        svg.selectAll("*").remove(); //Clear canvas so no duplicates are trailed every refresh
+
 
             // centering workaround
     svg.attr("viewBox", [
