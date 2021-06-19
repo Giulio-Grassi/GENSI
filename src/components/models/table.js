@@ -4,9 +4,18 @@ export class Table {
   }
 
   insertRelation = (questionId, nodeName, status) => {
-    if(!this.matrix.filter(x => x[0] === questionId && x[1] === nodeName)){
-      this.matrix.push([questionId, nodeName, status])
-    }
+    this.matrix.push([questionId, nodeName, status])
+  }
+
+  updateRelation = (questionId, nodeName, status) => {
+    this.matrix.map(x => {
+      if(x[0] === questionId && x[1] === nodeName){
+        return [questionId, nodeName, status]
+      }
+      else{
+        return x
+      }
+    })
   }
 
   deleteRelation = (questionId, nodeName) => {
@@ -15,5 +24,9 @@ export class Table {
 
   getAnswers = (questionId) => {
     return this.matrix.filter(x => x[0] === questionId)
+  }
+
+  getAll = () => {
+    return this.matrix
   }
 }
