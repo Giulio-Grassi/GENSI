@@ -14,16 +14,16 @@ import { Box } from 'grommet';
 import { Node } from './models/node';
 import { Table } from './models/table';  
 import { Question } from './models/question';  
+import { Text } from "grommet";
 
 
 export default function GensiForm() {
   const [step, setStep] = React.useState(1)
 
   //   const [nodes[], setNodes] = React.useState('');
-  const [nodes, setNodes] = React.useState([new Node("You", 0, 0)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
-  const [questions, setQuestion] = React.useState([new Question(1, "WHO YOU LIKE THE MOST?")]); //React state containing the array of questions
+  const [nodes, setNodes] = React.useState([new Node("You", 0, 0, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
+  const [questions, setQuestion] = React.useState([new Question(0, "WHO YOU LIKE THE MOST?"), new Question(1, "WHO IS THE FUNNIEST?")]); //React state containing the array of questions
   const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
-  const [links, setLinks] = React.useState([]); //D3 links between the visual nodes.
 
 
   // Proceed to next step
@@ -41,22 +41,15 @@ export default function GensiForm() {
         [...nodes,
         new Node(nodeName, 0, 0)]
         );
-    const latestNodeIndex = nodes.length;  //MIGHT BE NOT SAFE DEPENDING ON THE UPDATE CYCLE. "-1" MAKES  IT DELAYED
-    setLinks(
-        [...links,
-        {"source": 0, "target": latestNodeIndex}]
-        ); //0 is the hardcoded value for "You"
-
-        console.log("NODES",nodes)
-        console.log("LINKS",links)
   }
 
   function populateTable(){
-    for(var i = 1; i<=questions.length; i++){
-      for(var k = 1; k<=nodes.length; k++){
+    for(var i = 0; i < questions.length; i++){
+      for(var k = 0; k < nodes.length; k++){
         table.insertRelation(i, k, false)
       }
     }
+    console.log("populateTable", table.getAll())
   }
 
   function renderPageBaseOnStep(){
@@ -76,17 +69,20 @@ export default function GensiForm() {
             <Box  id="case 2 box" fill= "vertical">
             <NodeCreationFunction
               nodes={nodes}
-              links={links}
               onNodeCreation={createNode}
             />
             <ButtonFooter
-            onNext = {populateTable(),nextStep}
+            onNext = {() => {
+              populateTable();
+              nextStep();
+            }}
             /> 
             </Box>
             );
-        case 3: 
+        case 3:
           return (
             <Box id="case 3 box" fill= "vertical">
+              <Text>Dioacnae</Text>
             <NodeRow
             nodes={nodes}
             questions={questions}
@@ -94,12 +90,11 @@ export default function GensiForm() {
             filterYou={true}
             />
             <ButtonFooter
-            onNext = {nextStep}
+            onNext = {() => nextStep()}
             /> 
             </Box>
 
           );
-        
          case 4:
            return(
             <Box id="case 4 box" fill= "vertical">
