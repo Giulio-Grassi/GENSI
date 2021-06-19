@@ -18,7 +18,7 @@ export default function GensiForm() {
 //   const [nodes[], setNodes] = React.useState('');
 const [nodes, setNodes] = React.useState([{"id": "You", "fx" : 0, "fy" : 0}]); //fx and fy are attributes used by d3 to fix a node in positon
 const [links, setLinks] = React.useState([]);
-const [rowNodes, setRowNodes] = React.useState([]);
+const [rowNodes, setRowNodes] = React.useState(new Set());
   // Proceed to next step
   function nextStep(){
       setStep(step + 1);
@@ -42,12 +42,7 @@ const [rowNodes, setRowNodes] = React.useState([]);
 
         console.log(nodes)
         console.log(links)
-
-    setRowNodes( [...rowNodes,
-      {"id": nodeName, "selected": false}]
-      );
-    
-
+  
   }
 
   function renderPageBaseOnStep(){
@@ -80,9 +75,10 @@ const [rowNodes, setRowNodes] = React.useState([]);
           return (
             <Box id="case 3 box" fill= "vertical">
             <NodeRow
-            nodes={rowNodes}
+            initialNodes={nodes}
             filterYou={true}
-            setNodes={setRowNodes}
+            setSelectedIds={setRowNodes}
+            selectedIds={rowNodes}
             />
             <ButtonFooter
             onNext = {nextStep}

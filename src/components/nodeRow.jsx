@@ -11,14 +11,15 @@ import { forceLink } from 'd3-force';
 
 
 export default function NodeRow({
-    setNodes,//callback that gets triggered when we click on a node or filter YOU 
-     nodes,
+     initialNodes,
      selectedIds,
-    filterYou
+     setSelectedIds,
+    filterYou = false
     }) {
     const CIRCLE_RADIUS = 30;
-    const [nodeName, setNodeName] = React.useState('');
-    const [didFilter, setDidFilter] = React.useState(false);
+    const [nodes, setNodes] = React.useState([]);
+    const [didInitialise, setDidInitialise] = React.useState(false);
+    const [didFilter, setDidFilter] = React.useState(false)
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
@@ -28,16 +29,23 @@ export default function NodeRow({
     useEffect(() => {
       if (!dimensions) return;
 
-      // console.log("prefilter nodes ", nodes)
-      // if(filterYou && !didFilter){
-      //   //const filteredNodes = nodes.filter(e => e.id !=  "You") //removing you as we do not need it for this screen, TODO make it a var
+      console.log("prefilter nodes ", nodes)
+
+      if(!didInitialise){
+        setDidInitialise(true);
+        setNodes(initialNodes);
+      
+      if(filterYou && !didFilter){
+        //const filteredNodes = nodes.filter(e => e.id !=  "You") //removing you as we do not need it for this screen, TODO make it a var
        
-      //  setNodes(nodes.filter(e => e.id !=  "You"))
-      //  setDidFilter(true)
-      //  console.log("FILTERED")
+       setNodes(initialNodes.filter(e => e.id !=  "You"))
+       setDidFilter(true)
+       console.log("FILTERED")
        
-      // }
+      }
+    }
       console.log("postfilter nodes ", nodes)
+      console.log ("initial nodes", initialNodes )
 
 
         const manualPadding = 100
@@ -87,9 +95,10 @@ export default function NodeRow({
 
         console.log("clicked")
         // nodes[this.index].selected = true
-        setNodes(
-          nodes[i.index].selected = true  //THIS IS FAULTY 
-        )
+        setSelectedIds( oldId => new Set(...oldId, nodes[i.index]))
+          //nodes[i.index].selected = true  //THIS IS FAULTY 
+          //oldId => new Set(...oldId, nodes[i.index]))
+        
         console.log("clicked nodes", nodes)
         console.log("indexed node", nodes[i.index])
         console.log(d);
@@ -133,7 +142,7 @@ export default function NodeRow({
 
         //console.log("simulation nodes ", nodes)
       });
-      }, [nodes, dimensions]); //TODO check if this nodes param here is right and what it does...
+      }, [nodes, dimensions, selectedIds]); //TODO check if this nodes param here is right and what it does...
 
         return( 
                 <Box fill={true} ref={wrapperRef}  pad="small" height="xxlarge">
