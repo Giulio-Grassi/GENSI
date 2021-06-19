@@ -1,3 +1,4 @@
+//Table tuples are [questionId, nodeName, status]
 export class Table {
   constructor() {
     this.matrix = [];
@@ -18,8 +19,24 @@ export class Table {
     })
   }
 
+  toggleRelation = (questionId, nodeName) => {
+    this.matrix = this.matrix.map(x => {
+      if(x[0] === questionId && x[1] === nodeName){
+        return [questionId, nodeName, !x[2]]
+      }
+      else{
+        return x
+      }
+    })
+    return this
+  }
+
   deleteRelation = (questionId, nodeName) => {
     this.matrix = this.matrix.filter(x => x[0] !== questionId || x[1] !== nodeName)
+  }
+
+  getRelation = (questionId, nodeName) => {
+    return this.matrix.filter(x => x[0] === questionId && x[1] === nodeName)
   }
 
   getAnswers = (questionId) => {

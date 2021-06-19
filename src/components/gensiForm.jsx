@@ -14,7 +14,8 @@ import { Box } from 'grommet';
 import { Node } from './models/node';
 import { Table } from './models/table';  
 import { Question } from './models/question';  
-import { Text } from "grommet";
+import { Text, Button } from "grommet";
+import QuestionStrategy from './questionStrategy';
 
 
 export default function GensiForm() {
@@ -46,7 +47,7 @@ export default function GensiForm() {
   function populateTable(){
     for(var i = 0; i < questions.length; i++){
       for(var k = 0; k < nodes.length; k++){
-        table.insertRelation(i, k, false)
+        table.insertRelation(questions[i].getId(), nodes[k].getName(), false)
       }
     }
     console.log("populateTable", table.getAll())
@@ -80,20 +81,30 @@ export default function GensiForm() {
             </Box>
             );
         case 3:
-          return (
+          /*return (
             <Box id="case 3 box" fill= "vertical">
               <Text>Dioacnae</Text>
             <NodeRow
             nodes={nodes}
             questions={questions}
             table={table}
+            setTable={setTable}
             filterYou={true}
             />
             <ButtonFooter
-            onNext = {() => nextStep()}
+            onNext = {nextStep()}
             /> 
             </Box>
 
+          );*/
+          return (
+              <QuestionStrategy
+              nodes={nodes}
+              questions={questions}
+              table={table}
+              setTable={setTable}
+              superNext={() => nextStep()}
+              />
           );
          case 4:
            return(

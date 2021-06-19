@@ -12,8 +12,10 @@ import { forceLink } from 'd3-force';
 
 export default function NodeRow({
      nodes,
-     questions,
+     question,
      table,
+     setTable,
+     currentQuestion,
       filterYou
     }) {
     const CIRCLE_RADIUS = 30;
@@ -24,10 +26,19 @@ export default function NodeRow({
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
     const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map(x => {
       return {
-        "id": x.getName(),
-        "selected": false
+        id: x.getName(),
+        selected: false
       }
     }))
+
+    useEffect(() => {
+      setNodesRepresentation(nodesRepresentation.map(x => {
+        x.selected = table.getRelation(question, x.id)[0][2]
+        return x
+      }))
+    }, [currentQuestion])
+
+    
 
 
       // will be called initially and on every data change
@@ -108,6 +119,9 @@ export default function NodeRow({
             }
           })
         )
+        console.log("QUESTION: "+question+" NAME:"+name)
+        setTable(table.toggleRelation(question, name))
+        console.log("Updated table", table.getAll())
         console.log("clicked nodesRepresentation", nodesRepresentation)
         console.log("indexed node", nodesRepresentation[i.index])
         console.log(d);
@@ -153,7 +167,7 @@ export default function NodeRow({
       });
       }, [nodesRepresentation, dimensions]); //TODO check if this nodes param here is right and what it does...
 
-        return( 
+        return(
                 <Box fill={true} ref={wrapperRef}  pad="small" height="xxlarge">
                     <svg ref={svgRef}></svg>
                 </Box>
