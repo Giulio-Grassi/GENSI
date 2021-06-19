@@ -10,16 +10,61 @@ import { forceLink } from 'd3-force';
 
 export default function NodeCreationPage({
     nodes,
-    links,
     onNodeCreation,//callback that gets triggered when the button confirm name button is pressed and a new node should be added
 }) {
 
     const [nodeName, setNodeName] = React.useState('');
+    const [links, setLinks] = React.useState([])
+    const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map((x) => {
+        if(x.getIsFixed()){
+            return {
+                "id": x.getName(),
+                "fx": x.getX(),
+                "fy": x.getY()
+            }
+        }
+        else{
+            return {
+                "id": x.getName()
+            }
+        }
+    }))
 
+    function updateRepresentation(){
+        setNodesRepresentation(nodes.map((x) => {
+            if(x.getIsFixed()){
+                return {
+                    "id": x.getName(),
+                    "fx": x.getX(),
+                    "fy": x.getY()
+                }
+            }
+            else{
+                return {
+                    "id": x.getName()
+                }
+            }
+        }))
+        
+        /*setLinks(
+            [...links,
+            {"source": 0, "target": nodes.length-1}]
+            ); //0 is the hardcoded value for "You"*/
+
+        console.log("nodesRepresentation", nodesRepresentation)
+        console.log("links", links)
+    }
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
 
+    useEffect(() => {
+        updateRepresentation()
+        setLinks(
+            [...links,
+            {"source": 0, "target": nodes.length-1}]
+            );
+    }, [nodes])
 
       // will be called initially and on every data change
     useEffect(() => {
@@ -49,7 +94,7 @@ export default function NodeCreationPage({
 
   const node = svg
       .selectAll(".node")
-      .data(nodes)
+      .data(nodesRepresentation)
       .join("g")
       .attr('class', 'node')
 
@@ -66,9 +111,10 @@ export default function NodeCreationPage({
       .style('fill', '#000')
       .style('font-size', '20px')
       
-
-      const simulation = forceSimulation(nodes)
-      .force("charge", forceManyBody().strength(-10))
+      console.log("nodesRepresentation", nodesRepresentation)
+      console.log("simulation", forceSimulation(nodesRepresentation))
+      const simulation = forceSimulation(nodesRepresentation)
+      .force("charge", forceManyBody().strength(-40))
       .force("collide", forceCollide(80))
       // .force("center", forceCenter())
       .force("link", forceLink(links))
@@ -84,11 +130,16 @@ export default function NodeCreationPage({
         .attr("transform", d => `translate(${d.x}, ${d.y})`);
   });
 
-      }, [nodes, links, dimensions]); //TODO check if this nodes param here is right and what it does...
+      }, [nodesRepresentation, links, dimensions]); //TODO check if this nodes param here is right and what it does...
 
 
     function createNode() {
         onNodeCreation(nodeName);
+        /*updateRepresentation()
+        setLinks(
+            [...links,
+            {"source": 0, "target": nodes.length-1}]
+            );*/
         setNodeName('');
     }
 
