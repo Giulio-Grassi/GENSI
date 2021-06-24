@@ -8,6 +8,7 @@ import React, { Component } from 'react';
 import ParagraphPage from './paragraphPage'
 import NodeCreationFunction from './nodeCreationFunction'
 import NodeRow from './nodeRow';
+import LineBox from './dragDrop/lineBox';
 import MCQ from './mcq'
 import ButtonFooter from './buttonFooter'
 import { Box } from 'grommet';
@@ -80,7 +81,19 @@ export default function GensiForm() {
             /> 
             </Box>
             );
-        case 3:
+        case 3: 
+          return (
+          <Box id="case 3 box" fill= "vertical">
+            <LineBox
+              nodes={nodes}
+            />
+            <ButtonFooter
+            onNext = {() => nextStep()}
+            onPrev = {() => prevStep()}
+            /> 
+          </Box>
+          );
+        case 4:
           /*return (
             <Box id="case 3 box" fill= "vertical">
               <Text>Dioacnae</Text>
@@ -106,7 +119,7 @@ export default function GensiForm() {
               superNext={() => nextStep()}
               />
           );
-         case 4:
+         case 5:
            return(
             <Box id="case 4 box" fill= "vertical">
               <MCQ
