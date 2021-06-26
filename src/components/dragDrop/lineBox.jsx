@@ -8,6 +8,7 @@
 import {select, drag, forceSimulation, forceManyBody, forceCollide, forceCenter, tickFormat,} from 'd3'
 import useResizeObserver from '../useResizeObserver'
 import { forceLink } from 'd3-force';
+import { colors } from 'grommet/themes/base';
 
 
 export default function LineBox({
@@ -23,8 +24,11 @@ export default function LineBox({
         selected: false
       }
     }))
+    const [boxToDropIn, setBoxToDropIn] = React.useState("")
 
-
+    useEffect(()=> {
+      console.log("use effect box" + boxToDropIn)
+    },[boxToDropIn])
       // will be called initially and on every data change
     useEffect(() => {
       if (!dimensions) return;
@@ -48,7 +52,7 @@ export default function LineBox({
       .data(nodesRepresentation)
       .join("g")
       .attr('class', 'node')
-      .attr("transform", (d,i) => `translate(${d.x = (-dimensions.width / 2  + manualPadding + nodeOffset/2 + i * nodeOffset)}, ${d.selected ? d.y = 0 : d.y = 100 })`)
+      .attr("transform", (d,i) => `translate(${d.x = (-dimensions.width / 2  + manualPadding + nodeOffset/2 + i * nodeOffset)}, ${d.y = 0 })`)
     //  .on("mouseover", handleMouseOver)
       //.on("mouseout", handleMouseOut)
      // .on("click", handleMouseClick);
@@ -73,42 +77,88 @@ export default function LineBox({
       .style('font-size', '20px');
 
 
+      function boxMouseOver(event, d){
+        select(this).selectChild()
+        .attr("style", "fill:blue");
+        setBoxToDropIn(d.id)
+        console.log("box over")
+        console.log(boxToDropIn)
+        console.log(d.id)
 
+      }
+      function boxMouseOut(Event, d){
+        select(this).selectChild()
+        .attr("style", "fill:lightgrey");
+        setBoxToDropIn("")
+        console.log("box out")
+        console.log(boxToDropIn)
+
+      }
         function dragstarted(event, d) {
-          select(this).raise().attr("stroke", "black");
+          select(this).raise().attr("stroke", "black")
+          .style("pointer-events", "none");
         }
       
         function dragged(event, d) {
           select(this)
-          .attr("transform", () => `translate(${d.x = event.x}, ${d.y = event.y })`);
+          .attr("transform", () => `translate(${d.x = event.x}, ${d.y = event.y })`)
 
         }
       
         function dragended(event, d) {
-          select(this).attr("stroke", null);
+          select(this).attr("stroke", null)
+          //.style("pointer-events", "auto");
+          console.log("dragended")
+          console.log(boxToDropIn)
+          if(boxToDropIn != ""){ //select prob still doesn t work... 
+            // select(boxToDropIn).selectChild()
+            // .style("pointer-events", "none")
+            // .attr("style", "fill:red")
+            // .attr("height", 200);
+            console.log("inside if")
+            const mycolor = boxes.filter(box => {
+              if(box.id == boxToDropIn)return box.nodeColor})
+              console.log("color " + mycolor)
+            select(this)
+            .attr("fill", mycolor)
+
+          }
+
         }
       
 
       
-      function handleMouseClick(d, i){
+      const boxes = [{id: "1", nodeColor: "ffa500"},{id: "22", nodeColor: "ffa500"},{id: "333", nodeColor: "ffa500"}, {id: "4444444", nodeColor: "ffa500"}]
+      const manualPaddingBox = 50 //this is extra for outer pad. total outer pad is manual + inner
+      const maybeInnerPad = 50
+      const boxOffset = (dimensions.width - 2* manualPaddingBox)/ boxes.length
+      const boxWidth = (dimensions.width - 2*manualPaddingBox - maybeInnerPad*(boxes.length-1))/ boxes.length
+      const dropBox = svg
+      .selectAll(".dropBox")
+      .data(boxes, d => d.id)
+      .join("g")  //a che serve sto join
+      .attr('class', 'dropBox')
+      .attr("transform", (d,i) => `translate(${d.x = (-boxWidth/2 -dimensions.width / 2  + manualPaddingBox + boxOffset/2 + i * boxOffset)}, ${d.y = 100 })`)
+      .on("mouseover", boxMouseOver)
+      .on("mouseout", boxMouseOut)
 
-        console.log("clicked")
-        // nodes[this.index].selected = true
-        var name = nodesRepresentation[i.index].id //enforce node name uniqueness to make this bulletproof
-        setNodesRepresentation(
-          nodesRepresentation.map(x => {
-            if(x.id === name){
-              var y = x
-              y.selected = !y.selected
-              return y
-            }
-            else{
-              return x
-            }
-          })
-        )
-      }
-
+      const boxRect = dropBox.append("rect")		// pre-defined shape
+      .attr("style", "fill:lightgrey")	// fill color of shape
+        //.attr("x", x)								// displacement from origin
+        //.attr("y", y)								// displacement from origin
+        .attr("rx", 25)								// how much to round corners - to be transitioned below
+        .attr("ry", 25)								// how much to round corners - to be transitioned below
+        .attr("width", boxWidth)						// size of shape
+        .attr("height", 150);
+        
+      dropBox.append("text")
+        .join("g")
+        .text(d => d.id)
+        .attr("x", boxWidth/2)
+        .attr('text-anchor', 'middle')
+        .attr('alignment-baseline', 'middle')
+        .style('fill', '#000')
+        .style('font-size', '20px');
       
       const simulation = forceSimulation(nodesRepresentation)
 

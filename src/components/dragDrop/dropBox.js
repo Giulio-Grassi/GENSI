@@ -2,8 +2,8 @@
  * an attempt to make a resizable responsive box with header to drop nodes in
  */
 
-export default dropBox = ({svg, text, x,y, height, width, rounding = 5}) => {
-    var rect = svg.append("rect")		// pre-defined shape
+export default dropBox = ({svgElem, text, x,y, height, width, rounding = 5}) => {
+    svgElem.append("rect")		// pre-defined shape
     .attr("style", "fill:darkblue")	// fill color of shape
       .attr("x", x)								// displacement from origin
       .attr("y", y)								// displacement from origin
@@ -12,7 +12,7 @@ export default dropBox = ({svg, text, x,y, height, width, rounding = 5}) => {
       .attr("width", height)						// size of shape
       .attr("height", width);
     	
-      var text = svg.append("text")
+      svgElem.append("text")
       //.join("g")
       .text(text)
       .attr('text-anchor', 'middle')
