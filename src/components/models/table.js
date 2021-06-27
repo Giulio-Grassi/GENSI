@@ -5,7 +5,20 @@ export class Table {
   }
 
   insertRelation = (questionId, nodeName, status) => {
-    this.matrix.push([questionId, nodeName, status])
+    var exists = this.matrix.filter(x => {
+      if(x[0] === questionId && x[1] === nodeName){
+        return true
+      }
+      return false
+    })
+
+    if(exists){
+      return this.updateRelation(questionId, nodeName, status)
+    }
+    else{
+      this.matrix.push([questionId, nodeName, status])
+      return this
+    }
   }
 
   updateRelation = (questionId, nodeName, status) => {
@@ -17,6 +30,8 @@ export class Table {
         return x
       }
     })
+
+    return this
   }
 
   toggleRelation = (questionId, nodeName) => {
@@ -30,7 +45,7 @@ export class Table {
     })
     return this
   }
-
+  
   deleteRelation = (questionId, nodeName) => {
     this.matrix = this.matrix.filter(x => x[0] !== questionId || x[1] !== nodeName)
   }

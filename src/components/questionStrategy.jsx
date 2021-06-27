@@ -15,6 +15,7 @@ import { Node } from './models/node';
 import { Table } from './models/table';  
 import { Question } from './models/question';  
 import { Text } from "grommet";
+import LineBox from './lineBox';
 
 
 export default function QuestionStrategy({
@@ -42,6 +43,44 @@ export default function QuestionStrategy({
     }
   }
 
+  function nextQuestionValidationDragndrop(){
+    let valid = true
+    let i = 0
+    console.log("///////TRYHARD ALL", table.getAll())
+    while(valid && i < nodes.length){
+      console.log(nodes[i])
+      if(!table.getRelation(currentQuestion, nodes[i].getName())){
+        valid = false
+      }
+      i++
+    }
+    
+    if(valid){
+      nextQuestion()
+    }
+    else{
+      alert("You need to put all the nodes in a box before the next step.")
+    }
+  }
+
+  function prevQuestionValidationDragndrop(){
+    let valid = true
+    let i = 0
+    while(valid && i < nodes.length){
+      if(!table.getRelation(currentQuestion, nodes[i].getName())){
+        valid = false
+      }
+      i++
+    }
+    
+    if(valid){
+      prevQuestion()
+    }
+    else{
+      alert("You need to put all the nodes in a box before going back.")
+    }
+  }
+
   function questionComponentSelector(){
     switch (questions[currentQuestion].getType()) {
         case "select":
@@ -62,6 +101,23 @@ export default function QuestionStrategy({
               /> 
             </Box>
           );
+          case "dragndrop":
+            return (
+              <Box id="case 3 box" fill= "vertical">
+                <Text>{questions[currentQuestion].getText()}</Text>
+                <LineBox
+                  nodes={nodes}
+                  question={questions[currentQuestion]}
+                  table={table}
+                  setTable={setTable}
+                  filterYou={false}
+                />
+                <ButtonFooter
+                onNext = {() => nextQuestionValidationDragndrop()}
+                onPrev = {() => prevQuestionValidationDragndrop()}
+                /> 
+              </Box>
+            );
         default:
           (console.log('Question type not valid.', questions[currentQuestion]))
       }

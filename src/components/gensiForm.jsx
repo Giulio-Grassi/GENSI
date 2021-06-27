@@ -24,7 +24,7 @@ export default function GensiForm() {
 
   //   const [nodes[], setNodes] = React.useState('');
   const [nodes, setNodes] = React.useState([new Node("You", 0, 0, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
-  const [questions, setQuestion] = React.useState([new Question(0, "WHO YOU LIKE THE MOST?"), new Question(1, "WHO IS THE FUNNIEST?")]); //React state containing the array of questions
+  const [questions, setQuestion] = React.useState([new Question(0, "WEALTH QUESTION", "dragndrop", [{id: "More wealthy than me", colour: "148,0,211"},{id: "Less wealthy than me", colour: "32,178,170"}] )]); //React state containing the array of questions
   const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
 
 
@@ -81,19 +81,7 @@ export default function GensiForm() {
             /> 
             </Box>
             );
-        case 3: 
-          return (
-          <Box id="case 3 box" fill= "vertical">
-            <LineBox
-              nodes={nodes}
-            />
-            <ButtonFooter
-            onNext = {() => nextStep()}
-            onPrev = {() => prevStep()}
-            /> 
-          </Box>
-          );
-        case 4:
+        case 3:
           /*return (
             <Box id="case 3 box" fill= "vertical">
               <Text>Dioacnae</Text>
@@ -119,7 +107,7 @@ export default function GensiForm() {
               superNext={() => nextStep()}
               />
           );
-         case 5:
+         case 4:
            return(
             <Box id="case 4 box" fill= "vertical">
               <MCQ

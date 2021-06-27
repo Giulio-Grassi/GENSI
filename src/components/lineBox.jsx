@@ -12,7 +12,11 @@ import { colors } from 'grommet/themes/base';
 
 
 export default function LineBox({
-     nodes,
+  nodes,
+  question,
+  table,
+  setTable,
+  filterYou,
     }) {
     const CIRCLE_RADIUS = 30;
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
@@ -84,7 +88,6 @@ export default function LineBox({
         function dragged(event, d) {
           select(this)
           .attr("transform", () => `translate(${d.x = event.x}, ${d.y = event.y })`)
-          
         }
       
       
@@ -98,19 +101,22 @@ export default function LineBox({
          * @param {*} d 
          */
         function dragended(event, d) {
-
           console.log("dragended")
           console.log(boxToDropIn)
           if(boxToDropIn !== ""){
             console.log("inside if")
+            setTable(table.insertRelation(question.id, d.id, boxToDropIn))
           }
           select(this).attr("stroke", null)
-          .style("pointer-events", "auto");
+          .style("pointer-events", "auto")
         }
       
     //TODO NINAD, HERE THE BOXES ARE DECLERED, MAYBE MAKE A MODEL, IDK HOW U WANT TO MAKE  THE STATE OUT OF THESE.
-        const boxes = [{id: "1", nodeColor: "ffa500"},{id: "22", nodeColor: "ffa500"},{id: "333", nodeColor: "ffa500"}, {id: "4444444", nodeColor: "ffa500"}]
-
+        //const boxes = [{id: "1", nodeColor: "ffa500"},{id: "22", nodeColor: "ffa500"},{id: "333", nodeColor: "ffa500"}, {id: "4444444", nodeColor: "ffa500"}]
+        const boxes = []
+        question.getBoxes().forEach(x => {
+          boxes.push({id: x.id, nodeColor: x.colour})
+        })
 
   // ------FUNCTIONS FOR BOXES POSITION  AND SIZE  
       const extraOuterPadding = 50 //this is extra for outer pad. total outer pad is manual + inner
@@ -140,7 +146,7 @@ export default function LineBox({
 
       function boxMouseOver(event, d){
         select(this).selectChild()
-        .attr("style", "fill:blue");
+        .attr("style", "fill:rgba("+d.nodeColor+",1)");
         setBoxToDropIn(d.id)
         console.log("box over")
         console.log(boxToDropIn)
@@ -149,7 +155,7 @@ export default function LineBox({
       }
       function boxMouseOut(Event, d){
         select(this).selectChild()
-        .attr("style", "fill:lightgrey");
+        .attr("style", "fill:rgba("+d.nodeColor+",0.7)");
         setBoxToDropIn("")
         console.log("box out")
         console.log(boxToDropIn)
@@ -216,7 +222,7 @@ function drawBoxes(svg, data, boxWidth){
   // .on("mouseout", boxMouseOut)
 
   const boxRect = dropBox.append("rect")		// pre-defined shape
-  .attr("style", "fill:lightgrey")	// fill color of shape
+  .attr("style", d => "fill:rgba("+d.nodeColor+",0.7)")	// fill color of shape
     .attr("rx", 25)								// how much to round corners 
     .attr("ry", 25)								// how much to round corners
     .attr("width", boxWidth)					
