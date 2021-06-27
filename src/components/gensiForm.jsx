@@ -8,7 +8,7 @@ import React, { Component } from 'react';
 import ParagraphPage from './paragraphPage'
 import NodeCreationFunction from './nodeCreationFunction'
 import NodeRow from './nodeRow';
-import LineBox from './dragDrop/lineBox';
+import LineBox from './lineBox';
 import MCQ from './mcq'
 import ButtonFooter from './buttonFooter'
 import { Box } from 'grommet';
