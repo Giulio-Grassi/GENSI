@@ -6,7 +6,7 @@
  import React, { useState, useEffect, useRef} from 'react';
  import { Box, DataTable, Button, Text, Layer, Heading, TextInput } from "grommet";
 import {select, drag, forceSimulation, forceManyBody, forceCollide, forceCenter, tickFormat,} from 'd3'
-import useResizeObserver from '../useResizeObserver'
+import useResizeObserver from './useResizeObserver'
 import { forceLink } from 'd3-force';
 import { colors } from 'grommet/themes/base';
 
