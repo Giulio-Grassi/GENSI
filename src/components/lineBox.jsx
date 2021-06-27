@@ -84,7 +84,7 @@ export default function LineBox({
         function dragged(event, d) {
           select(this)
           .attr("transform", () => `translate(${d.x = event.x}, ${d.y = event.y })`)
-
+          
         }
       
       
@@ -98,24 +98,14 @@ export default function LineBox({
          * @param {*} d 
          */
         function dragended(event, d) {
-          select(this).attr("stroke", null)
-          //.style("pointer-events", "auto");
+
           console.log("dragended")
           console.log(boxToDropIn)
-          if(boxToDropIn != ""){ //select prob still doesn t work... 
-            // select(boxToDropIn).selectChild()
-            // .style("pointer-events", "none")
-            // .attr("style", "fill:red")
-            // .attr("height", 200);
+          if(boxToDropIn !== ""){
             console.log("inside if")
-            const mycolor = boxes.filter(box => {
-              if(box.id == boxToDropIn)return box.nodeColor})
-              console.log("color " + mycolor)
-            select(this)
-            .attr("fill", mycolor)
-
           }
-
+          select(this).attr("stroke", null)
+          .style("pointer-events", "auto");
         }
       
     //TODO NINAD, HERE THE BOXES ARE DECLERED, MAYBE MAKE A MODEL, IDK HOW U WANT TO MAKE  THE STATE OUT OF THESE.
@@ -128,6 +118,7 @@ export default function LineBox({
       function boxPositionFuncX(dimensions, extraOuterPadding, i){
         const boxOffset = (dimensions.width - 2* extraOuterPadding)/ boxes.length
         const x = (-boxWidth/2 -dimensions.width / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
+        return x
       }
 
       function boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding ){
@@ -166,17 +157,6 @@ export default function LineBox({
       }
 
 
-      
-      const simulation = forceSimulation(nodesRepresentation)
-
-      simulation.on("tick", () => {
-         
-      //  // .attr("x", d => (d.index * nodeOffset) + manualPadding - ( -dimensions.width / 2))
-      //   //.attr("transform", d => `translate(${ -((d.index * nodeOffset) + manualPadding - (dimensions.width / 2))}, ${d.selected ? d.y : 100 })`);
-         
-
-        //console.log("simulation nodes ", nodes)
-      });
       }, [nodesRepresentation, dimensions]); //TODO check if this nodes param here is right and what it does...
 
         return(
