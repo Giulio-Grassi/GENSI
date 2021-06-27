@@ -7,8 +7,6 @@
 import React, { Component } from 'react';
 import ParagraphPage from './paragraphPage'
 import NodeCreationFunction from './nodeCreationFunction'
-import NodeRow from './nodeRow';
-import LineBox from './lineBox';
 import MCQ from './mcq'
 import ButtonFooter from './buttonFooter'
 import { Box } from 'grommet';
@@ -17,7 +15,7 @@ import { Table } from './models/table';
 import { Question } from './models/question';  
 import { Text, Button } from "grommet";
 import QuestionStrategy from './questionStrategy';
-
+import myquestions from './questions'
 
 export default function GensiForm() {
   const [step, setStep] = React.useState(1)
@@ -55,6 +53,11 @@ export default function GensiForm() {
   }
 
   function renderPageBaseOnStep(){
+
+    //TODO NINAD: MOVE THIS CODE, ALSO TEST IF THIS ACTUALLY WORKS 
+     const myquestionsvar = myquestions()
+     const questionArray = myquestionsvar.map(q => new Question(q))
+
     switch (step) {
         case 1:
           return ( <Box id="case 1 box" fill= "vertical" >

@@ -1,10 +1,18 @@
+const defaults = {
+  id: "ERROR: ID NOT PROVIDED",
+  text: "ERROR: TEXT NOT PROVIDED",
+  type: "ERROR: QUESTION TYPE NOT PROVIDED",
+  options: []
+}
+
 export class Question {
-  constructor(id, text, type = "select", boxes = []) {
-    this.id = id
-    this.text = text;
-    this.type = type
-    if(type === "dragndrop"){
-      this.boxes = boxes
+
+  constructor(QuestionJsonObject){
+    this.id = QuestionJsonObject.id || defaults.id;
+    this.text = QuestionJsonObject.text || defaults.text;
+    this.type = QuestionJsonObject.type || defaults.type;
+    if(this.type === "dragndrop"){
+      this.boxes = QuestionJsonObject.boxes || defaults.options
     }
   }
 
