@@ -46,7 +46,7 @@ export default function LineBox({
         // console.log("width", dimensions.width)
         
         const svg = select(svgRef.current);
-        // svg.selectAll("*").remove(); //Clear canvas so no duplicates are trailed every refresh
+        svg.selectAll("*").remove(); //Clear canvas so no duplicates are trailed every refresh
             // centering workaround
     svg.attr("viewBox", [
         -dimensions.width / 2,
@@ -233,7 +233,7 @@ function drawBoxes(svg, data, boxWidth){
     .text(d => d.id)
     .attr("x", boxWidth/2)              //Used to center the text in the box  
     .attr('text-anchor', 'middle')
-    .attr('alignment-baseline', 'middle')
+    .attr('alignment-baseline', 'ideographic')
     .style('fill', '#000')
     .style('font-size', '20px');
     
