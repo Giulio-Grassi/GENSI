@@ -46,10 +46,9 @@ export default function QuestionStrategy({
   function nextQuestionValidationDragndrop(){
     let valid = true
     let i = 0
-    console.log("///////TRYHARD ALL", table.getAll())
     while(valid && i < nodes.length){
-      console.log(nodes[i])
-      if(!table.getRelation(currentQuestion, nodes[i].getName())){
+      //table.getRelation(question.id, x.id)
+      if(table.getRelation(questions[currentQuestion].getId(), nodes[i].getName())[0][2] === false){
         valid = false
       }
       i++
@@ -67,7 +66,8 @@ export default function QuestionStrategy({
     let valid = true
     let i = 0
     while(valid && i < nodes.length){
-      if(!table.getRelation(currentQuestion, nodes[i].getName())){
+      //table.getRelation(question.id, x.id)
+      if(table.getRelation(questions[currentQuestion].getId(), nodes[i].getName())[0][2] === false){
         valid = false
       }
       i++
@@ -89,7 +89,7 @@ export default function QuestionStrategy({
               <Text>{questions[currentQuestion].getText()}</Text>
               <NodeRow
                 nodes={nodes}
-                question={questions[currentQuestion].id}
+                question={questions[currentQuestion]}
                 table={table}
                 setTable={setTable}
                 filterYou={true}
