@@ -5,7 +5,7 @@
 
  import React, { useState, useEffect, useRef} from 'react';
  import { Box, DataTable, Button, Text, Layer, Heading, TextInput } from "grommet";
-import {select, drag, forceSimulation, forceManyBody, forceCollide, forceCenter, tickFormat,} from 'd3'
+import {select, drag, forceSimulation, forceManyBody, forceCollide, forceCenter, tickFormat, timeHour, timeout,} from 'd3'
 import useResizeObserver from './useResizeObserver'
 import { forceLink } from 'd3-force';
 import { colors } from 'grommet/themes/base';
@@ -36,7 +36,7 @@ export default function LineBox({
      * useless use effect, just used to check if the logic was working, ultimately to be removed. 
      */
     useEffect(()=> {
-      console.log("use effect box" + boxToDropIn)
+      console.log("useEffect box: " + boxToDropIn)
     },[boxToDropIn])
 
       // will be called initially and on every data change
@@ -81,11 +81,13 @@ export default function LineBox({
       }
 
         function dragstarted(event, d) {
+          console.log("dragstarted", boxToDropIn)
           select(this).raise().attr("stroke", "black")
           .style("pointer-events", "none"); //this is done so that the mouseover event on the box can be detected
         }
       
         function dragged(event, d) {
+          console.log("dragged", boxToDropIn)
           select(this)
           .attr("transform", () => `translate(${d.x = event.x}, ${d.y = event.y })`)
         }
@@ -101,14 +103,16 @@ export default function LineBox({
          * @param {*} d 
          */
         function dragended(event, d) {
-          console.log("dragended")
-          console.log(boxToDropIn)
-          if(boxToDropIn !== ""){
-            console.log("inside if")
-            setTable(table.insertRelation(question.id, d.id, boxToDropIn))
-          }
-          select(this).attr("stroke", null)
-          .style("pointer-events", "auto")
+          const thisObject = this
+          setTimeout(function() {
+            console.log("dragended", boxToDropIn)
+            if(boxToDropIn !== ""){
+              console.log("inside if")
+              setTable(table.insertRelation(question.id, d.id, boxToDropIn))
+            }
+            select(thisObject).attr("stroke", null)
+            .style("pointer-events", "auto")
+          }, 100);          
         }
       
     //TODO NINAD, HERE THE BOXES ARE DECLERED, MAYBE MAKE A MODEL, IDK HOW U WANT TO MAKE  THE STATE OUT OF THESE.
@@ -148,18 +152,18 @@ export default function LineBox({
         select(this).selectChild()
         .attr("style", "fill:rgba("+d.nodeColor+",1)");
         setBoxToDropIn(d.id)
-        console.log("box over")
-        console.log(boxToDropIn)
-        console.log(d.id)
+        
+        console.log("box over with d.id: "+d.id, boxToDropIn)
+        //console.log(d.id)
 
       }
       function boxMouseOut(Event, d){
-        select(this).selectChild()
-        .attr("style", "fill:rgba("+d.nodeColor+",0.7)");
-        setBoxToDropIn("")
-        console.log("box out")
-        console.log(boxToDropIn)
-
+        setTimeout(function() {
+          select(this).selectChild()
+          .attr("style", "fill:rgba("+d.nodeColor+",0.7)");
+          setBoxToDropIn("")
+          console.log("box out with d.id: "+d.id, boxToDropIn)
+        }, 200);
       }
 
 
