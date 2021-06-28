@@ -15,7 +15,6 @@ export default function NodeRow({
      question,
      table,
      setTable,
-     currentQuestion,
       filterYou
     }) {
     const CIRCLE_RADIUS = 30;
@@ -33,10 +32,10 @@ export default function NodeRow({
 
     useEffect(() => {
       setNodesRepresentation(nodesRepresentation.map(x => {
-        x.selected = table.getRelation(question, x.id)[0][2]
+        x.selected = table.getRelation(question.id, x.id)[0][2]
         return x
       }))
-    }, [currentQuestion])
+    }, [question])
 
     
 
@@ -120,7 +119,7 @@ export default function NodeRow({
           })
         )
         console.log("QUESTION: "+question+" NAME:"+name)
-        setTable(table.toggleRelation(question, name))
+        setTable(table.toggleRelation(question.id, name))
         console.log("Updated table", table.getAll())
         console.log("clicked nodesRepresentation", nodesRepresentation)
         console.log("indexed node", nodesRepresentation[i.index])
