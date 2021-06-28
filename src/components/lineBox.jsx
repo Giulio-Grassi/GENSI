@@ -3,7 +3,7 @@
  * once a node is selected it bumps up and changes color
  */
 
- import React, { useState, useEffect, useRef} from 'react';
+ import React, { useState, useEffect, useRef, useCallback} from 'react';
  import { Box, DataTable, Button, Text, Layer, Heading, TextInput } from "grommet";
 import {select, drag, forceSimulation, forceManyBody, forceCollide, forceCenter, tickFormat, timeHour, timeout,} from 'd3'
 import useResizeObserver from './useResizeObserver'
@@ -18,7 +18,7 @@ export default function LineBox({
   setTable,
   filterYou,
     }) {
-    const CIRCLE_RADIUS = 30;
+    const CIRCLE_RADIUS = 20;
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
@@ -31,12 +31,31 @@ export default function LineBox({
 
     //keeps the state of which box is curently being hovered on
     const [boxToDropIn, setBoxToDropIn] = React.useState("")
+    const [draggingNode, setDraggingNode] = React.useState("")
 
+    const memoizedCallback = useCallback(
+      () => {
+        if(draggingNode !== "" && boxToDropIn !== "")
+        setTable(table.insertRelation(question.id, draggingNode, boxToDropIn))
+        console.log("draggingNode", draggingNode)
+        console.log("boxToDropIn", boxToDropIn)
+      },
+      [draggingNode, boxToDropIn],
+    );
     /**
      * useless use effect, just used to check if the logic was working, ultimately to be removed. 
      */
+     useEffect(()=> {
+      console.log("useEffect draggingNode: " + draggingNode)
+    },[draggingNode])
+
+    //Temporary solution. ADD PADDING BETWEEN BOXES OF MINIMUM SIZE OF NODE. AND ALSO REDUCE NODE SIZE.
     useEffect(()=> {
       console.log("useEffect box: " + boxToDropIn)
+      if(draggingNode !== ""){
+        console.log("BEPPE: "+draggingNode+" & "+boxToDropIn)
+        setTable(table.insertOrUpdateRelation(question.id, draggingNode, boxToDropIn))
+      }
     },[boxToDropIn])
 
       // will be called initially and on every data change
@@ -81,6 +100,7 @@ export default function LineBox({
       }
 
         function dragstarted(event, d) {
+          setDraggingNode(d.id)
           console.log("dragstarted", boxToDropIn)
           select(this).raise().attr("stroke", "black")
           .style("pointer-events", "none"); //this is done so that the mouseover event on the box can be detected
@@ -103,8 +123,9 @@ export default function LineBox({
          * @param {*} d 
          */
         function dragended(event, d) {
+          setDraggingNode("")
           const thisObject = this
-          setTimeout(function() {
+          /*setTimeout(function() {
             console.log("dragended", boxToDropIn)
             if(boxToDropIn !== ""){
               console.log("inside if")
@@ -112,7 +133,14 @@ export default function LineBox({
             }
             select(thisObject).attr("stroke", null)
             .style("pointer-events", "auto")
-          }, 100);          
+          }, 100);*/
+          console.log("dragended", boxToDropIn)
+            if(boxToDropIn !== ""){
+              console.log("inside if")
+              setTable(table.insertRelation(question.id, d.id, boxToDropIn))
+            }
+            select(thisObject).attr("stroke", null)
+            .style("pointer-events", "auto")
         }
       
     //TODO NINAD, HERE THE BOXES ARE DECLERED, MAYBE MAKE A MODEL, IDK HOW U WANT TO MAKE  THE STATE OUT OF THESE.
@@ -123,8 +151,8 @@ export default function LineBox({
         })
 
   // ------FUNCTIONS FOR BOXES POSITION  AND SIZE  
-      const extraOuterPadding = 50 //this is extra for outer pad. total outer pad is manual + inner
-      const boxPadding = 50
+      const extraOuterPadding = 0 //this is extra for outer pad. total outer pad is manual + inner
+      const boxPadding = 70
       function boxPositionFuncX(dimensions, extraOuterPadding, i){
         const boxOffset = (dimensions.width - 2* extraOuterPadding)/ boxes.length
         const x = (-boxWidth/2 -dimensions.width / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
@@ -156,6 +184,10 @@ export default function LineBox({
         console.log("box over with d.id: "+d.id, boxToDropIn)
         //console.log(d.id)
 
+        if(draggingNode !== ""){
+          console.log("BEPPE: "+draggingNode+" & "+d.id)
+          setTable(table.insertOrUpdateRelation(question.id, draggingNode, d.id))
+        }
       }
       function boxMouseOut(Event, d){
         setTimeout(function() {
@@ -163,7 +195,8 @@ export default function LineBox({
           .attr("style", "fill:rgba("+d.nodeColor+",0.7)");
           setBoxToDropIn("")
           console.log("box out with d.id: "+d.id, boxToDropIn)
-        }, 200);
+        }, 400);
+
       }
 
 
