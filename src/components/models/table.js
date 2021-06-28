@@ -5,20 +5,8 @@ export class Table {
   }
 
   insertRelation = (questionId, nodeName, status) => {
-    var exists = this.matrix.filter(x => {
-      if(x[0] === questionId && x[1] === nodeName){
-        return true
-      }
-      return false
-    })
-
-    if(exists){
-      return this.updateRelation(questionId, nodeName, status)
-    }
-    else{
-      this.matrix.push([questionId, nodeName, status])
-      return this
-    }
+    this.matrix.push([questionId, nodeName, status])
+    return this
   }
 
   updateRelation = (questionId, nodeName, status) => {
@@ -30,6 +18,37 @@ export class Table {
         return x
       }
     })
+
+    return this
+  }
+
+  insertOrUpdateRelation = (questionId, nodeName, status) => {
+    const existence = this.matrix.filter(x => {
+      if(x[0] === questionId && x[1] === nodeName){
+        return true
+      }
+      else{
+        return false
+      }
+    })
+
+    if(existence){
+      if(!existence[0][2] === status){
+        const resultOfUpdate = this.matrix.map(x => {
+          if(x[0] === questionId && x[1] === nodeName){
+            x.status = status
+            return x
+          }
+          else{
+            return x
+          }
+        })
+        this.matrix = resultOfUpdate
+      }
+    }
+    else{
+      this.matrix.push([questionId, nodeName, status])
+    }
 
     return this
   }
@@ -58,7 +77,7 @@ export class Table {
     return this.matrix.filter(x => x[0] === questionId)
   }
 
-  getAll = () => {
+  getAll(){
     return this.matrix
   }
 }
