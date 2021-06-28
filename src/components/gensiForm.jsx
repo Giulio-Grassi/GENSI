@@ -19,10 +19,21 @@ import myquestions from './questions'
 
 export default function GensiForm() {
   const [step, setStep] = React.useState(1)
+  const question1 = {
+    id: 1,
+    text: "Who do you like?",
+    type: "select"
+  }
+  const question2 = {
+    id: 2,
+    text: "WEALTH QUESTION",
+    type: "dragndrop",
+    boxes: [{id: "More wealthy than me", colour: "148,0,211"},{id: "Less wealthy than me", colour: "32,178,170"}]
+  }
 
   //   const [nodes[], setNodes] = React.useState('');
   const [nodes, setNodes] = React.useState([new Node("You", 0, 0, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
-  const [questions, setQuestion] = React.useState([new Question(0, "WEALTH QUESTION", "dragndrop", [{id: "More wealthy than me", colour: "148,0,211"},{id: "Less wealthy than me", colour: "32,178,170"}] )]); //React state containing the array of questions
+  const [questions, setQuestion] = React.useState([new Question(question1), new Question(question2)]); //React state containing the array of questions
   const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
 
 
