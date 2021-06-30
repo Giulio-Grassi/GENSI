@@ -14,6 +14,9 @@ export class Question {
     if(this.type === "dragndrop"){
       this.boxes = QuestionJsonObject.boxes || defaults.options
     }
+    if(!QuestionJsonObject.type){
+      this.type = "select"
+    }
   }
 
   getId = () => {

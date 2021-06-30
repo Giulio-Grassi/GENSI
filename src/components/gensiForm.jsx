@@ -33,7 +33,10 @@ export default function GensiForm() {
 
   //   const [nodes[], setNodes] = React.useState('');
   const [nodes, setNodes] = React.useState([new Node("You", 0, 0, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
-  const [questions, setQuestion] = React.useState([new Question(question1), new Question(question2)]); //React state containing the array of questions
+  //   question initaliser from json
+  const myquestionsvar = myquestions()
+  const questionArray = myquestionsvar.map(q => new Question(q))
+  const [questions, setQuestion] = React.useState(questionArray); //React state containing the array of questions
   const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
 
 
@@ -64,11 +67,6 @@ export default function GensiForm() {
   }
 
   function renderPageBaseOnStep(){
-
-    //TODO NINAD: MOVE THIS CODE, ALSO TEST IF THIS ACTUALLY WORKS 
-     const myquestionsvar = myquestions()
-     const questionArray = myquestionsvar.map(q => new Question(q))
-
     switch (step) {
         case 1:
           return ( <Box id="case 1 box" fill= "vertical" >

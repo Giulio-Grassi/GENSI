@@ -10,7 +10,7 @@ export class Table {
   }
 
   updateRelation = (questionId, nodeName, status) => {
-    this.matrix.map(x => {
+    this.matrix = this.matrix.map(x => {
       if(x[0] === questionId && x[1] === nodeName){
         return [questionId, nodeName, status]
       }
