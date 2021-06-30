@@ -28,7 +28,7 @@ export default function GensiForm() {
     id: 2,
     text: "WEALTH QUESTION",
     type: "dragndrop",
-    boxes: [{id: "More wealthy than me", colour: "148,0,211"},{id: "Less wealthy than me", colour: "32,178,170"}]
+    boxes: [{id: "More wealthy than me", colour: "#AED6F1"},{id: "Less wealthy than me", colour: "#E74C3C"}]
   }
 
   //   const [nodes[], setNodes] = React.useState('');
