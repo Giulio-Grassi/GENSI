@@ -41,28 +41,10 @@ export default function LineBox({
     const [boxToDropIn, setBoxToDropIn] = React.useState("")
     const [draggingNode, setDraggingNode] = React.useState("")
 
-    const memoizedCallback = useCallback(
-      () => {
-        if(draggingNode !== "" && boxToDropIn !== "")
-        setTable(table.insertRelation(question.id, draggingNode, boxToDropIn))
-        console.log("draggingNode", draggingNode)
-        console.log("boxToDropIn", boxToDropIn)
-      },
-      [draggingNode, boxToDropIn],
-    );
-    /**
-     * useless use effect, just used to check if the logic was working, ultimately to be removed. 
-     */
-     useEffect(()=> {
-      console.log("useEffect draggingNode: " + draggingNode)
-    },[draggingNode])
-
     //Temporary solution. ADD PADDING BETWEEN BOXES OF MINIMUM SIZE OF NODE. AND ALSO REDUCE NODE SIZE.
     useEffect(()=> {
-      console.log("useEffect box: " + boxToDropIn)
       if(draggingNode !== ""){
-        console.log("BEPPE: "+draggingNode+" & "+boxToDropIn)
-        setTable(table.insertOrUpdateRelation(question.id, draggingNode, boxToDropIn))
+        setTable(table.updateRelation(question.id, draggingNode, boxToDropIn))
         const myboxArr = boxes.filter(box => box.id === boxToDropIn)
         var newColor = "#ABEBC6"
         if(myboxArr.length > 0){
@@ -74,7 +56,7 @@ export default function LineBox({
         selectAll(".node")
         .filter(function(d) { return d.id === draggingNode })
         .selectChild()
-        .attr("fill", function (d) { return newColor; });  
+        .attr("style", d => "fill:"+newColor);  
       }
     },[boxToDropIn])
 
@@ -121,13 +103,13 @@ export default function LineBox({
 
         function dragstarted(event, d) {
           setDraggingNode(d.id)
-          console.log("dragstarted", boxToDropIn)
+          //console.log("dragstarted", boxToDropIn)
           select(this).raise().attr("stroke", "black")
           .style("pointer-events", "none"); //this is done so that the mouseover event on the box can be detected
         }
       
         function dragged(event, d) {
-          console.log("dragged", boxToDropIn)
+          //console.log("dragged", boxToDropIn)
           select(this)
           .attr("transform", () => `translate(${d.x = event.x}, ${d.y = event.y })`)
         }
@@ -144,7 +126,6 @@ export default function LineBox({
          */
         function dragended(event, d) {
           setDraggingNode("")
-          const thisObject = this
           /*setTimeout(function() {
             console.log("dragended", boxToDropIn)
             if(boxToDropIn !== ""){
@@ -154,13 +135,9 @@ export default function LineBox({
             select(thisObject).attr("stroke", null)
             .style("pointer-events", "auto")
           }, 100);*/
-          console.log("dragended", boxToDropIn)
-            if(boxToDropIn !== ""){
-              console.log("inside if")
-              setTable(table.insertRelation(question.id, d.id, boxToDropIn))
-            }
-            select(thisObject).attr("stroke", null)
-            .style("pointer-events", "auto")
+          //console.log("dragended", boxToDropIn)
+          select(this).attr("stroke", null)
+          .style("pointer-events", "auto")
         }
       
 
@@ -195,22 +172,13 @@ export default function LineBox({
         .attr("style", "fill:#F7DC6F");
         setBoxToDropIn(d.id)
         
-        console.log("box over with d.id: "+d.id, boxToDropIn)
+        //console.log("box over with d.id: "+d.id, boxToDropIn)
         //console.log(d.id)
-
-        if(draggingNode !== ""){
-          console.log("BEPPE: "+draggingNode+" & "+d.id)
-          setTable(table.insertOrUpdateRelation(question.id, draggingNode, d.id))
-        }
       }
       function boxMouseOut(Event, d){
         select(this).selectChild()
         .attr("style", "fill:#E59866");
-        setTimeout(function() {
-          setBoxToDropIn("")
-          console.log("box out with d.id: "+d.id, boxToDropIn)
-        }, 400);
-
+        setBoxToDropIn("")
       }
 
 

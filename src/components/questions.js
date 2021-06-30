@@ -1,34 +1,33 @@
 export default function getQuestions() {
     return (
-    [
-        {
-            "id": 0,
-            "text" : "WEALTH QUESTION",
-            "type" : "dragndrop",
-            "boxes" : [
-                {"id": "More wealthy than me", 
-                    "colour": "148,0,211"
+        [
+            {
+                "id": 1,
+                "text" : "WEALTH QUESTION",
+                "type" : "dragndrop",
+                "boxes" : [
+                    {
+                        "id": "More wealthy than me", 
+                        "colour": "#AED6F1"
                     },
-        
-                    {"id": "Less wealthy than me",
-                    "colour": "32,178,170"
+                    {
+                        "id": "Less wealthy than me",
+                        "colour": "#E74C3C"
                     }
-            ]
-        },
-
-        {
-            "id": 1,
-            "text" : "datboi",
-            "type" : "",
-            "boxes" : []
-        },
-
-        {
-            "id": 2,
-            "text" : "waddup",
-            "type" : "",
-            "boxes" : []
-        }
-    ]
+                ]
+            },
+            {
+                "id": 2,
+                "text" : "datboi",
+                "type" : "select",
+                "boxes" : []
+            },
+            {
+                "id": 3,
+                "text" : "waddup",
+                "type" : "",
+                "boxes" : []
+            }
+        ]
     )
 }
