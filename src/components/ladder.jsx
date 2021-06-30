@@ -64,11 +64,11 @@ export default function Ladder({
         console.log("BEPPE: "+draggingNode+" & "+boxToDropIn)
         setTable(table.insertOrUpdateRelation(question.id, draggingNode, boxToDropIn))
         const myboxArr = boxes.filter(box => box.id === boxToDropIn)
-        var newColor = "#FFFFFF"
+        var newColor = "#ABEBC6"
         if(myboxArr.length > 0){
            newColor = myboxArr[0].nodeColor;
         }
-        else{ newColor = "#FFFFFF"}
+        else{ newColor = "#ABEBC6"}
         selectAll(".node")
         .filter(function(d) { return d.id === draggingNode })
         .selectChild()
@@ -208,7 +208,7 @@ export default function Ladder({
 
       function boxMouseOver(event, d){
         select(this).selectChild()
-        .attr("style", "fill:rgba("+d.nodeColor+",1)");
+        .attr("style", "fill:#F7DC6F");
         setBoxToDropIn(d.id)
         
         console.log("box over with d.id: "+d.id, boxToDropIn)
@@ -222,7 +222,7 @@ export default function Ladder({
       function boxMouseOut(Event, d){
         setTimeout(function() {
           select(this).selectChild()
-          .attr("style", "fill:rgba("+d.nodeColor+",0.7)");
+          .attr("style", "fill:#E59866");
           setBoxToDropIn("")
           console.log("box out with d.id: "+d.id, boxToDropIn)
         }, 400);
@@ -289,7 +289,7 @@ function drawBoxes(svg, data, boxWidth, boxHeight){
   // .on("mouseout", boxMouseOut)
 
   const boxRect = dropBox.append("rect")		// pre-defined shape
-  .attr("style", d => "fill:rgba("+d.nodeColor+",0.7)")	// fill color of shape
+  .attr("style", d => "fill:#E59866")	// fill color of shape
     .attr("rx", 25)								// how much to round corners 
     .attr("ry", 25)								// how much to round corners
     .attr("width", boxWidth)					

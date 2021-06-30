@@ -16,6 +16,7 @@ import { Table } from './models/table';
 import { Question } from './models/question';  
 import { Text } from "grommet";
 import LineBox from './lineBox';
+import Ladder from './lineBox';
 
 
 export default function QuestionStrategy({
@@ -118,6 +119,23 @@ export default function QuestionStrategy({
                 /> 
               </Box>
             );
+            case "ladder":
+              return (
+                <Box id="case 3 box" fill= "vertical">
+                  <Text>{questions[currentQuestion].getText()}</Text>
+                  <LineBox
+                    nodes={nodes}
+                    question={questions[currentQuestion]}
+                    table={table}
+                    setTable={setTable}
+                    filterYou={false}
+                  />
+                  <ButtonFooter
+                  onNext = {() => nextQuestionValidationDragndrop()}
+                  onPrev = {() => prevQuestionValidationDragndrop()}
+                  /> 
+                </Box>
+              );
         default:
           (console.log('Question type not valid.', questions[currentQuestion]))
       }
