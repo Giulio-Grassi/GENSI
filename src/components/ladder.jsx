@@ -11,7 +11,7 @@ import { forceLink } from 'd3-force';
 import { colors } from 'grommet/themes/base';
 
 
-export default function LineBox({
+export default function Ladder({
   nodes,
   question,
   table,
@@ -165,11 +165,19 @@ export default function LineBox({
 
   // ------FUNCTIONS FOR BOXES POSITION  AND SIZE  
       const extraOuterPadding = 0 //this is extra for outer pad. total outer pad is manual + inner
-      const boxPadding = 70
-      function boxPositionFuncX(dimensions, extraOuterPadding, i){
-        const boxOffset = (dimensions.width - 2* extraOuterPadding)/ boxes.length
-        const x = (-boxWidth/2 -dimensions.width / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
-        return x
+      const boxPadding = 50
+
+      function boxHeightWithPadding(dimensions, extraOuterPadding, boxPadding ){
+        const boxHeight = (dimensions.height - 2*extraOuterPadding - boxPadding*(boxes.length-1))/ boxes.length
+        return boxHeight
+      }
+
+      function boxPositionFuncY(dimensions, extraOuterPadding, i){
+        const boxOffset = (dimensions.height - 2* extraOuterPadding)/ boxes.length
+        const y = (-boxWidth/2 -dimensions.height / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
+        
+        if (i % 2 == 1) return y
+        else return -y 
       }
 
       function boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding ){
@@ -178,12 +186,21 @@ export default function LineBox({
       }
 
       const boxWidth = boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding)
+
+      function boxWidthFunc(i){
+        //follows compound interest formula where the time is the index 
+        const base = 100
+        const percent = 0.1
+        const CI = base * ( 1 + percent) * i 
+        if(i == 0) return base 
+        else return CI       
+      }
   // ------------------
 
       //Draws the boxes, positions them and appends necessary callbacks 
-      const dropBoxes = drawBoxes(svg, boxes, boxWidth)
+      const dropBoxes = drawBoxes(svg, boxes, boxWidth, boxWidthFunc)
       dropBoxes
-      .attr("transform", (d,i) => `translate(${d.x = boxPositionFuncX(dimensions, extraOuterPadding, i ) }, ${d.y = 100 })`)
+      .attr("transform", (d,i) => `translate(${d.x = 0 }, ${d.y = boxPositionFuncY(dimensions, extraOuterPadding, i ) })`)
       .on("mouseover", boxMouseOver)
       .on("mouseout", boxMouseOut)
       
@@ -261,7 +278,7 @@ node.append("text")
  * @param {the width of each box} boxWidth 
  * @returns d3 selection with all the boxes so that it is then possible to append callbacks...
  */
-function drawBoxes(svg, data, boxWidth){
+function drawBoxes(svg, data, boxWidth, boxHeight){
   const dropBox = svg
   .selectAll(".dropBox")
   .data(data, d => d.id)
@@ -276,7 +293,7 @@ function drawBoxes(svg, data, boxWidth){
     .attr("rx", 25)								// how much to round corners 
     .attr("ry", 25)								// how much to round corners
     .attr("width", boxWidth)					
-    .attr("height", 150);
+    .attr("height", boxHeight);
     
   dropBox.append("text")
     .join("g")
