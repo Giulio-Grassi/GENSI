@@ -58,6 +58,10 @@ export default function GensiForm() {
 
   function populateTable(){
     for(var i = 0; i < questions.length; i++){
+      if(questions[i].getType()==='mcq'){
+        table.insertRelation(questions[i].getId(), nodes[0].getName(), false)
+        continue
+      }
       for(var k = 0; k < nodes.length; k++){
         table.insertRelation(questions[i].getId(), nodes[k].getName(), false)
       }

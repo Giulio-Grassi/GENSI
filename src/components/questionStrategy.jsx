@@ -45,7 +45,8 @@ export default function QuestionStrategy({
     }
   }
 
-  function nextQuestionValidationDragndrop(){
+
+  function dragNDropValidation(buttonCallback){
     let valid = true
     let i = 0
     while(valid && i < nodes.length){
@@ -55,32 +56,16 @@ export default function QuestionStrategy({
       }
       i++
     }
-    
-    if(valid){
-      nextQuestion()
-    }
-    else{
-      alert("You need to put all the nodes in a box before the next step.")
-    }
+
+    valid? buttonCallback() : alert("Please put all the nodes in a box before changing page.")
   }
 
-  function prevQuestionValidationDragndrop(){
-    let valid = true
-    let i = 0
-    while(valid && i < nodes.length){
-      //table.getRelation(question.id, x.id)
-      if(table.getRelation(questions[currentQuestion].getId(), nodes[i].getName())[0][2] === false){
+  function mcqValidation(buttonCallback){
+    let valid = true;
+    if(table.getRelation(questions[currentQuestion].getId(), nodes[0].getName())[0][2] === false){
         valid = false
-      }
-      i++
     }
-    
-    if(valid){
-      prevQuestion()
-    }
-    else{
-      alert("You need to put all the nodes in a box before going back.")
-    }
+    (valid)? buttonCallback() : alert("please select an option before proceeding")
   }
 
   function questionComponentSelector(){
@@ -88,7 +73,10 @@ export default function QuestionStrategy({
         case "select":
           return (
             <Box id="case 3 box" fill= "vertical">
-              <Text>{questions[currentQuestion].getText()}</Text>
+              <Text
+                              alignSelf = "center"
+                              size = "xxlarge"
+                >{questions[currentQuestion].getText()}</Text>
               <NodeRow
                 nodes={nodes}
                 question={questions[currentQuestion]}
@@ -106,7 +94,10 @@ export default function QuestionStrategy({
         case "dragndrop":
           return (
             <Box id="case 3 box" fill= "vertical">
-              <Text>{questions[currentQuestion].getText()}</Text>
+              <Text 
+                alignSelf = "center"
+                size = "xxlarge"
+              >{questions[currentQuestion].getText()}</Text>
               <LineBox
                 nodes={nodes}
                 question={questions[currentQuestion]}
@@ -115,15 +106,18 @@ export default function QuestionStrategy({
                 filterYou={false}
               />
               <ButtonFooter
-              onNext = {() => nextQuestionValidationDragndrop()}
-              onPrev = {() => prevQuestionValidationDragndrop()}
+              onNext = {() => dragNDropValidation(nextQuestion)}
+              onPrev = {() => dragNDropValidation(prevQuestion)}
               /> 
             </Box>
           );
           case "ladder":
             return (
               <Box id="case 3 box" fill= "vertical">
-                <Text>{questions[currentQuestion].getText()}</Text>
+                <Text
+                                                alignSelf = "center"
+                                                size = "xxlarge"
+                      >{questions[currentQuestion].getText()}</Text>
                 <Ladder
                   nodes={nodes}
                   question={questions[currentQuestion]}
@@ -132,25 +126,28 @@ export default function QuestionStrategy({
                   filterYou={false}
                 />
                 <ButtonFooter
-                onNext = {() => nextQuestionValidationDragndrop()}
-                onPrev = {() => prevQuestionValidationDragndrop()}
+                onNext = {() => dragNDropValidation(nextQuestion)}
+                onPrev = {() => dragNDropValidation(prevQuestion)}
                 /> 
               </Box>
             );
           case "mcq":
             return (
               <Box id="case 3 box" fill= "vertical">
-                <Text>{questions[currentQuestion].getText()}</Text>
+                <Text
+                                alignSelf = "center"
+                                size = "xxlarge"
+                    >{questions[currentQuestion].getText()}</Text>
                 <MCQ
-                  nodes={nodes}
+                  node={nodes[0].getName()}
                   question={questions[currentQuestion]}
                   table={table}
                   setTable={setTable}
                   filterYou={false}
                 />
                 <ButtonFooter
-                onNext = {() => nextQuestionValidationDragndrop()}
-                onPrev = {() => prevQuestionValidationDragndrop()}
+                onNext = {() => mcqValidation(nextQuestion)}
+                onPrev = {() => mcqValidation(prevQuestion)}
                 /> 
               </Box>
             );

@@ -7,32 +7,28 @@
  import { Button, Text, Box, RadioButtonGroup} from "grommet";
 
 export default function MCQ({
-    titles,
-    //customValues, TODO implement cause right now we ust use the index 
+    node,
+    question,
+    table,
+    setTable,
+    filterYou,    //customValues, TODO implement cause right now we ust use the index 
 }){
-    const [value, setValue] = useState('');
+    const [value, setValue] = useState(false);
 
-    function getQuestions (){
-        const questions = titles.map((title, i) => ({label: `${title}`, value:  `${i}` }))
-        //const questions = titles.map((title, i)=> `${title} lollone` )
 
-        console.log("titles", titles)
-        console.log("questions", questions)
-        return questions
-    }
-        const questions = titles.map((title, i) => ({label: `${title}`, value:  `${i}` }))
-        //const questions = titles.map((title, i)=> `${title} lollone` )
-
-        console.log("titles", titles)
-        console.log("questions", questions)
-
+        const boxes =question.getBoxes()
+        const options = boxes.map(box => box.id);
     return(
+
             <Box id="mcq page" align="center" pad="large" justify="center" align="center" fill="vertical" >
                 <RadioButtonGroup  align="center" justify="center" 
                     name="radio"
-                    options={getQuestions()}
+                    options={options}
                     value={value}
-                    onChange={event => setValue(event.target.value)}
+                    onChange={event => {setValue(event.target.value)
+                                         table.updateRelation(question.id, node, event.target.value)
+                                         console.log(table.getAll())
+                                        }}
                 />
             </Box>
     )

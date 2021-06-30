@@ -27,8 +27,21 @@ export default function getQuestions() {
             {
                 "id": 2,
                 "text" : "Who is egocentric",
-                "type" : "select",
-                "boxes" : []
+                "type" : "mcq",
+                "boxes" : [
+                    {
+                        "id": "Like a lot", 
+                    },
+                    {
+                        "id": "Like somehow",
+                    },
+                    {
+                        "id": "Like a little less", 
+                    },
+                    {
+                        "id": "Don't like",
+                    },
+                ]
             },
             {
                 "id": 3,
