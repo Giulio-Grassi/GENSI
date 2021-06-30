@@ -3,8 +3,8 @@ export default function getQuestions() {
         [
             {
                 "id": 1,
-                "text" : "WEALTH QUESTION",
-                "type" : "dragndrop",
+                "text" : "ninad",
+                "type" : "ladder",
                 "boxes" : [
                     {
                         "id": "More wealthy than me", 
@@ -13,7 +13,11 @@ export default function getQuestions() {
                     {
                         "id": "Less wealthy than me",
                         "colour": "#E74C3C"
-                    }
+                    },
+                    {
+                        "id": "More  than me", 
+                        "colour": "#AED6F1"
+                    },
                 ]
             },
             {

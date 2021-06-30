@@ -186,6 +186,7 @@ export default function Ladder({
       }
 
       const boxWidth = boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding)
+      const boxHeight = boxHeightWithPadding(dimensions, extraOuterPadding, boxPadding)
 
       function boxWidthFunc(i){
         //follows compound interest formula where the time is the index 
@@ -198,7 +199,7 @@ export default function Ladder({
   // ------------------
 
       //Draws the boxes, positions them and appends necessary callbacks 
-      const dropBoxes = drawBoxes(svg, boxes, boxWidth, boxWidthFunc)
+      const dropBoxes = drawBoxes(svg, boxes, boxWidthFunc, boxHeight)
       dropBoxes
       .attr("transform", (d,i) => `translate(${d.x = 0 }, ${d.y = boxPositionFuncY(dimensions, extraOuterPadding, i ) })`)
       .on("mouseover", boxMouseOver)
@@ -292,13 +293,13 @@ function drawBoxes(svg, data, boxWidth, boxHeight){
   .attr("style", d => "fill:#E59866")	// fill color of shape
     .attr("rx", 25)								// how much to round corners 
     .attr("ry", 25)								// how much to round corners
-    .attr("width", boxWidth)					
+    .attr("width", (d,i) => boxWidth(i))					
     .attr("height", boxHeight);
     
   dropBox.append("text")
     .join("g")
     .text(d => d.id)
-    .attr("x", boxWidth/2)              //Used to center the text in the box  
+    //.attr("x", boxWidth/2)              //Used to center the text in the box  
     .attr('text-anchor', 'middle')
     .attr('alignment-baseline', 'ideographic')
     .style('fill', '#000')
