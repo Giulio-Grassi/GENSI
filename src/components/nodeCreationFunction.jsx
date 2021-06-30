@@ -101,7 +101,7 @@ export default function NodeCreationPage({
   node.append('circle')
       .join("g")
       .attr("r", 30)
-      .attr("fill", function (d) { return '#ABEBC6'; })  
+      .attr("fill", function (d) { return '#D9BBF9'; })  
 
 
   node.append("text")

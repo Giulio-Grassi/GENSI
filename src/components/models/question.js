@@ -11,10 +11,10 @@ export class Question {
     this.id = QuestionJsonObject.id || defaults.id;
     this.text = QuestionJsonObject.text || defaults.text;
     this.type = QuestionJsonObject.type || defaults.type;
-    if(this.type === "dragndrop"){
+    if(this.type === "dragndrop" || this.type === "ladder"){
       this.boxes = QuestionJsonObject.boxes || defaults.options
     }
-    if(!QuestionJsonObject.type){
+    else if(!QuestionJsonObject.type){
       this.type = "select"
     }
   }

@@ -7,16 +7,17 @@
 import React, { Component } from 'react';
 import ParagraphPage from './paragraphPage'
 import NodeCreationFunction from './nodeCreationFunction'
-import NodeRow from './nodeRow';
-import MCQ from './mcq'
+
 import ButtonFooter from './buttonFooter'
 import { Box } from 'grommet';
 import { Node } from './models/node';
 import { Table } from './models/table';  
 import { Question } from './models/question';  
 import { Text } from "grommet";
+import NodeRow from './nodeRow';
 import LineBox from './lineBox';
-import Ladder from './lineBox';
+import Ladder from './ladder';
+import MCQ from './mcq'
 
 
 export default function QuestionStrategy({
@@ -102,11 +103,28 @@ export default function QuestionStrategy({
               /> 
             </Box>
           );
-          case "dragndrop":
+        case "dragndrop":
+          return (
+            <Box id="case 3 box" fill= "vertical">
+              <Text>{questions[currentQuestion].getText()}</Text>
+              <LineBox
+                nodes={nodes}
+                question={questions[currentQuestion]}
+                table={table}
+                setTable={setTable}
+                filterYou={false}
+              />
+              <ButtonFooter
+              onNext = {() => nextQuestionValidationDragndrop()}
+              onPrev = {() => prevQuestionValidationDragndrop()}
+              /> 
+            </Box>
+          );
+          case "ladder":
             return (
               <Box id="case 3 box" fill= "vertical">
                 <Text>{questions[currentQuestion].getText()}</Text>
-                <LineBox
+                <Ladder
                   nodes={nodes}
                   question={questions[currentQuestion]}
                   table={table}
@@ -119,23 +137,23 @@ export default function QuestionStrategy({
                 /> 
               </Box>
             );
-            case "ladder":
-              return (
-                <Box id="case 3 box" fill= "vertical">
-                  <Text>{questions[currentQuestion].getText()}</Text>
-                  <LineBox
-                    nodes={nodes}
-                    question={questions[currentQuestion]}
-                    table={table}
-                    setTable={setTable}
-                    filterYou={false}
-                  />
-                  <ButtonFooter
-                  onNext = {() => nextQuestionValidationDragndrop()}
-                  onPrev = {() => prevQuestionValidationDragndrop()}
-                  /> 
-                </Box>
-              );
+          case "mcq":
+            return (
+              <Box id="case 3 box" fill= "vertical">
+                <Text>{questions[currentQuestion].getText()}</Text>
+                <MCQ
+                  nodes={nodes}
+                  question={questions[currentQuestion]}
+                  table={table}
+                  setTable={setTable}
+                  filterYou={false}
+                />
+                <ButtonFooter
+                onNext = {() => nextQuestionValidationDragndrop()}
+                onPrev = {() => prevQuestionValidationDragndrop()}
+                /> 
+              </Box>
+            );
         default:
           (console.log('Question type not valid.', questions[currentQuestion]))
       }

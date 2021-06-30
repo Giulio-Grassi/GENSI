@@ -41,39 +41,22 @@ export default function Ladder({
     const [boxToDropIn, setBoxToDropIn] = React.useState("")
     const [draggingNode, setDraggingNode] = React.useState("")
 
-    const memoizedCallback = useCallback(
-      () => {
-        if(draggingNode !== "" && boxToDropIn !== "")
-        setTable(table.insertRelation(question.id, draggingNode, boxToDropIn))
-        console.log("draggingNode", draggingNode)
-        console.log("boxToDropIn", boxToDropIn)
-      },
-      [draggingNode, boxToDropIn],
-    );
-    /**
-     * useless use effect, just used to check if the logic was working, ultimately to be removed. 
-     */
-     useEffect(()=> {
-      console.log("useEffect draggingNode: " + draggingNode)
-    },[draggingNode])
-
     //Temporary solution. ADD PADDING BETWEEN BOXES OF MINIMUM SIZE OF NODE. AND ALSO REDUCE NODE SIZE.
     useEffect(()=> {
-      console.log("useEffect box: " + boxToDropIn)
       if(draggingNode !== ""){
-        console.log("BEPPE: "+draggingNode+" & "+boxToDropIn)
-        setTable(table.insertOrUpdateRelation(question.id, draggingNode, boxToDropIn))
+        setTable(table.updateRelation(question.id, draggingNode, boxToDropIn))
         const myboxArr = boxes.filter(box => box.id === boxToDropIn)
-        var newColor = "#ABEBC6"
+        var newColor = "#D9BBF9"
         if(myboxArr.length > 0){
            newColor = myboxArr[0].nodeColor;
         }
-        else{ newColor = "#ABEBC6"}
+        else{
+          newColor = "#D9BBF9"
+        }
         selectAll(".node")
         .filter(function(d) { return d.id === draggingNode })
         .selectChild()
-        .attr("fill", function (d) { return newColor; });  
-
+        .attr("style", d => "fill:"+newColor);  
       }
     },[boxToDropIn])
 
@@ -98,7 +81,7 @@ export default function Ladder({
        */
   const nodes = drawNodes(svg, nodesRepresentation, CIRCLE_RADIUS)
       nodes  
-      .attr("transform", (d,i) => `translate(${d.x = nodePositionFuncX(i, dimensions)}, ${d.y = nodePositionFuncY(i) })`)
+      .attr("transform", (d,i) => `translate(${d.x = 300}, ${d.y = nodePositionFuncY(i, dimensions) })`)
       .call(drag()
             .on("start", dragstarted)
             .on("drag", dragged)
@@ -109,18 +92,18 @@ export default function Ladder({
  
 
       function nodePositionFuncX(i, dimensions){
-        const manualPadding = 100
-        const nodeOffset = (dimensions.width - 2* manualPadding)/ nodesRepresentation.length
-        const x = (-dimensions.width / 2  + manualPadding + nodeOffset/2 + i * nodeOffset)
-        return x
-      }
-      function nodePositionFuncY(i, dimensions){
         return 0
+      }
+
+      function nodePositionFuncY(i, dimensions){
+        const manualPadding = 100
+        const nodeOffset = (dimensions.height - 2* manualPadding)/ nodesRepresentation.length
+        const x = (-dimensions.height / 2  + manualPadding + nodeOffset/2 + i * nodeOffset)
+        return x
       }
 
         function dragstarted(event, d) {
           setDraggingNode(d.id)
-          console.log("dragstarted", boxToDropIn)
           select(this).raise().attr("stroke", "black")
           .style("pointer-events", "none"); //this is done so that the mouseover event on the box can be detected
         }
@@ -141,9 +124,8 @@ export default function Ladder({
          * @param {*} event 
          * @param {*} d 
          */
-        function dragended(event, d) {
+         function dragended(event, d) {
           setDraggingNode("")
-          const thisObject = this
           /*setTimeout(function() {
             console.log("dragended", boxToDropIn)
             if(boxToDropIn !== ""){
@@ -153,13 +135,9 @@ export default function Ladder({
             select(thisObject).attr("stroke", null)
             .style("pointer-events", "auto")
           }, 100);*/
-          console.log("dragended", boxToDropIn)
-            if(boxToDropIn !== ""){
-              console.log("inside if")
-              setTable(table.insertRelation(question.id, d.id, boxToDropIn))
-            }
-            select(thisObject).attr("stroke", null)
-            .style("pointer-events", "auto")
+          //console.log("dragended", boxToDropIn)
+          select(this).attr("stroke", null)
+          .style("pointer-events", "auto")
         }
       
 
@@ -171,13 +149,12 @@ export default function Ladder({
         const boxHeight = (dimensions.height - 2*extraOuterPadding - boxPadding*(boxes.length-1))/ boxes.length
         return boxHeight
       }
-
+      
       function boxPositionFuncY(dimensions, extraOuterPadding, i){
         const boxOffset = (dimensions.height - 2* extraOuterPadding)/ boxes.length
-        const y = (-boxWidth/2 -dimensions.height / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
+        const y = (-boxHeight/2 -dimensions.height / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
         
-        if (i % 2 == 1) return y
-        else return -y 
+        return y 
       }
 
       function boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding ){
@@ -187,13 +164,14 @@ export default function Ladder({
 
       const boxWidth = boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding)
       const boxHeight = boxHeightWithPadding(dimensions, extraOuterPadding, boxPadding)
-
+      const base = 100
       function boxWidthFunc(i){
-        //follows compound interest formula where the time is the index 
-        const base = 100
-        const percent = 0.1
-        const CI = base * ( 1 + percent) * i 
-        if(i == 0) return base 
+        //follows compound interest formula where the time is the index
+        var t = (boxes.length-1)/2
+
+        const percent = 1
+        const CI = base * ( 1 + percent) * Math.floor(Math.abs(i-t))
+        if(Math.floor(Math.abs(i-t)) === 0) return base 
         else return CI       
       }
   // ------------------
@@ -201,38 +179,30 @@ export default function Ladder({
       //Draws the boxes, positions them and appends necessary callbacks 
       const dropBoxes = drawBoxes(svg, boxes, boxWidthFunc, boxHeight)
       dropBoxes
-      .attr("transform", (d,i) => `translate(${d.x = 0 }, ${d.y = boxPositionFuncY(dimensions, extraOuterPadding, i ) })`)
+      .attr("transform", (d,i) => `translate(${d.x = -100-(boxWidthFunc(i)/2) }, ${d.y = boxPositionFuncY(dimensions, extraOuterPadding, i ) })`)
       .on("mouseover", boxMouseOver)
       .on("mouseout", boxMouseOut)
+      // .attr("transform", (d,i) => `translate(${d.x = xfunc(i)}, ${d.y = yfunc(i) })`)
+
       
 
 
       function boxMouseOver(event, d){
         select(this).selectChild()
-        .attr("style", "fill:#F7DC6F");
+        .attr("style", "fill:#9370DB");
         setBoxToDropIn(d.id)
         
-        console.log("box over with d.id: "+d.id, boxToDropIn)
+        //console.log("box over with d.id: "+d.id, boxToDropIn)
         //console.log(d.id)
-
-        if(draggingNode !== ""){
-          console.log("BEPPE: "+draggingNode+" & "+d.id)
-          setTable(table.insertOrUpdateRelation(question.id, draggingNode, d.id))
-        }
       }
       function boxMouseOut(Event, d){
-        setTimeout(function() {
-          select(this).selectChild()
-          .attr("style", "fill:#E59866");
-          setBoxToDropIn("")
-          console.log("box out with d.id: "+d.id, boxToDropIn)
-        }, 400);
-
+        select(this).selectChild()
+        .attr("style", "fill:#DADADA");
+        setBoxToDropIn("")
       }
 
 
       }, [nodesRepresentation, dimensions]); //TODO check if this nodes param here is right and what it does...
-
         return(
                 <Box fill={true} ref={wrapperRef}  pad="small" height="xxlarge">
                     <svg ref={svgRef}></svg>
@@ -256,7 +226,7 @@ function drawNodes(svg, data, CIRCLE_RADIUS){
 node.append('circle')
   //.join("g")
   .attr("r", CIRCLE_RADIUS)
-  .attr("fill", function (d) { return '#ABEBC6'; });  
+  .attr("fill", function (d) { return '#D9BBF9'; });  
 
 
 node.append("text")
@@ -290,7 +260,7 @@ function drawBoxes(svg, data, boxWidth, boxHeight){
   // .on("mouseout", boxMouseOut)
 
   const boxRect = dropBox.append("rect")		// pre-defined shape
-  .attr("style", d => "fill:#E59866")	// fill color of shape
+  .attr("style", d => "fill:#DADADA")	// fill color of shape
     .attr("rx", 25)								// how much to round corners 
     .attr("ry", 25)								// how much to round corners
     .attr("width", (d,i) => boxWidth(i))					
@@ -300,7 +270,7 @@ function drawBoxes(svg, data, boxWidth, boxHeight){
     .join("g")
     .text(d => d.id)
     //.attr("x", boxWidth/2)              //Used to center the text in the box  
-    .attr('text-anchor', 'middle')
+    .attr('text-anchor', 'right')
     .attr('alignment-baseline', 'ideographic')
     .style('fill', '#000')
     .style('font-size', '20px');

@@ -3,26 +3,30 @@ export default function getQuestions() {
         [
             {
                 "id": 1,
-                "text" : "ninad",
+                "text" : "Who do you prefer",
                 "type" : "ladder",
                 "boxes" : [
                     {
-                        "id": "More wealthy than me", 
+                        "id": "Like a lot", 
                         "colour": "#AED6F1"
                     },
                     {
-                        "id": "Less wealthy than me",
+                        "id": "Like somehow",
                         "colour": "#E74C3C"
                     },
                     {
-                        "id": "More  than me", 
-                        "colour": "#AED6F1"
+                        "id": "Like a little less", 
+                        "colour": "#C948F5"
+                    },
+                    {
+                        "id": "Don't like",
+                        "colour": "#E74C3C"
                     },
                 ]
             },
             {
                 "id": 2,
-                "text" : "datboi",
+                "text" : "Who is egocentric",
                 "type" : "select",
                 "boxes" : []
             },

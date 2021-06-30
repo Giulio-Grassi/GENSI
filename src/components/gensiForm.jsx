@@ -7,7 +7,6 @@
 import React, { Component } from 'react';
 import ParagraphPage from './paragraphPage'
 import NodeCreationFunction from './nodeCreationFunction'
-import MCQ from './mcq'
 import ButtonFooter from './buttonFooter'
 import { Box } from 'grommet';
 import { Node } from './models/node';
@@ -112,23 +111,13 @@ export default function GensiForm() {
           );*/
           return (
               <QuestionStrategy
-              nodes={nodes}
-              questions={questions}
-              table={table}
-              setTable={setTable}
-              superNext={() => nextStep()}
+                nodes={nodes}
+                questions={questions}
+                table={table}
+                setTable={setTable}
+                superNext={() => nextStep()}
               />
           );
-         case 4:
-           return(
-            <Box id="case 4 box" fill= "vertical">
-              <MCQ
-              titles= {['choice 1', 'choice 2', 'choice 3']}
-              />
-              </Box>
-);
-          //  case 5:
-          //   return <Success />;
         default:
           (console.log('This is a multi-step form built with React.'))
       }

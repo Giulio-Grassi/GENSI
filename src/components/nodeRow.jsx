@@ -89,7 +89,7 @@ export default function NodeRow({
   node.append('circle')
       //.join("g")
       .attr("r", CIRCLE_RADIUS)
-      .attr("fill", function (d) { return '#ABEBC6'; });  
+      .attr("fill", function (d) { return '#D9BBF9'; });  
 
 
   node.append("text")
@@ -131,7 +131,7 @@ export default function NodeRow({
         select(this).selectChild('circle') //select circle at mouseposition... otherwise label gets in the way
         .transition()
         .attr("r", CIRCLE_RADIUS *1.5)
-        .attr("fill", function (d) { return '#ffa500'; })
+        .attr("fill", function (d) { return '#90EE90'; })
       }
 
   function handleMouseOut(d, i) {
@@ -139,7 +139,7 @@ export default function NodeRow({
         select(this).selectChild('circle')
         .transition()
         .attr("r", CIRCLE_RADIUS)
-        .attr("fill", function (d) { return '#ABEBC6'; })
+        .attr("fill", function (d) { return '#D9BBF9'; })
       }
 
 
