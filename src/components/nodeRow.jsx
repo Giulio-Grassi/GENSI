@@ -15,11 +15,12 @@ export default function NodeRow({
      question,
      table,
      setTable,
-      filterYou
+     filterYou = false
     }) {
     const CIRCLE_RADIUS = 30;
-    const [nodeName, setNodeName] = React.useState('');
-    const [didFilter, setDidFilter] = React.useState(false);
+    const [nodes, setNodes] = React.useState([]);
+    const [didInitialise, setDidInitialise] = React.useState(false);
+    const [didFilter, setDidFilter] = React.useState(false)
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
@@ -44,16 +45,21 @@ export default function NodeRow({
     useEffect(() => {
       if (!dimensions) return;
 
-      // console.log("prefilter nodes ", nodes)
-      // if(filterYou && !didFilter){
-      //   //const filteredNodes = nodes.filter(e => e.id !=  "You") //removing you as we do not need it for this screen, TODO make it a var
+      console.log("prefilter nodes ", nodes)
+
+      if(!didInitialise){
+        setDidInitialise(true);
+        setNodes(initialNodes);
+      
+      if(filterYou && !didFilter){
+        //const filteredNodes = nodes.filter(e => e.id !=  "You") //removing you as we do not need it for this screen, TODO make it a var
        
-      //  setNodes(nodes.filter(e => e.id !=  "You"))
-      //  setDidFilter(true)
-      //  console.log("FILTERED")
-       
-      // }
-      console.log("postfilter nodesRepresentation ", nodesRepresentation)
+         setNodes(initialNodes.filter(e => e.id !=  "You"))
+         setDidFilter(true)
+         console.log("FILTERED")
+        console.log("postfilter nodesRepresentation ", nodesRepresentation)
+      }
+    }
 
 
         const manualPadding = 100

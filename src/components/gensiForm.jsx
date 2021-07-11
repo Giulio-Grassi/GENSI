@@ -38,7 +38,6 @@ export default function GensiForm() {
   const [questions, setQuestion] = React.useState(questionArray); //React state containing the array of questions
   const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
 
-
   // Proceed to next step
   function nextStep(){
     setStep(step + 1);
