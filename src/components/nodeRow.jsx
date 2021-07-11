@@ -4,17 +4,18 @@
  */
 
  import React, { useState, useEffect, useRef} from 'react';
- import { Box, DataTable, Button, Layer, Heading, TextInput } from "grommet";
+ import { Box, DataTable, Button, Text, Layer, Heading, TextInput } from "grommet";
 import {select, forceSimulation, forceManyBody, forceCollide, forceCenter, tickFormat,} from 'd3'
 import useResizeObserver from './useResizeObserver'
 import { forceLink } from 'd3-force';
 
 
 export default function NodeRow({
-     initialNodes,
-     selectedIds,
-     setSelectedIds,
-    filterYou = false
+     nodes,
+     question,
+     table,
+     setTable,
+     filterYou = false
     }) {
     const CIRCLE_RADIUS = 30;
     const [nodes, setNodes] = React.useState([]);
@@ -23,6 +24,21 @@ export default function NodeRow({
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
+    const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map(x => {
+      return {
+        id: x.getName(),
+        selected: false
+      }
+    }))
+
+    useEffect(() => {
+      setNodesRepresentation(nodesRepresentation.map(x => {
+        x.selected = table.getRelation(question.id, x.id)[0][2]
+        return x
+      }))
+    }, [question])
+
+    
 
 
       // will be called initially and on every data change
@@ -38,21 +54,21 @@ export default function NodeRow({
       if(filterYou && !didFilter){
         //const filteredNodes = nodes.filter(e => e.id !=  "You") //removing you as we do not need it for this screen, TODO make it a var
        
-       setNodes(initialNodes.filter(e => e.id !=  "You"))
-       setDidFilter(true)
-       console.log("FILTERED")
-       
+         setNodes(initialNodes.filter(e => e.id !=  "You"))
+         setDidFilter(true)
+         console.log("FILTERED")
+        console.log("postfilter nodesRepresentation ", nodesRepresentation)
       }
     }
-      console.log("postfilter nodes ", nodes)
-      console.log ("initial nodes", initialNodes )
 
 
         const manualPadding = 100
-        const nodeOffset = (dimensions.width - 2* manualPadding)/ nodes.length
+        const nodeOffset = (dimensions.width - 2* manualPadding)/ nodesRepresentation.length
         console.log("width", dimensions.width)
         
         const svg = select(svgRef.current);
+        svg.selectAll("*").remove(); //Clear canvas so no duplicates are trailed every refresh
+
 
             // centering workaround
     svg.attr("viewBox", [
@@ -64,7 +80,7 @@ export default function NodeRow({
 
   const node = svg
       .selectAll(".node")
-      .data(nodes)
+      .data(nodesRepresentation)
       .join("g")
       .attr('class', 'node')
       //.attr("x", d => d.x = (-dimensions.width / 2  + manualPadding + nodeOffset/2 + d.index * nodeOffset))
@@ -79,7 +95,7 @@ export default function NodeRow({
   node.append('circle')
       //.join("g")
       .attr("r", CIRCLE_RADIUS)
-      .attr("fill", function (d) { return '#5b8075'; });  
+      .attr("fill", function (d) { return '#D9BBF9'; });  
 
 
   node.append("text")
@@ -95,12 +111,24 @@ export default function NodeRow({
 
         console.log("clicked")
         // nodes[this.index].selected = true
-        setSelectedIds( oldId => new Set(...oldId, nodes[i.index]))
-          //nodes[i.index].selected = true  //THIS IS FAULTY 
-          //oldId => new Set(...oldId, nodes[i.index]))
-        
-        console.log("clicked nodes", nodes)
-        console.log("indexed node", nodes[i.index])
+        var name = nodesRepresentation[i.index].id //enforce node name uniqueness to make this bulletproof
+        setNodesRepresentation(
+          nodesRepresentation.map(x => {
+            if(x.id === name){
+              var y = x
+              y.selected = !y.selected
+              return y
+            }
+            else{
+              return x
+            }
+          })
+        )
+        console.log("QUESTION: "+question+" NAME:"+name)
+        setTable(table.toggleRelation(question.id, name))
+        console.log("Updated table", table.getAll())
+        console.log("clicked nodesRepresentation", nodesRepresentation)
+        console.log("indexed node", nodesRepresentation[i.index])
         console.log(d);
       }
       // Create Event Handlers for mouse
@@ -108,8 +136,8 @@ export default function NodeRow({
 
         select(this).selectChild('circle') //select circle at mouseposition... otherwise label gets in the way
         .transition()
-        .attr("fill", function (d) { return '#ffa500'; })
         .attr("r", CIRCLE_RADIUS *1.5)
+        .attr("fill", function (d) { return '#90EE90'; })
       }
 
   function handleMouseOut(d, i) {
@@ -117,7 +145,7 @@ export default function NodeRow({
         select(this).selectChild('circle')
         .transition()
         .attr("r", CIRCLE_RADIUS)
-        .attr("fill", function (d) { return '#5b8075'; })
+        .attr("fill", function (d) { return '#D9BBF9'; })
       }
 
 
@@ -132,7 +160,7 @@ export default function NodeRow({
 
       //more than having the simulation, just have the posittions in the state?
       
-      const simulation = forceSimulation(nodes)
+      const simulation = forceSimulation(nodesRepresentation)
 
       simulation.on("tick", () => {
          node
@@ -142,9 +170,9 @@ export default function NodeRow({
 
         //console.log("simulation nodes ", nodes)
       });
-      }, [nodes, dimensions, selectedIds]); //TODO check if this nodes param here is right and what it does...
+      }, [nodesRepresentation, dimensions]); //TODO check if this nodes param here is right and what it does...
 
-        return( 
+        return(
                 <Box fill={true} ref={wrapperRef}  pad="small" height="xxlarge">
                     <svg ref={svgRef}></svg>
                 </Box>

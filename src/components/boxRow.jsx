@@ -65,7 +65,7 @@ export default function NodeRow({
   node.append('circle')
       //.join("g")
       .attr("r", CIRCLE_RADIUS)
-      .attr("fill", function (d) { return '#5b8075'; });  
+      .attr("fill", function (d) { return '#ABEBC6'; });  
 
 
   node.append("text")
@@ -99,7 +99,7 @@ export default function NodeRow({
         select(this).selectChild('circle')
         .transition()
         .attr("r", CIRCLE_RADIUS)
-        .attr("fill", function (d) { return '#5b8075'; })
+        .attr("fill", function (d) { return '#ABEBC6'; })
       }
 
       const simulation = forceSimulation(nodes)
