@@ -5,13 +5,20 @@
  import React from 'react';
  import { Button, Text, Box } from "grommet";
 
-export default function ParagraphPage({
-}){
+export default function ParagraphPage(props){
+    const {sentence} = props
     return(
             <Box id="paragraph page" fill= "vertical" justify="center" align="center" pad= "small" height="medium" >
-                <Text size="xlarge" >
-                This is a demonstration of the features currently available in this "version of GENSI...?"
-                </Text>
+                <div className="horizontalClass">
+                    <Text size="xxxlarge" className="title">
+                        {sentence}
+                    </Text>
+                    <div id="flip">
+                        <div><div>BOLD</div></div>
+                        <div><div>FAST</div></div>
+                        <div><div>PRIVATE</div></div>
+                    </div>
+                </div>
             </Box>
 
     )

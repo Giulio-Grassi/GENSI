@@ -12,47 +12,37 @@ import { Box } from 'grommet';
 import { Node } from './models/node';
 import { Table } from './models/table';  
 import { Question } from './models/question';  
-import { Text, Button } from "grommet";
+import { Grommet, Text, Button } from "grommet";
 import QuestionStrategy from './questionStrategy';
-import myquestions from './questions'
+import myquestions from './config/questions'
+import './assets/css/styles.css'
 
-export default function GensiForm() {
+
+export default function GensiForm(props) {
   const [step, setStep] = React.useState(1)
-  const question1 = {
-    id: 1,
-    text: "Who do you like?",
-    type: "select"
-  }
-  const question2 = {
-    id: 2,
-    text: "WEALTH QUESTION",
-    type: "dragndrop",
-    boxes: [{id: "More wealthy than me", colour: "#AED6F1"},{id: "Less wealthy than me", colour: "#E74C3C"}]
-  }
-
   //   const [nodes[], setNodes] = React.useState('');
-  const [nodes, setNodes] = React.useState([new Node("You", 0, 0, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
+  const [nodes, setNodes] = React.useState([new Node("You", 0, 200, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
   //   question initaliser from json
   const myquestionsvar = myquestions()
   const questionArray = myquestionsvar.map(q => new Question(q))
   const [questions, setQuestion] = React.useState(questionArray); //React state containing the array of questions
   const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
-
+  
   // Proceed to next step
   function nextStep(){
     setStep(step + 1);
   };
 
   // Go back to prev step
-  function prevStep(){
-    setStep(step - 1);
-  };
+;
 
-  function createNode(nodeName) { //IMPORTANT AS ALL THE USESTATES NEED TO BE INITIALISED 
-     setNodes(
-        [...nodes,
-        new Node(nodeName, 0, 0)]
-        );
+  function createNode(nodeName) { //IMPORTANT AS ALL THE USESTATES NEED TO BE INITIALISED
+    if(nodeName && nodeName.length > 0){
+      const findPotentialDuplicate = nodes.filter(x => x.getName() === nodeName)
+      if(findPotentialDuplicate.length === 0){
+        setNodes([...nodes,  new Node(nodeName, 0, 0)])
+      }
+    }
   }
 
   function populateTable(){
@@ -72,11 +62,9 @@ export default function GensiForm() {
     switch (step) {
         case 1:
           return ( <Box id="case 1 box" fill= "vertical" >
-            <ParagraphPage
-            />
+            <ParagraphPage sentence="GENSI  is  ↗"/>
             <ButtonFooter
-            onNext = {nextStep}
-            onPrev = {prevStep}
+              onNext = {nextStep}
             /> 
             </Box>
           );
@@ -96,35 +84,33 @@ export default function GensiForm() {
             </Box>
             );
         case 3:
-          /*return (
-            <Box id="case 3 box" fill= "vertical">
-              <Text>Dioacnae</Text>
-            <NodeRow
-            nodes={nodes}
-            questions={questions}
-            table={table}
-            setTable={setTable}
-            filterYou={true}
-            />
-            <ButtonFooter
-            onNext = {nextStep()}
-            /> 
-            </Box>
-
-          );*/
           return (
               <QuestionStrategy
                 nodes={nodes}
+                setNodes={setNodes}
                 questions={questions}
                 table={table}
                 setTable={setTable}
                 superNext={() => nextStep()}
+                darkMode={props.darkMode}
               />
           );
+          case 4:
+            return (
+              <Box id="paragraph page" fill= "vertical" justify="center" align="center" pad= "small" height="medium" >
+                  <Text size="xxxlarge" className="title">
+                      Thanks for taking the survey.
+                  </Text>
+                  <div id="flip">
+                      <div><div>See ya :)</div></div>
+                      <div><div>Arrivederci</div></div>
+                      <div><div>Adios!</div></div>
+                  </div>
+              </Box>
+            );
         default:
-          (console.log('This is a multi-step form built with React.'))
+          (console.log('This is a multi-step form built with React. And this step number is not supported!'))
       }
 }
   return renderPageBaseOnStep()
-    
   }

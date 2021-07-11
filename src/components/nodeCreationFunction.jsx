@@ -101,7 +101,7 @@ export default function NodeCreationPage({
   node.append('circle')
       .join("g")
       .attr("r", 30)
-      .attr("fill", function (d) { return '#D9BBF9'; })  
+      .attr("fill", function (d) { return '#42c58a'; })  
 
 
   node.append("text")
@@ -135,29 +135,31 @@ export default function NodeCreationPage({
 
     function createNode() {
         onNodeCreation(nodeName);
-        /*updateRepresentation()
-        setLinks(
-            [...links,
-            {"source": 0, "target": nodes.length-1}]
-            );*/
         setNodeName('');
     }
 
 
         return( 
-        <Box id="nodeCreation box" fill= "vertical">
+        <Box id="nodeCreation box" fill= "vertical" className="nodeCreation">
+            <p className="title">{"Please add the people as nodes."}</p>
+            <div className="inputContainer">
                 <TextInput
-                placeholder="type here"
-                value={nodeName}
-                onChange={event => setNodeName(event.target.value)}
+                    placeholder="Type here..."
+                    value={nodeName}
+                    onChange={event => setNodeName(event.target.value)}
                 />
 
-                <Button primary label="Confirm Name"
-                onClick={() => createNode()} />
+                <Button
+                    primary
+                    label="Add person"
+                    onClick={() => createNode()}
+                    disabled={nodeName && nodeName.length > 0 ? false : true}
+                />
+            </div>
 
-            <Box id="SVG wrap" fill={true} ref={wrapperRef}  pad="small" height="xxlarge">
-                <svg ref={svgRef}></svg>
-            </Box>
+            <div className="wrapperRef" ref={wrapperRef} >
+                <svg ref={svgRef} className="nodeCreationSVG"></svg>
+            </div>
         </Box>
         )
  
