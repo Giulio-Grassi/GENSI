@@ -1,15 +1,25 @@
 import './App.css';
 import GensiForm from './components/gensiForm'
 import { Grommet, Box, Button, Grid, Text } from 'grommet';
-import { grommet } from 'grommet/themes';
 import ResponsiveHeader from './components/responsiveHeader'
+import { useState } from 'react';
+import { acme } from "./components/assets/themes/theme";
+import { deepMerge } from "grommet/utils";
+import { grommet } from "grommet";
 
+const theme = deepMerge(grommet, acme);
 function App() {
+  const [darkMode, setDarkMode] = useState(false);
+
   return (
-    <Grommet full theme={grommet}>
+    <Grommet
+      full
+      theme={theme}
+      themeMode={darkMode ? "dark" : "light"}
+    >
       <Box fill="vertical"> 
-        <ResponsiveHeader/>
-        <GensiForm></GensiForm>
+        <ResponsiveHeader darkMode={darkMode} setDarkMode={setDarkMode}/>
+        <GensiForm darkMode={darkMode}></GensiForm>
       </Box>
     </Grommet>
   );

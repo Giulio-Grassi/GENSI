@@ -12,13 +12,8 @@ export default function MCQ({
   //customValues, TODO implement cause right now we ust use the index
 }) {
   return (
-    <Box 
-    direction="row" 
-    justify="between" 
-    align="end" 
-    pad="xlarge">
-
-        <Box>
+    <div className="footer">
+        <div className="prevButton">
           {typeof onPrev === "function" && (
             <Button 
             primary 
@@ -26,17 +21,17 @@ export default function MCQ({
             justify="start" 
             onClick={() => onPrev()} 
             />)}
-        </Box>
+        </div>
 
-        <Box>{typeof onNext === "function" &&(
+        <div className="nextButton">
+          {typeof onNext === "function" &&(
             <Button 
                 primary 
                 label="Next" 
                 justify="end" 
                 onClick={() => onNext()} 
             />)}
-        </Box>
-
-    </Box>
+        </div>
+    </div>
   );
 }

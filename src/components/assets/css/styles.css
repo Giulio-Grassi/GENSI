@@ -1,0 +1,114 @@
+
+#flip {
+  height:50px;
+  overflow:hidden;
+}
+
+#flip > div > div {
+  color:#fff;
+  padding:12px;
+  height:40px;
+  margin-bottom:45px;
+  display:inline-block;
+  font-weight: 100;
+}
+
+#flip div:first-child {
+  animation: show 5s linear infinite;
+}
+
+#flip div div {
+  background:#42c58a;
+}
+#flip div:first-child div {
+  background:#000000;
+}
+#flip div:last-child div {
+  background:#f58990;
+}
+
+@keyframes show {
+  0% {margin-top:-270px;}
+  5% {margin-top:-180px;}
+  33% {margin-top:-180px;}
+  38% {margin-top:-90px;}
+  66% {margin-top:-90px;}
+  71% {margin-top:0px;}
+  99.99% {margin-top:0px;}
+  100% {margin-top:-270px;}
+}
+
+.horizontalClass{
+  display: flex;
+}
+
+.title{
+  font-size: 3vw;
+  font-weight: 100;
+  padding: 10px;
+  text-align: center;
+}
+
+@media (orientation: portrait) {
+  .title{
+    font-size: 4vh;
+  }
+}
+
+.inputContainer{
+  text-align: center;
+  width: 50vw;
+  justify-self: center;
+  justify-content: center;
+  justify-items: center;
+  margin-right: auto;
+  margin-left: auto;
+  margin-top: 10vh;
+}
+
+@media (orientation: portrait) {
+  .inputContainer{
+    width: 70vw;
+  }
+}
+
+.inputContainer > *{
+  z-index: 5;
+  margin: 10px;
+}
+
+.footer{
+  width: 100%;
+  background-color: rgba(255,255,255,0);
+  display: flex;
+}
+
+.prevButton{
+  z-index: 5;
+  min-width: 49vw;
+  text-align: center;
+  padding-bottom: 5vh;
+}
+
+.nextButton{
+  z-index: 5;
+  min-width: 49vw;
+  text-align: center;
+  padding-bottom: 5vh;
+}
+
+.wrapperRef{
+  z-index: 1;
+  width: 99vw;
+  height: 50vh;
+}
+
+.nodeCreationSVG{
+  z-index: 1;
+  opacity: 50%;
+  position: fixed; left: 0; right: 0; top: auto; bottom:0;
+}
+
+.nodeCreation > .inputContainer, .nodeCreation > .title{
+  z-index: 5;
+}

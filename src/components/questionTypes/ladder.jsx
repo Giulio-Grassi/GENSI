@@ -6,17 +6,19 @@
  import React, { useState, useEffect, useRef, useCallback} from 'react';
  import { Box, DataTable, Button, Text, Layer, Heading, TextInput } from "grommet";
 import {select, drag, forceSimulation, forceManyBody, forceCollide, forceCenter, tickFormat, timeHour, timeout, selectAll,} from 'd3'
-import useResizeObserver from './useResizeObserver'
+import useResizeObserver from '../useResizeObserver'
 import { forceLink } from 'd3-force';
 import { colors } from 'grommet/themes/base';
+import { acme } from "../assets/themes/theme";
 
 
-export default function LineBox({
+export default function Ladder({
   nodes,
   question,
   table,
   setTable, 
   filterYou,
+  darkMode
     }) {
     const CIRCLE_RADIUS = 20;
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
@@ -46,12 +48,12 @@ export default function LineBox({
       if(draggingNode !== ""){
         setTable(table.updateRelation(question.id, draggingNode, boxToDropIn))
         const myboxArr = boxes.filter(box => box.id === boxToDropIn)
-        var newColor = "#ABEBC6"
+        var newColor = "#D9BBF9"
         if(myboxArr.length > 0){
            newColor = myboxArr[0].nodeColor;
         }
         else{
-          newColor = "#ABEBC6"
+          newColor = "#D9BBF9"
         }
         selectAll(".node")
         .filter(function(d) { return d.id === draggingNode })
@@ -81,7 +83,7 @@ export default function LineBox({
        */
   const nodes = drawNodes(svg, nodesRepresentation, CIRCLE_RADIUS)
       nodes  
-      .attr("transform", (d,i) => `translate(${d.x = nodePositionFuncX(i, dimensions)}, ${d.y = nodePositionFuncY(i) })`)
+      .attr("transform", (d,i) => `translate(${d.x = 300}, ${d.y = nodePositionFuncY(i, dimensions) })`)
       .call(drag()
             .on("start", dragstarted)
             .on("drag", dragged)
@@ -92,24 +94,24 @@ export default function LineBox({
  
 
       function nodePositionFuncX(i, dimensions){
-        const manualPadding = 100
-        const nodeOffset = (dimensions.width - 2* manualPadding)/ nodesRepresentation.length
-        const x = (-dimensions.width / 2  + manualPadding + nodeOffset/2 + i * nodeOffset)
-        return x
-      }
-      function nodePositionFuncY(i, dimensions){
         return 0
+      }
+
+      function nodePositionFuncY(i, dimensions){
+        const manualPadding = 100
+        const nodeOffset = (dimensions.height - 2* manualPadding)/ nodesRepresentation.length
+        const x = (-dimensions.height / 2  + manualPadding + nodeOffset/2 + i * nodeOffset)
+        return x
       }
 
         function dragstarted(event, d) {
           setDraggingNode(d.id)
-          //console.log("dragstarted", boxToDropIn)
           select(this).raise().attr("stroke", "black")
           .style("pointer-events", "none"); //this is done so that the mouseover event on the box can be detected
         }
       
         function dragged(event, d) {
-          //console.log("dragged", boxToDropIn)
+          console.log("dragged", boxToDropIn)
           select(this)
           .attr("transform", () => `translate(${d.x = event.x}, ${d.y = event.y })`)
         }
@@ -124,7 +126,7 @@ export default function LineBox({
          * @param {*} event 
          * @param {*} d 
          */
-        function dragended(event, d) {
+         function dragended(event, d) {
           setDraggingNode("")
           /*setTimeout(function() {
             console.log("dragended", boxToDropIn)
@@ -142,12 +144,19 @@ export default function LineBox({
       
 
   // ------FUNCTIONS FOR BOXES POSITION  AND SIZE  
-      const extraOuterPadding = 40 //this is extra for outer pad. total outer pad is manual + inner
-      const boxPadding = 280 / boxes.length 
-      function boxPositionFuncX(dimensions, extraOuterPadding, i){
-        const boxOffset = (dimensions.width - 2* extraOuterPadding)/ boxes.length
-        const x = (-boxWidth/2 -dimensions.width / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
-        return x
+      const extraOuterPadding = 0 //this is extra for outer pad. total outer pad is manual + inner
+      const boxPadding = 50
+
+      function boxHeightWithPadding(dimensions, extraOuterPadding, boxPadding ){
+        const boxHeight = (dimensions.height - 2*extraOuterPadding - boxPadding*(boxes.length-1))/ boxes.length
+        return boxHeight
+      }
+      
+      function boxPositionFuncY(dimensions, extraOuterPadding, i){
+        const boxOffset = (dimensions.height - 2* extraOuterPadding)/ boxes.length
+        const y = (-boxHeight/2 -dimensions.height / 2  + extraOuterPadding + boxOffset/2 + i * boxOffset)
+        
+        return y 
       }
 
       function boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding ){
@@ -156,20 +165,33 @@ export default function LineBox({
       }
 
       const boxWidth = boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding)
+      const boxHeight = boxHeightWithPadding(dimensions, extraOuterPadding, boxPadding)
+      const base = 100
+      function boxWidthFunc(i){
+        //follows compound interest formula where the time is the index
+        var t = (boxes.length-1)/2
+
+        const percent = 1
+        const CI = base * ( 1 + percent) * Math.floor(Math.abs(i-t))
+        if(Math.floor(Math.abs(i-t)) === 0) return base 
+        else return CI       
+      }
   // ------------------
 
       //Draws the boxes, positions them and appends necessary callbacks 
-      const dropBoxes = drawBoxes(svg, boxes, boxWidth)
+      const dropBoxes = drawBoxes(svg, boxes, boxWidthFunc, boxHeight, darkMode)
       dropBoxes
-      .attr("transform", (d,i) => `translate(${d.x = boxPositionFuncX(dimensions, extraOuterPadding, i ) }, ${d.y = 100 })`)
+      .attr("transform", (d,i) => `translate(${d.x = -100-(boxWidthFunc(i)/2) }, ${d.y = boxPositionFuncY(dimensions, extraOuterPadding, i ) })`)
       .on("mouseover", boxMouseOver)
       .on("mouseout", boxMouseOut)
+      // .attr("transform", (d,i) => `translate(${d.x = xfunc(i)}, ${d.y = yfunc(i) })`)
+
       
 
 
       function boxMouseOver(event, d){
         select(this).selectChild()
-        .attr("style", "fill:#F7DC6F");
+        .attr("style", "fill:#F9939B");
         setBoxToDropIn(d.id)
         
         //console.log("box over with d.id: "+d.id, boxToDropIn)
@@ -177,13 +199,12 @@ export default function LineBox({
       }
       function boxMouseOut(Event, d){
         select(this).selectChild()
-        .attr("style", "fill:#E59866");
+        .attr("style", "fill:#DADADA");
         setBoxToDropIn("")
       }
 
 
-      }, [nodesRepresentation, dimensions]); //TODO check if this nodes param here is right and what it does...
-
+      }, [nodesRepresentation, dimensions, darkMode]); //TODO check if this nodes param here is right and what it does...
         return(
                 <Box fill={true} ref={wrapperRef}  pad="small" height="xxlarge">
                     <svg ref={svgRef}></svg>
@@ -230,7 +251,7 @@ node.append("text")
  * @param {the width of each box} boxWidth 
  * @returns d3 selection with all the boxes so that it is then possible to append callbacks...
  */
-function drawBoxes(svg, data, boxWidth){
+function drawBoxes(svg, data, boxWidth, boxHeight, darkMode){
   const dropBox = svg
   .selectAll(".dropBox")
   .data(data, d => d.id)
@@ -241,19 +262,19 @@ function drawBoxes(svg, data, boxWidth){
   // .on("mouseout", boxMouseOut)
 
   const boxRect = dropBox.append("rect")		// pre-defined shape
-  .attr("style", d => "fill:#E59866")	// fill color of shape
+  .attr("style", d => "fill:#DADADA")	// fill color of shape
     .attr("rx", 25)								// how much to round corners 
     .attr("ry", 25)								// how much to round corners
-    .attr("width", boxWidth)					
-    .attr("height", 150);
+    .attr("width", (d,i) => boxWidth(i))					
+    .attr("height", boxHeight);
     
   dropBox.append("text")
     .join("g")
     .text(d => d.id)
-    .attr("x", boxWidth/2)              //Used to center the text in the box  
-    .attr('text-anchor', 'middle')
+    //.attr("x", boxWidth/2)              //Used to center the text in the box  
+    .attr('text-anchor', 'right')
     .attr('alignment-baseline', 'ideographic')
-    .style('fill', '#000')
+    .style('fill', (darkMode ? acme.global.colors['grey-1'] : acme.global.colors['grey-4']))
     .style('font-size', '20px');
     
     return dropBox
