@@ -15,7 +15,7 @@ app.use(express.json());
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'frontend/build')));
 
-const uri = "mongodb://localhost:27017";
+const uri = "mongodb://mongo:27017/";
 Mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const connection = Mongoose.connection;
@@ -24,10 +24,10 @@ connection.once('open', () => {
 });
 
 //ROUTES
-const test = require('./routes/test');
+const test = require('./routes/Tokyo');
 
 
-app.use('/api/test', test);
+app.use('/api/tokyo', test);
 
 
 /*app.get('*', (req, res) => {
@@ -38,9 +38,9 @@ app.use('/api/test', test);
 
 // The "catchall" handler: for any request that doesn't
 // match one above, send back React's index.html file.
-app.get('*', (req, res) => {
+/*app.get('*', (req, res) => {
   res.sendFile(path.join(__dirname + '/frontend/build/index.html'));
-});
+});*/
 
 app.listen(port, () => {
   console.log(`Example app listening at http://localhost:${port}`)

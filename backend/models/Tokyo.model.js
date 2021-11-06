@@ -1,6 +1,6 @@
 const Mongoose = require('mongoose');
 
-const TestSchema = new Mongoose.Schema({
+const TokyoSchema = new Mongoose.Schema({
     name: {
         type: String,
         required: true,
@@ -9,6 +9,6 @@ const TestSchema = new Mongoose.Schema({
     timestamps: true,
 });
 
-const Test = Mongoose.model("Test", TestSchema);
+const Tokyo = Mongoose.model("Tokyo", TokyoSchema);
 
-module.exports = Test;
+module.exports = Tokyo;
