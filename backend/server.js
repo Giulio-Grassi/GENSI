@@ -14,20 +14,20 @@ app.use(express.json());
 
 // Serve static files from the React app
 app.use(express.static(path.join(__dirname, 'frontend/build')));
-/*
-const uri = process.env.ATLAS_URI;
+
+const uri = "mongodb://localhost:27017";
 Mongoose.connect(uri, {useNewUrlParser: true, useUnifiedTopology: true});
 
 const connection = Mongoose.connection;
 connection.once('open', () => {
     console.log("MongoDB database connection established successfully")
 });
-*/
+
 //ROUTES
-//const contactUs = require('./routes/Contactus');
+const test = require('./routes/test');
 
 
-//app.use('/api/contactus', contactUs);
+app.use('/api/test', test);
 
 
 /*app.get('*', (req, res) => {
