@@ -39,6 +39,9 @@ export default function QuestionStrategy({
     if(currentQuestion > 0){
       setCurrentQuestion(currentQuestion-1)
     }
+    else if(currentQuestion === 0){
+      alert("This is the first question, you can't go back.")
+    }
   }
 
 
@@ -66,27 +69,6 @@ export default function QuestionStrategy({
 
   function questionComponentSelector(){
     switch (questions[currentQuestion].getType()) {
-        case "select":
-          return (
-            <Box id="case 3 box" fill= "vertical">
-              <Text size="xxxlarge" className="title">
-                {questions[currentQuestion].getText()}
-              </Text>
-              <NodeRow
-                nodes={nodes}
-                setNodes={setNodes}
-                question={questions[currentQuestion]}
-                table={table}
-                setTable={setTable}
-                filterYou={true}
-                currentQuestion={currentQuestion}
-              />
-              <ButtonFooter
-              onNext = {() => nextQuestion()}
-              onPrev = {() => prevQuestion()}
-              /> 
-            </Box>
-          );
         case "dragndrop":
           return (
             <Box id="case 3 box" fill= "vertical">
@@ -147,7 +129,27 @@ export default function QuestionStrategy({
             </Box>
           );
         default:
-          (console.log('Question type not valid.', questions[currentQuestion]))
+          return (
+            <Box id="case 3 box" fill= "vertical">
+              <Text size="xxxlarge" className="title">
+                {questions[currentQuestion].getText()}
+              </Text>
+              <p className="subtitle">{"When a node moves up, it means it is selected. And its unselected if it moves down."}</p>
+              <NodeRow
+                nodes={nodes}
+                setNodes={setNodes}
+                question={questions[currentQuestion]}
+                table={table}
+                setTable={setTable}
+                filterYou={true}
+                currentQuestion={currentQuestion}
+              />
+              <ButtonFooter
+              onNext = {() => nextQuestion()}
+              onPrev = {() => prevQuestion()}
+              /> 
+            </Box>
+          );
       }
 }
   return questionComponentSelector()

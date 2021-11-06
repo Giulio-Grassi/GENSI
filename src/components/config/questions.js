@@ -45,8 +45,14 @@ export default function getQuestions() {
             },
             {
                 "id": 3,
-                "text" : "waddup",
+                "text" : "waddup without correct type",
                 "type" : "",
+                "boxes" : []
+            },
+            {
+                "id": 4,
+                "text" : "waddup with correct type(select)",
+                "type" : "select",
                 "boxes" : []
             }
         ]

@@ -1,5 +1,5 @@
 export class Node {
-  constructor(name, fx, fy, isFixed = false) {
+  constructor(name, id, fx, fy, isFixed = false) {
     this.name = name;
     this.fx = fx
     this.fy = fy
