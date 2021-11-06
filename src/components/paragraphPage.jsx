@@ -19,6 +19,8 @@ export default function ParagraphPage(props){
                         <div><div>PRIVATE</div></div>
                     </div>
                 </div>
+                <p className="subtitle">{"When returing to an answered question, it will be reset. So, please do it only if you'll change the choice."}</p>
+                <p className="subtitle">{"And you can leave it empty if you want to submit the previous answer."}</p>
             </Box>
 
     )
