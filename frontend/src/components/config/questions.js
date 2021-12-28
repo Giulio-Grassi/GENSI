@@ -3,7 +3,7 @@ export default function getQuestions() {
         [
             {
                 "id": 1,
-                "text" : "How do you like them",
+                "text" : "Who do you prefer",
                 "type" : "ladder",
                 "boxes" : [
                     {
@@ -26,20 +26,20 @@ export default function getQuestions() {
             },
             {
                 "id": 2,
-                "text" : "Do you think you're egocentric?",
+                "text" : "Who is egocentric",
                 "type" : "mcq",
                 "boxes" : [
                     {
-                        "id": "a lot", 
+                        "id": "Like a lot", 
                     },
                     {
-                        "id": "somehow",
+                        "id": "Like somehow",
                     },
                     {
-                        "id": "not much", 
+                        "id": "Like a little less", 
                     },
                     {
-                        "id": "not at all",
+                        "id": "Don't like",
                     },
                 ]
             },

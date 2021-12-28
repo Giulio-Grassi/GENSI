@@ -16,7 +16,7 @@ import { Grommet, Text, Button } from "grommet";
 import QuestionStrategy from './questionStrategy';
 import myquestions from './config/questions'
 import './assets/css/styles.css'
-import axios from 'axios';
+
 
 export default function GensiForm(props) {
   const [step, setStep] = React.useState(1)
@@ -48,162 +48,14 @@ export default function GensiForm(props) {
   function populateTable(){
     for(var i = 0; i < questions.length; i++){
       if(questions[i].getType()==='mcq'){
-        table.insertRelation(questions[i].getId(), nodes[0].getName(), false, "mcq")
+        table.insertRelation(questions[i].getId(), nodes[0].getName(), false)
         continue
       }
       for(var k = 0; k < nodes.length; k++){
-        table.insertRelation(questions[i].getId(), nodes[k].getName(), false, questions[k].getType())
+        table.insertRelation(questions[i].getId(), nodes[k].getName(), false)
       }
     }
     console.log("populateTable", table.getAll())
-  }
-
-  function saveAnswersOnDatabase(){
-    var counter = 1
-    var anonymizedNames = []
-    nodes.forEach(x => {
-      anonymizedNames.add({
-        name: x.getName(),
-        anonName: counter++,
-      })
-    })
-
-    const totalAnswers = []
-
-    for(let i = 0; i < questions.length; i++){
-      var results = table.filter(x => x[0] === i)
-      var answer = {}
-      if(results && results.length > 0){
-        if(results[0][3] === "mcq"){
-          /*1: { //mcq
-            questionType: "mcq"
-            title: "How do you like yourself?"
-            answer: "a lot",
-          },*/
-          answer = {
-            questionType: "mcq",
-            title: questions[i].getText(),
-            answer: results[0][2],
-          }
-        }
-        else if(results[0][3] === "ladder"){
-          /*2: { //ladder
-            questionType: "ladder"
-            title: "how do you like these people"
-            answer: [
-              1: {
-                title: "like a lot"
-                answer: [1,3]
-              }
-              2: {
-                title: "like somehow"
-                answer: [4]
-              }
-            ]
-          }*/
-          let boxesLadder  = questions[i].getBoxes()
-          var ans = []
-          boxesLadder.forEach(b => {
-            var ansArray = []
-            var boxResults = results.filter(x => x[2] === b.id)
-            boxResults.forEach(br => {
-              ansArray.add(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
-            })
-
-            var tempAns = {
-              title: b.id,
-              answer: ansArray
-            }
-
-            ans.add(tempAns)
-          })
-
-          answer = {
-            questionType: "ladder",
-            title: questions[i].getText(),
-            answer: ans
-          }
-        }
-        else if(results[0][3] === "linebox"){
-          /*2: {
-            questionType: "linebox"
-            title: "how do you like these people"
-            answer: [
-              1: {
-                title: "like a lot"
-                answer: [1,3]
-              }
-              2: {
-                title: "like somehow"
-                answer: [4]
-              }
-            ]
-          }*/
-          let boxesLadder  = questions[i].getBoxes()
-          var ans = []
-          boxesLadder.forEach(b => {
-            var ansArray = []
-            var boxResults = results.filter(x => x[2] === b.id)
-            boxResults.forEach(br => {
-              ansArray.add(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
-            })
-
-            var tempAns = {
-              title: b.id,
-              answer: ansArray
-            }
-
-            ans.add(tempAns)
-          })
-
-          answer = {
-            questionType: "linebox",
-            title: questions[i].getText(),
-            answer: ans
-          }
-        }
-        else if(results[0][3] === "noderow"){
-          /*{ //noderow
-            questionType: "noderow"
-            title: "Has bullied someone",
-            answer: {
-              selected: [3],
-              unselected: [1,4]
-            }
-          }*/
-          var ansSelected = []
-          var andUnselected = []
-          results.forEach(r => {
-            if(r[2]){
-              selected.add(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
-            }else{
-              unselected.add(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
-            }
-          })
-
-          answer = {
-            questionType: "noderow",
-            title: questions[i].getText(),
-            answer: {
-              selected: ansSelected,
-              unselected: andUnselected
-            }
-          }
-        }
-      }
-      if(answer !== {}){
-        totalAnswers.add(answer)
-      }
-    }
-
-    //Post the event to mongodb
-    axios.post('/api/survey/', totalAnswers)
-        .then(
-            alert("Successful.")
-        )
-        .catch((error) => {
-            alert("Something went wrong when saving your answers!")
-        });      
   }
 
   function renderPageBaseOnStep(){
@@ -244,7 +96,6 @@ export default function GensiForm(props) {
               />
           );
           case 4:
-            
             return (
               <Box id="paragraph page" fill= "vertical" justify="center" align="center" pad= "small" height="medium" >
                   <Text size="xxxlarge" className="title">
