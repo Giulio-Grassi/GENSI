@@ -62,16 +62,17 @@ export default function GensiForm(props) {
     var counter = 1
     var anonymizedNames = []
     nodes.forEach(x => {
-      anonymizedNames.add({
+      var t = {
         name: x.getName(),
         anonName: counter++,
-      })
+      }
+      anonymizedNames.push(t)
     })
 
     const totalAnswers = []
 
     for(let i = 0; i < questions.length; i++){
-      var results = table.filter(x => x[0] === i)
+      var results = table.getAll().filter(x => x[0] === i)
       var answer = {}
       if(results && results.length > 0){
         if(results[0][3] === "mcq"){
@@ -107,7 +108,7 @@ export default function GensiForm(props) {
             var ansArray = []
             var boxResults = results.filter(x => x[2] === b.id)
             boxResults.forEach(br => {
-              ansArray.add(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
+              ansArray.push(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
             })
 
             var tempAns = {
@@ -115,7 +116,7 @@ export default function GensiForm(props) {
               answer: ansArray
             }
 
-            ans.add(tempAns)
+            ans.push(tempAns)
           })
 
           answer = {
@@ -145,7 +146,7 @@ export default function GensiForm(props) {
             var ansArray = []
             var boxResults = results.filter(x => x[2] === b.id)
             boxResults.forEach(br => {
-              ansArray.add(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
+              ansArray.push(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
             })
 
             var tempAns = {
@@ -153,7 +154,7 @@ export default function GensiForm(props) {
               answer: ansArray
             }
 
-            ans.add(tempAns)
+            ans.push(tempAns)
           })
 
           answer = {
@@ -175,9 +176,9 @@ export default function GensiForm(props) {
           var andUnselected = []
           results.forEach(r => {
             if(r[2]){
-              selected.add(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
+              ansSelected.push(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
             }else{
-              unselected.add(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
+              andUnselected.push(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
             }
           })
 
@@ -192,7 +193,7 @@ export default function GensiForm(props) {
         }
       }
       if(answer !== {}){
-        totalAnswers.add(answer)
+        totalAnswers.push(answer)
       }
     }
 
@@ -203,6 +204,7 @@ export default function GensiForm(props) {
         )
         .catch((error) => {
             alert("Something went wrong when saving your answers!")
+            console.log(error)
         });      
   }
 
@@ -244,7 +246,7 @@ export default function GensiForm(props) {
               />
           );
           case 4:
-            
+            saveAnswersOnDatabase()
             return (
               <Box id="paragraph page" fill= "vertical" justify="center" align="center" pad= "small" height="medium" >
                   <Text size="xxxlarge" className="title">
