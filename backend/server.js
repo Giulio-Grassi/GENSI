@@ -7,7 +7,7 @@ const Mongoose = require('mongoose');
 require('dotenv').config();
 
 const app = express()
-const port = process.env.PORT || 5000
+const port = process.env.PORT || 8080
 
 app.use(cors());
 app.use(express.json());
@@ -24,11 +24,10 @@ connection.once('open', () => {
 });
 
 //ROUTES
-const test = require('./routes/Tokyo');
+const survey = require('./routes/Survey');
 
 
-app.use('/api/tokyo', test);
-
+app.use('/api/survey', survey);
 
 /*app.get('*', (req, res) => {
   res.status(404).json("No routes match.")

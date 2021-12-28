@@ -15,7 +15,7 @@ export default function LineBox({
   nodes,
   question,
   table,
-  setTable, 
+  setTable,
   filterYou,
   darkMode
     }) {

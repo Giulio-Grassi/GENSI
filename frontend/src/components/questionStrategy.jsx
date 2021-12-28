@@ -12,7 +12,7 @@ import NodeRow from './questionTypes/nodeRow';
 import LineBox from './questionTypes/lineBox';
 import Ladder from './questionTypes/ladder';
 import MCQ from './questionTypes/mcq'
-
+import ContactNetwork from './questionTypes/contactNetwork';
 
 export default function QuestionStrategy({
   nodes,
@@ -26,6 +26,8 @@ export default function QuestionStrategy({
 
   const [currentQuestion, setCurrentQuestion] = React.useState(0)
 
+  const [networkCounter, setNetworkCounter] = React.useState(2)
+  
   function nextQuestion(){
     if(currentQuestion < questions.length-1){
       setCurrentQuestion(currentQuestion+1)
@@ -67,6 +69,15 @@ export default function QuestionStrategy({
     (valid)? buttonCallback() : alert("please select an option before proceeding")
   }
 
+  function networkNext(buttonCallback){
+    if (networkCounter + 1 > nodes.length + 1)
+    {
+      buttonCallback()
+      setNetworkCounter(networkCounter + 1)
+    }
+    else
+    setNetworkCounter(2)
+  }
   function questionComponentSelector(){
     switch (questions[currentQuestion].getType()) {
         case "dragndrop":
@@ -128,6 +139,25 @@ export default function QuestionStrategy({
               /> 
             </Box>
           );
+          case "network":
+            return (
+              <Box id="case 3 box" fill= "vertical">
+                <Text size="xxxlarge" className="title">
+                  {questions[currentQuestion].getText()}
+                </Text>
+                <ContactNetwork
+                  nodes={nodes}
+                  question={questions[currentQuestion]}
+                  table={table}
+                  setTable={setTable}
+                  filterYou={true}
+                />
+                <ButtonFooter
+                onNext = {() => networkNext(nextQuestion)}
+                onPrev = {() => prevQuestion()}
+                /> 
+              </Box>
+            );
         default:
           return (
             <Box id="case 3 box" fill= "vertical">
