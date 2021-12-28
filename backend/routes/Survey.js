@@ -1,7 +1,7 @@
 const router = require('express').Router();
 let Survey = require('../models/Survey.model');
 
-router.route('/add').get((req, res) => {
+router.route('/add').post((req, res) => {
     const newSurvey = new Survey({
         answer: req.body
     });

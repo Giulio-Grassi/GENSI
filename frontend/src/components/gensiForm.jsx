@@ -48,19 +48,21 @@ export default function GensiForm(props) {
   }
 
   function populateTable(){
+    
     for(var i = 0; i < questions.length; i++){
       if(questions[i].getType()==='mcq'){
         table.insertRelation(questions[i].getId(), nodes[0].getName(), false, "mcq")
         continue
       }
       for(var k = 0; k < nodes.length; k++){
-        table.insertRelation(questions[i].getId(), nodes[k].getName(), false, questions[k].getType())
+        table.insertRelation(questions[i].getId(), nodes[k].getName(), false, questions[i].getType())
       }
     }
     console.log("populateTable", table.getAll())
   }
 
   function saveAnswersOnDatabase(){
+    // e.preventDefault()
     var counter = 1
     var anonymizedNames = []
     nodes.forEach(x => {
@@ -200,7 +202,10 @@ export default function GensiForm(props) {
     }
 
     //Post the event to mongodb
-    axios.post('/api/survey/', totalAnswers)
+    axios({
+      method: 'post',
+      url:'http://backend:8080/api/survey/add', 
+      data: {totalAnswers}})
         .then(
             alert("Successful.")
         )
@@ -259,6 +264,7 @@ export default function GensiForm(props) {
                       <div><div>Arrivederci</div></div>
                       <div><div>Adios!</div></div>
                   </div>
+                  {/* <button onClick={() => this.handleSubmit} >Save your survey</button> */}
               </Box>
             );
         default:

@@ -24,16 +24,11 @@ export default function getQuestions() {
                     },
                 ]
             },
+
             {
                 "id": 2,
-                "text" : "Do you think you're egocentric?",
-                "type" : "network",
-                "boxes" : []
-            },
-            {
-                "id": 3,
                 "text" : "do you like them",
-                "type" : "dragndrop",
+                "type" : "ladder",
                 "boxes" : [
                     {
                         "id": "Like a lot", 
@@ -53,12 +48,6 @@ export default function getQuestions() {
                     },
                 ]
             },
-            {
-                "id": 4,
-                "text" : "waddup with correct type(select)",
-                "type" : "select",
-                "boxes" : []
-            }
         ]
     )
 }
