@@ -21,7 +21,7 @@ import axios from 'axios';
 export default function GensiForm(props) {
   const [step, setStep] = React.useState(1)
   //   const [nodes[], setNodes] = React.useState('');
-  const [nodes, setNodes] = React.useState([new Node("You", 0, 200, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
+  const [nodes, setNodes] = React.useState([new Node(1, "You", 0, 200, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
   //   question initaliser from json
   const myquestionsvar = myquestions()
   const questionArray = myquestionsvar.map(q => new Question(q))
@@ -37,10 +37,12 @@ export default function GensiForm(props) {
 ;
 
   function createNode(nodeName) { //IMPORTANT AS ALL THE USESTATES NEED TO BE INITIALISED
+    console.log("NINADDC" , nodes)
     if(nodeName && nodeName.length > 0){
       const findPotentialDuplicate = nodes.filter(x => x.getName() === nodeName)
       if(findPotentialDuplicate.length === 0){
-        setNodes([...nodes,  new Node(nodeName, 0, 0)])
+        setNodes([...nodes,  new Node(nodes.length + 1, nodeName, 0, 0)])
+        console.log("MANAGGIA A DOCKER" , nodes)
       }
     }
   }

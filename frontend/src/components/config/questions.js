@@ -3,7 +3,7 @@ export default function getQuestions() {
         [
             {
                 "id": 1,
-                "text" : "How do you like them",
+                "text" : "do you like them",
                 "type" : "ladder",
                 "boxes" : [
                     {
@@ -27,27 +27,31 @@ export default function getQuestions() {
             {
                 "id": 2,
                 "text" : "Do you think you're egocentric?",
-                "type" : "mcq",
-                "boxes" : [
-                    {
-                        "id": "a lot", 
-                    },
-                    {
-                        "id": "somehow",
-                    },
-                    {
-                        "id": "not much", 
-                    },
-                    {
-                        "id": "not at all",
-                    },
-                ]
+                "type" : "network",
+                "boxes" : []
             },
             {
                 "id": 3,
-                "text" : "waddup without correct type",
-                "type" : "",
-                "boxes" : []
+                "text" : "do you like them",
+                "type" : "dragndrop",
+                "boxes" : [
+                    {
+                        "id": "Like a lot", 
+                        "colour": "#AED6F1"
+                    },
+                    {
+                        "id": "Like somehow",
+                        "colour": "#E74C3C"
+                    },
+                    {
+                        "id": "Like a little less", 
+                        "colour": "#C948F5"
+                    },
+                    {
+                        "id": "Don't like",
+                        "colour": "#E74C3C"
+                    },
+                ]
             },
             {
                 "id": 4,

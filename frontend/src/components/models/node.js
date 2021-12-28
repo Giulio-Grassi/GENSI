@@ -1,5 +1,6 @@
 export class Node {
-  constructor(name, id, fx, fy, isFixed = false) {
+  constructor(id, name, fx, fy, isFixed = false, ) {
+    this.id = id
     this.name = name;
     this.fx = fx
     this.fy = fy
@@ -12,12 +13,19 @@ export class Node {
   setY = (fy) => {
     this.fy = fy
   }
+  setId = (id) => {
+    this.id = id
+  }
+
   setIsFixed = (isFixed) => {
     this.isFixed = isFixed
   }
 
   getX = () => {
     return this.fx
+  }
+  getId = () => {
+    return this.id
   }
   getY = () => {
     return this.fy
