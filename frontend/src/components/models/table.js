@@ -4,8 +4,8 @@ export class Table {
     this.matrix = [];
   }
 
-  insertRelation = (questionId, nodeName, status) => {
-    this.matrix.push([questionId, nodeName, status])
+  insertRelation = (questionId, nodeName, status, type) => {
+    this.matrix.push([questionId, nodeName, status, type])
     return this
   }
 
