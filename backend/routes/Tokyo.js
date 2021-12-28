@@ -7,7 +7,7 @@ router.route('/add').get((req, res) => {
     });
     
     newTokyo.save().then(() => res.json('New TOKYO ITEM Added to Database')).catch(err => res.status(400).json('!!!    !!!!   Error ' + err));
-    res.redirect('http://google.com')
+    // res.redirect('http://google.com')
 });
 
 module.exports = router;

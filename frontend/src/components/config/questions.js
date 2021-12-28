@@ -3,7 +3,7 @@ export default function getQuestions() {
         [
             {
                 "id": 1,
-                "text" : "Who do you prefer",
+                "text" : "MANNAGGIAN A DIO do you like them",
                 "type" : "ladder",
                 "boxes" : [
                     {
@@ -26,28 +26,32 @@ export default function getQuestions() {
             },
             {
                 "id": 2,
-                "text" : "Who is egocentric",
-                "type" : "mcq",
-                "boxes" : [
-                    {
-                        "id": "Like a lot", 
-                    },
-                    {
-                        "id": "Like somehow",
-                    },
-                    {
-                        "id": "Like a little less", 
-                    },
-                    {
-                        "id": "Don't like",
-                    },
-                ]
+                "text" : "Do you think you're egocentric?",
+                "type" : "network",
+                "boxes" : []
             },
             {
                 "id": 3,
-                "text" : "waddup without correct type",
-                "type" : "",
-                "boxes" : []
+                "text" : "MANNAGGIAN A DIO do you like them",
+                "type" : "dragndrop",
+                "boxes" : [
+                    {
+                        "id": "Like a lot", 
+                        "colour": "#AED6F1"
+                    },
+                    {
+                        "id": "Like somehow",
+                        "colour": "#E74C3C"
+                    },
+                    {
+                        "id": "Like a little less", 
+                        "colour": "#C948F5"
+                    },
+                    {
+                        "id": "Don't like",
+                        "colour": "#E74C3C"
+                    },
+                ]
             },
             {
                 "id": 4,
