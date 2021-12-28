@@ -27,6 +27,7 @@ export default function QuestionStrategy({
   const [currentQuestion, setCurrentQuestion] = React.useState(0)
 
   const [networkCounter, setNetworkCounter] = React.useState(2)
+  
   function nextQuestion(){
     if(currentQuestion < questions.length-1){
       setCurrentQuestion(currentQuestion+1)
