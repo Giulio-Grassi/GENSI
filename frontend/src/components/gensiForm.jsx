@@ -37,18 +37,16 @@ export default function GensiForm(props) {
 ;
 
   function createNode(nodeName) { //IMPORTANT AS ALL THE USESTATES NEED TO BE INITIALISED
-    console.log("NINADDC" , nodes)
     if(nodeName && nodeName.length > 0){
       const findPotentialDuplicate = nodes.filter(x => x.getName() === nodeName)
+
       if(findPotentialDuplicate.length === 0){
         setNodes([...nodes,  new Node(nodes.length + 1, nodeName, 0, 0)])
-        console.log("MANAGGIA A DOCKER" , nodes)
       }
     }
   }
 
   function populateTable(){
-    
     for(var i = 0; i < questions.length; i++){
       if(questions[i].getType()==='mcq'){
         table.insertRelation(questions[i].getId(), nodes[0].getName(), false, "mcq")
@@ -76,8 +74,9 @@ export default function GensiForm(props) {
     const totalAnswers = []
 
     for(let i = 0; i < questions.length; i++){
-      var results = table.getAll().filter(x => x[0] === i)
+      var results = table.getAll().filter(x => x[0] === i+1)
       var answer = {}
+
       if(results && results.length > 0){
         if(results[0][3] === "mcq"){
           /*1: { //mcq
@@ -106,6 +105,9 @@ export default function GensiForm(props) {
               }
             ]
           }*/
+          console.log("we inside ladder")
+          console.log(results)
+
           let boxesLadder  = questions[i].getBoxes()
           var ans = []
           boxesLadder.forEach(b => {
@@ -176,6 +178,8 @@ export default function GensiForm(props) {
               unselected: [1,4]
             }
           }*/
+          console.log("we inside noderow")
+          console.log(results)
           var ansSelected = []
           var andUnselected = []
           results.forEach(r => {
@@ -195,8 +199,6 @@ export default function GensiForm(props) {
             }
           }
         }
-      }
-      if(answer !== {}){
         totalAnswers.push(answer)
       }
     }
@@ -212,7 +214,8 @@ export default function GensiForm(props) {
         .catch((error) => {
             alert("Something went wrong when saving your answers!")
             console.log(error)
-        });      
+        });    
+    console.log("SOSSINO          ",totalAnswers)  
   }
 
   function renderPageBaseOnStep(){

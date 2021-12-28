@@ -12,7 +12,7 @@ export class Table {
   updateRelation = (questionId, nodeName, status) => {
     this.matrix = this.matrix.map(x => {
       if(x[0] === questionId && x[1] === nodeName){
-        return [questionId, nodeName, status]
+        return [questionId, nodeName, status, x[3]]
       }
       else{
         return x
@@ -22,7 +22,7 @@ export class Table {
     return this
   }
 
-  insertOrUpdateRelation = (questionId, nodeName, status) => {
+  insertOrUpdateRelation = (questionId, nodeName, status, type) => {
     const existence = this.matrix.filter(x => {
       if(x[0] === questionId && x[1] === nodeName){
         return true
@@ -47,7 +47,7 @@ export class Table {
       }
     }
     else{
-      this.matrix.push([questionId, nodeName, status])
+      this.matrix.push([questionId, nodeName, status, type])
     }
 
     return this
@@ -56,7 +56,7 @@ export class Table {
   toggleRelation = (questionId, nodeName) => {
     this.matrix = this.matrix.map(x => {
       if(x[0] === questionId && x[1] === nodeName){
-        return [questionId, nodeName, !x[2]]
+        return [questionId, nodeName, !x[2], x[3]]
       }
       else{
         return x
