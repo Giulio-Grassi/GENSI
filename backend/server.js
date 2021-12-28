@@ -24,11 +24,10 @@ connection.once('open', () => {
 });
 
 //ROUTES
-const test = require('./routes/Tokyo');
+const survey = require('./routes/Survey');
 
 
-app.use('/api/tokyo', test);
-
+app.use('/api/survey', survey);
 
 /*app.get('*', (req, res) => {
   res.status(404).json("No routes match.")

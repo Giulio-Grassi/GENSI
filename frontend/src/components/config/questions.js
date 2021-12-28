@@ -3,7 +3,7 @@ export default function getQuestions() {
         [
             {
                 "id": 1,
-                "text" : "MANNAGGIAN A DIO do you like them",
+                "text" : "do you like them",
                 "type" : "ladder",
                 "boxes" : [
                     {
@@ -32,7 +32,7 @@ export default function getQuestions() {
             },
             {
                 "id": 3,
-                "text" : "MANNAGGIAN A DIO do you like them",
+                "text" : "do you like them",
                 "type" : "dragndrop",
                 "boxes" : [
                     {
