@@ -1,7 +1,11 @@
 const Mongoose = require('mongoose');
 
 const SurveySchema = new Mongoose.Schema({
-    answer: {
+    surveyId: {
+        type: String,
+        required: true,
+    },
+    result: {
         type: Object,
         required: true,
     },
