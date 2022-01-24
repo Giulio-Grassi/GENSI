@@ -3,6 +3,11 @@ export default function getQuestions() {
         [
             {
                 "id": 1,
+                "text" : "Starting at the first contact, please indicate if this person knows the other persons you have listed. Then do the same for your second contact, etc.",
+                "type" : "network",
+            },
+            {
+                "id": 1,
                 "text" : "do you like them",
                 "type" : "ladder",
                 "boxes" : [
