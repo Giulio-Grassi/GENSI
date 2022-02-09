@@ -66,14 +66,15 @@ export default function GensiForm(props) {
         table.insertRelation(questions[i].getId(), nodes[0].getName(), false, "mcq")
         continue
       }
+      if(questions[i].getType()==='network'){
+        continue
+      }
       for(var k = 0; k < nodes.length; k++){
         table.insertRelation(questions[i].getId(), nodes[k].getName(), false, questions[i].getType())
       }
     }
     console.log("populateTable", table.getAll())
   }
-
-  
 
   function renderPageBaseOnStep(){
     switch (step) {
