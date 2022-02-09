@@ -26,9 +26,11 @@ connection.once('open', () => {
 
 //ROUTES
 const survey = require('./routes/Survey');
+const question = require('./routes/Question');
 
 
 app.use('/api/survey', survey);
+app.use('/api/question', question);
 
 /*app.get('*', (req, res) => {
   res.status(404).json("No routes match.")
