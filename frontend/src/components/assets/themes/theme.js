@@ -1,5 +1,9 @@
 export const acme = {
   global: {
+    font: {
+      //family: "Roboto Condensed", //font needs to be supported by default on all computers and operating systems
+      size: "14px"
+    },
     colors: {
       /* BEGIN: Color Palette Definition */
       ruby: {
