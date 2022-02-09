@@ -52,6 +52,9 @@ export default function GensiForm(props) {
         table.insertRelation(questions[i].getId(), nodes[0].getName(), false, "mcq")
         continue
       }
+      if(questions[i].getType()==='network'){
+        continue
+      }
       for(var k = 0; k < nodes.length; k++){
         table.insertRelation(questions[i].getId(), nodes[k].getName(), false, questions[i].getType())
       }
@@ -197,6 +200,17 @@ export default function GensiForm(props) {
               selected: ansSelected,
               unselected: andUnselected
             }
+          }
+        }
+        else if(results[0][3] === "network"){
+          /*1: { //mcq
+            questionType: "mcq"
+            title: "How do you like yourself?"
+            answer: "a lot",
+          },*/
+          answer = {
+            questionType: "network",
+            answer: results[0][1],
           }
         }
         totalAnswers.push(answer)

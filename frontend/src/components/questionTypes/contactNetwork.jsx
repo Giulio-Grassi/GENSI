@@ -24,7 +24,7 @@ export default function ContactNetwork({
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
     const [currentCenterNodeId, setCurrentCenterNodeId] = React.useState(2)
     const relationships = table.getNetworkPairs(question, currentCenterNodeId)
-    const [relToAdd, setRelToAdd] = React.useState(new Set())
+    const [relToAdd, setRelToAdd] = React.useState([])
     const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.reduce(function (nodReps, nod) {
       if(!(filterYou && (nod.id == 1))){
 
@@ -135,6 +135,8 @@ export default function ContactNetwork({
   node.append('circle')
       .join("g")
       .attr("r", CIRCLE_RADIUS)
+      .style("stroke", "red")
+      .attr("stroke-width", function(d) { if(d.UID === currentCenterNodeId){return 4} else return 0 })
       .attr("fill", function (d) { return '#42c58a'; });  
 
 
@@ -178,17 +180,25 @@ export default function ContactNetwork({
             }
           })
         )
-        setRelToAdd( new Set (relToAdd.add((currentCenterNodeId, d.UID))))
-        console.log("relsToAdd: " +relToAdd)
         // console.log("QUESTION: "+question+" NAME:"+name)
         console.log("Updated table", table.getAll())
         console.log("clicked nodesRepresentation", nodesRepresentation)
         // console.log("indexed node", nodesRepresentation[i.index])
-        console.log(d);
-        console.log("REL TO ADD : " ,Array.from(relToAdd).join(" "))
-
+        console.log("\n\n\n\n")
+        console.log("Selected node d "+d.id+" and number is "+d.UID);
         console.log("CURRENT CENTER : " , currentCenterNodeId)
-        setTable(table.addNetworkPairs(question.id, new Set((currentCenterNodeId, d.UID))))
+        
+        //This block is for every click on the nodes, not next
+        let existence = relToAdd.filter(x => (x[0] === currentCenterNodeId && x[1] === d.UID) || (x[0] === d.UID && x[1] === currentCenterNodeId))
+        if(existence.length === 0){
+          let newArray = relToAdd
+          newArray.push([currentCenterNodeId, d.UID])
+          setRelToAdd(newArray)
+        }
+        
+        //This block is for click on next
+        console.log("relToAdd", relToAdd)
+        setTable(table.addNetworkPairs(question.id, relToAdd))
 
       }
       // Create Event Handlers for mouse

@@ -73,7 +73,10 @@ export class Table {
     return this.matrix.filter(x => x[0] === questionId && x[1] === nodeName)
   }
 
-  // return the instance [questionId, relationObject] that has the datastructure of the social network of the nodes
+  //rObject is an array of arrays. The inner arrays are monodirectional and format like [1, 3].
+  //rObject shouldn't have both directions.
+
+  // return the instance [questionId, relationObject, "network"] that has the datastructure of the social network of the nodes
   getNetwork = (questionId) => {
     return this.matrix.filter(x => x[0] === questionId)
   }
@@ -87,22 +90,29 @@ export class Table {
   }
 
   addNetworkPairs = (questionId, rObject) => {
-    const existence = this.matrix.filter(x => x[0] === questionId)
+    let existence = this.matrix.filter(x => x[0] === questionId && x[2] === "network")
 // x yyyyyyyyy z
-// xyz xyz xyz 
-    if(existence){
-        const resultOfUpdate = this.matrix.map(x => {
-          if(x[0] === questionId){
-            rObject.forEach(y => x[1].add(y))
-            return x
-          }
-          else{
-            return x
-          }
-        })
-        this.matrix = resultOfUpdate
-    }
-    else{
+// xyz xyz xyz
+    console.log("existence", existence)
+    if(existence.length > 0){
+      existence = existence[0]
+      rObject.forEach(r => {
+        if(!existence[1].includes(r) && !existence[1].includes([r[1], r[0]])){
+          console.log(r)
+          console.log("r is not in existence.")
+          existence[1].push(r)
+        }
+      })
+      
+      this.matrix.map(x => {
+        if(x[0] === existence[0] && x[2] === existence[2]){
+          return existence
+        }
+        else{
+          return x
+        }
+      })
+    } else{
       console.log("ROBJECT : " ,rObject)
       this.matrix.push([questionId, rObject, "network"])
     }
