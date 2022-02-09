@@ -55,9 +55,21 @@ export default function ContactNetwork({
 
     // TODO ASK NINAD WTF IS THIS AND DOES IT NEED TO BE A USE EFFECT OR IS IT INITIALISATION?
     useEffect(() => {
-      setNodesRepresentation(nodesRepresentation.map(x => {
-        x.selected = table.getRelation(question.id, x.id)[0][2]
-        return x
+      setNodesRepresentation(nodesRepresentation.filter(x => {
+        let r = table.getNetworkPairs(question.id, currentCenterNodeId)
+        let relationFound = false
+        let i = 0
+        while(!relationFound && i < r.length){
+          if(r[i][0] === x.UID || r[i][1] === x.UID){
+            relationFound = true
+          }
+          else i++
+        }
+        //x.selected = relationFound //true means it's been already selected, hence we don't show the node.
+        //return x
+        if(!relationFound){
+          return x
+        }
       }))
 
     }, [question])
@@ -185,8 +197,7 @@ export default function ContactNetwork({
         console.log("clicked nodesRepresentation", nodesRepresentation)
         // console.log("indexed node", nodesRepresentation[i.index])
         console.log("\n\n\n\n")
-        console.log("Selected node d "+d.id+" and number is "+d.UID);
-        console.log("CURRENT CENTER : " , currentCenterNodeId)
+        
         
         //This block is for every click on the nodes, not next
         let existence = relToAdd.filter(x => (x[0] === currentCenterNodeId && x[1] === d.UID) || (x[0] === d.UID && x[1] === currentCenterNodeId))
@@ -200,6 +211,11 @@ export default function ContactNetwork({
         console.log("relToAdd", relToAdd)
         setTable(table.addNetworkPairs(question.id, relToAdd))
 
+        console.log("\n\n\nCheck getNetwork")
+        console.log("Selected node d "+d.id+" and number is "+d.UID);
+        console.log("CURRENT CENTER : " , currentCenterNodeId)
+        console.log(table.getNetworkPairs(question.id, d.UID))
+        console.log(table.getNetworkPairs(question.id, currentCenterNodeId))
       }
       // Create Event Handlers for mouse
       function handleMouseOver(e, d) {  // Add interactivity

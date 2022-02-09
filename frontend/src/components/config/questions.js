@@ -7,7 +7,7 @@ export default function getQuestions() {
                 "type" : "network",
             },
             {
-                "id": 1,
+                "id": 2,
                 "text" : "do you like them",
                 "type" : "ladder",
                 "boxes" : [
@@ -30,7 +30,7 @@ export default function getQuestions() {
                 ]
             },
             {
-                "id": 2,
+                "id": 3,
                 "text" : "who do you like",
                 "type" : "noderow",
             },
