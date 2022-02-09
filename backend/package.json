@@ -1,0 +1,30 @@
+{
+  "name": "egosurveyreact",
+  "version": "1.0.0",
+  "description": "",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev-backend": "nodemon server.js",
+    "dev": "concurrently \"npm run dev-backend\" \"cd ../frontend && yarn start\" "
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Giulio-Grassi/egoSurveyReact.git"
+  },
+  "author": "Giulio Grassi and Ninad Bhuiyan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Giulio-Grassi/egoSurveyReact/issues"
+  },
+  "homepage": "https://github.com/Giulio-Grassi/egoSurveyReact#readme",
+  "dependencies": {
+    "concurrently": "^6.3.0",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "express": "^4.17.1",
+    "mongoose": "^6.0.12",
+    "nodemon": "^2.0.14",
+    "path": "^0.12.7"
+  }
+}
