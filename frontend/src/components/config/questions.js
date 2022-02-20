@@ -1,10 +1,10 @@
 export default function getQuestions() {
     return (
-        (
+        ([
             {
                 surveyId: "FIRST001-Imke",
                 upperBoundNodes: 10,
-                lowerBoundNodes: 10,
+                lowerBoundNodes: 4,
             },
             [
                 {
@@ -115,7 +115,7 @@ export default function getQuestions() {
                         },
                     ]
                 },
-            ]
+            ]]
         )
     )
 }

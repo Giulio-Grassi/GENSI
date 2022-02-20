@@ -1,4 +1,7 @@
-function saveAnswersOnDatabase(surveyId){
+import axios from 'axios';
+
+
+function saveAnswersOnDatabase(surveyId, questions, table, nodes){
     // e.preventDefault()
     var counter = 1
     var anonymizedNames = []

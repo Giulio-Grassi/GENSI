@@ -26,8 +26,10 @@ export default function QuestionStrategy({
 
   const [currentQuestion, setCurrentQuestion] = React.useState(0)
 
-  const [networkCounter, setNetworkCounter] = React.useState(2)
-  
+  // state specifically for network component... 
+  const [networkCounter, setNetworkCounter] = React.useState(2) //given we always filter you... and first node is 1...
+  const [relToAdd, setRelToAdd] = React.useState([])
+
   function nextQuestion(){
     if(currentQuestion < questions.length-1){
       setCurrentQuestion(currentQuestion+1)
@@ -69,14 +71,28 @@ export default function QuestionStrategy({
     (valid)? buttonCallback() : alert("please select an option before proceeding")
   }
 
+  /**
+   * handles the newtork given addToRel 
+   * @param {*} buttonCallback 
+   */
   function networkNext(buttonCallback){
-    if (networkCounter + 1 > nodes.length + 1)
+    console.log("network next")
+    if (networkCounter + 1 < nodes.length + 1)
     {
-      buttonCallback()
-      setNetworkCounter(networkCounter + 1)
+      setNetworkCounter(networkCounter +1)
+      console.log("network counter : ", networkCounter)
+      console.log("relToAdd : ", relToAdd)
+      const newtable = table.addNetworkPairs(questions[currentQuestion].id, relToAdd)
+      // add the rels to the table
+      setTable(newtable)
+      setRelToAdd([])
+      console.log("relToAdd2 : ", relToAdd)
+
     }
-    else
+    else{
+    buttonCallback()
     setNetworkCounter(2)
+    }
   }
   function questionComponentSelector(){
     switch (questions[currentQuestion].getType()) {
@@ -151,6 +167,10 @@ export default function QuestionStrategy({
                   table={table}
                   setTable={setTable}
                   filterYou={true}
+                  relToAdd={relToAdd}
+                  setRelToAdd={setRelToAdd}
+                  internalCounter={networkCounter}
+                  
                 />
                 <ButtonFooter
                 onNext = {() => networkNext(nextQuestion)}

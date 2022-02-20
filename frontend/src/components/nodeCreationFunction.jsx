@@ -3,7 +3,7 @@
  */
  import React, { useState, useEffect, useRef} from 'react';
  import { Box, DataTable, Button, Layer, Heading, TextInput } from "grommet";
-import {select, forceSimulation, forceManyBody, forceCollide, forceCenter,} from 'd3'
+import {select, forceSimulation, forceManyBody, forceCollide, forceCenter, } from 'd3'
 import useResizeObserver from './useResizeObserver'
 import { forceLink } from 'd3-force';
 
@@ -11,38 +11,51 @@ import { forceLink } from 'd3-force';
 export default function NodeCreationPage({
     nodes,
     onNodeCreation,//callback that gets triggered when the button confirm name button is pressed and a new node should be added
+    maxNodes, //number used to calculate angles, got it from the form initially 
+    filterYou = false
 }) {
 
     const [nodeName, setNodeName] = React.useState('');
     const [links, setLinks] = React.useState([])
-    const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map((x) => {
-        if(x.getIsFixed()){
-            return {
-                "id": x.getName(),
-                "fx": x.getX(),
-                "fy": x.getY()
-            }
+    // const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map((x) => {
+    //     if(x.getIsFixed()){
+    //         return {
+    //             "id": x.getName(),
+    //             "fx": x.getX(),
+    //             "fy": x.getY(),
+    //             "UID": x.getId()
+    //         }
+    //     }
+    //     else{
+    //         return {
+    //             "id": x.getName(),
+    //             "UID": x.getId()
+    //         }
+    //     }
+    // }))
+
+
+    const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.reduce(function (nodReps, nod) {
+        if(!(filterYou && (nod.id == 1))){
+
+          let newNod = {
+            id: nod.getName(),
+            selected: false,
+            UID: nod.getId()
+          }
+          nodReps.push(newNod)
         }
-        else{
-            return {
-                "id": x.getName()
-            }
-        }
-    }))
+        
+        return nodReps
+      }, []))
+
 
     function updateRepresentation(){
         setNodesRepresentation(nodes.map((x) => {
-            if(x.getIsFixed()){
-                return {
-                    "id": x.getName(),
-                    "fx": x.getX(),
-                    "fy": x.getY()
-                }
-            }
-            else{
-                return {
-                    "id": x.getName()
-                }
+            return {
+            "id" : x.getName(),
+            "selected" : false,
+            "UID" : x.getId()
             }
         }))
         
@@ -58,8 +71,25 @@ export default function NodeCreationPage({
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
 
+    function handlePos(d){
+        if(d.UID == 1){
+            console.log("handlePos", d.UID)
+          return [0,0]
+        }
+        else{
+          // -1 is used as one node will be in the center
+          const baseAngle = (2 * Math.PI)/(maxNodes -1);
+          const angle = baseAngle * d.UID
+          const xpos = Math.cos(angle) * 100
+          const ypos = Math.sin(angle) * 100
+          console.log("pos", [xpos, ypos])
+          return [xpos, ypos]
+        }
+      }
+
+
     useEffect(() => {
-        updateRepresentation()
+         updateRepresentation()
         setLinks(
             [...links,
             {"source": 0, "target": nodes.length-1}]
@@ -85,18 +115,30 @@ export default function NodeCreationPage({
       ]);
 
   const link = svg
-      .attr("stroke", "#999")
+      .attr("stroke", "#aaa")
       .attr("stroke-opacity", 0.6)
       .selectAll("line")
       .data(links)
       .join("line")
-      .attr("stroke-width", d => Math.sqrt(d.value));
+      .attr("stroke-width", 15)
+      .attr("x1",( d) =>  d.source.x)
+      .attr("y1", d => d.source.y)
+      .attr("x2", d => d.target.x)
+      .attr("y2", d => d.target.y);
+
+    // const link = svg.selectAll(".link")
+    //     .data(links)
+    //     .enter().append("line")
+    //     .attr("class", "link")
+    //     .style("stroke-width",2);
 
   const node = svg
       .selectAll(".node")
       .data(nodesRepresentation)
       .join("g")
       .attr('class', 'node')
+      .attr("transform", d => `translate(${d.x = handlePos(d)[0]}, ${d.y = handlePos(d)[1]})`)      
+
 
   node.append('circle')
       .join("g")
@@ -113,22 +155,28 @@ export default function NodeCreationPage({
       
       console.log("nodesRepresentation", nodesRepresentation)
       console.log("simulation", forceSimulation(nodesRepresentation))
-      const simulation = forceSimulation(nodesRepresentation)
-      .force("charge", forceManyBody().strength(-40))
-      .force("collide", forceCollide(80))
-      // .force("center", forceCenter())
-      .force("link", forceLink(links))
+    //   const simulation = forceSimulation(nodesRepresentation)
+    //    .force("charge", forceManyBody().strength(0))
+    //   .force("collide", forceCollide(0))
+    //   // .force("center", forceCenter())
+    //   .force("link", forceLink(links))
 
-  simulation.on("tick", () => {
-    link
-        .attr("x1", d => d.source.x)
-        .attr("y1", d => d.source.y)
-        .attr("x2", d => d.target.x)
-        .attr("y2", d => d.target.y);
 
-    node
-        .attr("transform", d => `translate(${d.x}, ${d.y})`);
-  });
+    //   simulation.on("tick", function() {
+    //     link.attr("x1", function(d) { return d.source.x; })
+    //         .attr("y1", function(d) { return d.source.y; })
+    //         .attr("x2", function(d) { return d.target.x; })
+    //         .attr("y2", function(d) { return d.target.y; });})
+//   simulation.on("tick", () => {
+//     // link
+//     //     .attr("x1", d =>{console.log("x1 sim " + d.source.x); return d.source.x; })
+//     //     .attr("y1", d => d.source.y)
+//     //     .attr("x2", d => d.target.x)
+//     //     .attr("y2", d => d.target.y);
+
+//     // node
+//     //     .attr("transform", d => `translate(${d.x}, ${d.y})`);
+//   });
 
       }, [nodesRepresentation, links, dimensions]); //TODO check if this nodes param here is right and what it does...
 

@@ -15,6 +15,9 @@ export default function ContactNetwork({
      question,
      table,
      setTable,
+     internalCounter,
+     relToAdd,
+     setRelToAdd,
      filterYou = true
     }) {
     const CIRCLE_RADIUS = 30;
@@ -22,9 +25,9 @@ export default function ContactNetwork({
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
-    const [currentCenterNodeId, setCurrentCenterNodeId] = React.useState(2)
+    const [currentCenterNodeId, setCurrentCenterNodeId] = React.useState(internalCounter) 
     const relationships = table.getNetworkPairs(question, currentCenterNodeId)
-    const [relToAdd, setRelToAdd] = React.useState([])
+    // const [relToAdd, setRelToAdd] = React.useState([])
     const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.reduce(function (nodReps, nod) {
       if(!(filterYou && (nod.id == 1))){
 
@@ -33,7 +36,7 @@ export default function ContactNetwork({
         if( (currentCenterNodeId, nod.getId()) in relationships || (nod.getId(), currentCenterNodeId) in relationships){
           sel = true
         }
-        else sel = false
+        else{ sel = false
         let newNod = {
           id: nod.getName(),
           selected: false,
@@ -42,9 +45,12 @@ export default function ContactNetwork({
         }
         nodReps.push(newNod)
       }
+      }
       
       return nodReps
     }, []))
+
+
 
 
     //PSEUDO
@@ -54,26 +60,63 @@ export default function ContactNetwork({
 
 
     // TODO ASK NINAD WTF IS THIS AND DOES IT NEED TO BE A USE EFFECT OR IS IT INITIALISATION?
+    // useEffect(() => {
+
+    //   setNodesRepresentation(nodesRepresentation.filter(x => {
+    //     let r = table.getNetworkPairs(question.id, currentCenterNodeId)
+    //     let relationFound = false
+    //     let i = 0
+    //     while(!relationFound && i < r.length){
+    //       if(r[i][0] === x.UID || r[i][1] === x.UID){
+    //         relationFound = true
+    //       }
+    //       else i++
+    //     }
+    //     //x.selected = relationFound //true means it's been already selected, hence we don't show the node.
+    //     //return x
+    //     if(!relationFound){
+    //       return x
+    //     }
+    //   }))
+
+    // }, [question])
+
+
+    //this use effect resets the state 
     useEffect(() => {
-      setNodesRepresentation(nodesRepresentation.filter(x => {
-        let r = table.getNetworkPairs(question.id, currentCenterNodeId)
-        let relationFound = false
-        let i = 0
-        while(!relationFound && i < r.length){
-          if(r[i][0] === x.UID || r[i][1] === x.UID){
-            relationFound = true
+      const relationships = table.getNetworkPairs(question.id, currentCenterNodeId)
+      console.log("GET PAIRS SETNODE : ", relationships)
+      let alreadyIn = relationships.map(rel => {
+        if(rel[0] === currentCenterNodeId){
+          return rel[1]
+        } else return rel[0]
+      })
+
+      setNodesRepresentation(nodes.reduce(function (nodReps, nod) {
+
+        if(!(filterYou && (nod.id == 1))){
+          if(!alreadyIn.includes(nod.getId())){
+          let newNod = {
+            id: nod.getName(),
+            selected: false,
+            preselected: false,
+            UID: nod.getId()
           }
-          else i++
+          nodReps.push(newNod)
         }
-        //x.selected = relationFound //true means it's been already selected, hence we don't show the node.
-        //return x
-        if(!relationFound){
-          return x
         }
-      }))
-
-    }, [question])
-
+        
+        return nodReps
+      }, []))
+      // setNodesRepresentation(
+      //     nodesRepresentation.map(x => {
+      //         var y = x
+      //         y.selected = false
+      //         return y
+      //     })
+      //   )
+      setRelToAdd([])
+    }, [internalCounter, currentCenterNodeId, table])
   //   //builds a map id -> angle 
   //   function initialiseNodesOnCircle(){
         
@@ -103,6 +146,13 @@ export default function ContactNetwork({
       // will be called initially and on every data change
     useEffect(() => {
       if (!dimensions) return;
+
+      console.log("GET PAIRS : ", table.getNetworkPairs(question.id, currentCenterNodeId))
+      setTable(table)
+
+      console.log("internal : ", internalCounter)
+      setCurrentCenterNodeId(internalCounter)
+
 
       // console.log("prefilter nodes ", nodes)
       // console.log("prefilter nodesRepresentation ", nodesRepresentation)
@@ -149,7 +199,7 @@ export default function ContactNetwork({
       .attr("r", CIRCLE_RADIUS)
       .style("stroke", "red")
       .attr("stroke-width", function(d) { if(d.UID === currentCenterNodeId){return 4} else return 0 })
-      .attr("fill", function (d) { return '#42c58a'; });  
+      .attr("fill", function (d) {return (d.selected)?  '#42c58a' : '#ff0000' });  
 
 
   node.append("text")
@@ -209,13 +259,12 @@ export default function ContactNetwork({
         
         //This block is for click on next
         console.log("relToAdd", relToAdd)
-        setTable(table.addNetworkPairs(question.id, relToAdd))
+        // setTable(table.addNetworkPairs(question.id, relToAdd))
 
         console.log("\n\n\nCheck getNetwork")
         console.log("Selected node d "+d.id+" and number is "+d.UID);
         console.log("CURRENT CENTER : " , currentCenterNodeId)
-        console.log(table.getNetworkPairs(question.id, d.UID))
-        console.log(table.getNetworkPairs(question.id, currentCenterNodeId))
+        // console.log(table.getNetworkPairs(question.id, d.UID))
       }
       // Create Event Handlers for mouse
       function handleMouseOver(e, d) {  // Add interactivity
@@ -223,17 +272,15 @@ export default function ContactNetwork({
         select(this).selectChild('circle') //select circle at mouseposition... otherwise label gets in the way
         .transition()
         .attr("r", CIRCLE_RADIUS *1.5)
-        .attr("fill", function (d) { return '#90EE90'; })
+        .attr("fill", function (d) {return (d.selected)?  '#90EE90' : '#cc0000'})
       }
-
   function handleMouseOut(e, d) {
         // Use D3 to select element, change color back to normal
         select(this).selectChild('circle')
         .transition()
         .attr("r", CIRCLE_RADIUS)
-        .attr("fill", function (d) { return '#42c58a'; })
+        .attr("fill", function (d) {return (d.selected)?  '#42c58a' : '#ff0000'})
       }
-
 
 
 

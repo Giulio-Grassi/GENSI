@@ -92,6 +92,7 @@ export default function GensiForm(props) {
             <NodeCreationFunction
               nodes={nodes}
               onNodeCreation={createNode}
+              maxNodes = {upperBound}
             />
             <ButtonFooter
             onNext = {() => {
@@ -114,8 +115,8 @@ export default function GensiForm(props) {
               />
           );
           case 4:
-            saveAnswersOnDatabase(surveyId)
-            saveAnswersSeparately(surveyId)
+            saveAnswersOnDatabase(surveyId, questions, table, nodes)
+            saveAnswersSeparately(surveyId, questions, table, nodes)
             return (
               <Box id="paragraph page" fill= "vertical" justify="center" align="center" pad= "small" height="medium" >
                   <Text size="xxxlarge" className="title">
