@@ -44,8 +44,8 @@ services:
       - "3000:3000"
     networks:
       - app-network
-    links:
-      - "backend:be"
+    # links:
+    #   - "backend:be"
   mongo-express:
     image: mongo-express
     restart: always
