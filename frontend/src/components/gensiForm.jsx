@@ -52,6 +52,7 @@ export default function GensiForm(props) {
   
       for(let i = 0; i < questions.length; i++){
         var results = table.getAll().filter(x => x[0] === i+1)
+        console.log("Formatting these : ", results)
         var answer = {}
   
         if(results && results.length > 0){
@@ -176,7 +177,7 @@ export default function GensiForm(props) {
               }
             }
           }
-          else if(results[0][3] === "network"){
+          else if(results[0][2] === "network"){
             //For network we save the object containing the relationships
             answer = {
               questionType: "network",
@@ -186,13 +187,12 @@ export default function GensiForm(props) {
           totalAnswers.push(answer)
         }
       }
-      const container = (surveyId, totalAnswers)
-      
+
       //Post the event to mongodb
       axios({
         method: 'post',
         url:'http://localhost:8080/api/survey/add', 
-        data: {container}})
+        data: {surveyId, totalAnswers}})
           .then(
               alert("Success.")
           )
@@ -200,7 +200,7 @@ export default function GensiForm(props) {
               alert("Something went wrong when saving your answers!")
               console.log("Answers uploading error", error)
           });    
-      console.log("Uploaded Answers",totalAnswers)  
+      console.log("Uploaded Answers", {surveyId, totalAnswers})  
     }
   
 

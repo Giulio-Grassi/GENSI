@@ -36,15 +36,16 @@ export default function ContactNetwork({
         if( (currentCenterNodeId, nod.getId()) in relationships || (nod.getId(), currentCenterNodeId) in relationships){
           sel = true
         }
-        else{ sel = false
-        let newNod = {
-          id: nod.getName(),
-          selected: false,
-          preselected: sel,
-          UID: nod.getId()
+        else{
+          sel = false
+          let newNod = {
+            id: nod.getName(),
+            selected: false,
+            preselected: sel,
+            UID: nod.getId()
+          }
+          nodReps.push(newNod)
         }
-        nodReps.push(newNod)
-      }
       }
       
       return nodReps
@@ -85,7 +86,7 @@ export default function ContactNetwork({
     //this use effect resets the state 
     useEffect(() => {
       const relationships = table.getNetworkPairs(question.id, currentCenterNodeId)
-      console.log("GET PAIRS SETNODE : ", relationships)
+      //console.log("GET PAIRS SETNODE : ", relationships)
       let alreadyIn = relationships.map(rel => {
         if(rel[0] === currentCenterNodeId){
           return rel[1]
@@ -115,7 +116,7 @@ export default function ContactNetwork({
       //         return y
       //     })
       //   )
-      setRelToAdd([])
+      //setRelToAdd([])
     }, [internalCounter, currentCenterNodeId, table])
   //   //builds a map id -> angle 
   //   function initialiseNodesOnCircle(){
@@ -147,10 +148,10 @@ export default function ContactNetwork({
     useEffect(() => {
       if (!dimensions) return;
 
-      console.log("GET PAIRS : ", table.getNetworkPairs(question.id, currentCenterNodeId))
+      //console.log("GET PAIRS : ", table.getNetworkPairs(question.id, currentCenterNodeId))
       setTable(table)
 
-      console.log("internal : ", internalCounter)
+      // console.log("internal : ", internalCounter)
       setCurrentCenterNodeId(internalCounter)
 
 
@@ -225,46 +226,52 @@ export default function ContactNetwork({
       }
 
       function handleMouseClick(e, d){
-        // console.log("clicked"+ "This : " + this + "Id :" + d.id+ "x : " + d.x  + "UID : " + d.UID)
-        // // nodes[this.index].selected = true
-        // console.log("prova this : " + this.index + i.index)
-        console.log("D VALUE" + d.UID)
-        //var name = nodesRepresentation[d.UID -1] //enforce node name uniqueness to make this bulletproof
-        setNodesRepresentation(
-          nodesRepresentation.map(x => {
-            if(x.UID == d.UID){
-              var y = x
-              y.selected = !y.selected
-              return y
-            }
-            else{
-              return x
-            }
-          })
-        )
-        // console.log("QUESTION: "+question+" NAME:"+name)
-        console.log("Updated table", table.getAll())
-        console.log("clicked nodesRepresentation", nodesRepresentation)
-        // console.log("indexed node", nodesRepresentation[i.index])
-        console.log("\n\n\n\n")
-        
-        
-        //This block is for every click on the nodes, not next
-        let existence = relToAdd.filter(x => (x[0] === currentCenterNodeId && x[1] === d.UID) || (x[0] === d.UID && x[1] === currentCenterNodeId))
-        if(existence.length === 0){
-          let newArray = relToAdd
-          newArray.push([currentCenterNodeId, d.UID])
-          setRelToAdd(newArray)
-        }
-        
-        //This block is for click on next
-        console.log("relToAdd", relToAdd)
-        // setTable(table.addNetworkPairs(question.id, relToAdd))
+        if(currentCenterNodeId !== d.UID){
+          // console.log("clicked"+ "This : " + this + "Id :" + d.id+ "x : " + d.x  + "UID : " + d.UID)
+          // // nodes[this.index].selected = true
+          // console.log("prova this : " + this.index + i.index)
+          // console.log("D VALUE" + d.UID)
+          //var name = nodesRepresentation[d.UID -1] //enforce node name uniqueness to make this bulletproof
 
-        console.log("\n\n\nCheck getNetwork")
-        console.log("Selected node d "+d.id+" and number is "+d.UID);
-        console.log("CURRENT CENTER : " , currentCenterNodeId)
-        // console.log(table.getNetworkPairs(question.id, d.UID))
+          setNodesRepresentation(
+            nodesRepresentation.map(x => {
+              if(x.UID == d.UID){
+                var y = x
+                y.selected = !y.selected
+                return y
+              }
+              else{
+                return x
+              }
+            })
+          )
+          // console.log("QUESTION: "+question+" NAME:"+name)
+          // console.log("Updated table", table.getAll())
+          // console.log("clicked nodesRepresentation", nodesRepresentation)
+          // console.log("indexed node", nodesRepresentation[i.index])
+          // console.log("\n\n\n\n")
+          
+          
+          //This block is for every click on the nodes, not next
+          let existence = relToAdd.filter(x => (x[0] === currentCenterNodeId && x[1] === d.UID) || (x[0] === d.UID && x[1] === currentCenterNodeId))
+          if(existence.length === 0){
+            let newArray = relToAdd
+            newArray.push([currentCenterNodeId, d.UID])
+            setRelToAdd(newArray)
+          } else {
+            let newArray = relToAdd.filter(x => !(x[0] === currentCenterNodeId && x[1] === d.UID) || (x[0] === d.UID && x[1] === currentCenterNodeId))
+            setRelToAdd(newArray)
+          }
+          
+          //This block is for click on next
+          // console.log("relToAdd", relToAdd)
+          // setTable(table.addNetworkPairs(question.id, relToAdd))
+
+          // console.log("\n\n\nCheck getNetwork")
+          console.log("Selected node d "+d.id+" and number is "+d.UID);
+          // console.log("CURRENT CENTER : " , currentCenterNodeId)
+          // console.log(table.getNetworkPairs(question.id, d.UID))
+        }
       }
       // Create Event Handlers for mouse
       function handleMouseOver(e, d) {  // Add interactivity

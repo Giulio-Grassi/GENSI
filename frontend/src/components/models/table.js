@@ -105,16 +105,18 @@ export class Table {
     let existence = this.matrix.filter(x => x[0] === questionId && x[2] === "network")
     if(existence.length > 0){
       existence = existence[0]
-      rObject.forEach(r => {
-        if(!existence[1].includes(r) && !existence[1].includes([r[1], r[0]])){
-          existence[1].push(r)
-        }
-      })
+      // rObject.forEach(r => {
+      //   let  = relToAdd.filter(x => (x[0] === currentCenterNodeId && x[1] === d.UID) || (x[0] === d.UID && x[1] === currentCenterNodeId))
+      //   if(!existence[1].includes(r) && !existence[1].includes([r[1], r[0]])){
+      //     existence[1].push(r)
+      //   }
+      // })
       
       // update the matrix with the new dataset
       this.matrix.map(x => {
         if(x[0] === existence[0] && x[2] === existence[2]){
-          return existence
+          console.log("ROBJECT : " ,rObject)
+          return [questionId, rObject, "network"]
         }
         else{
           return x

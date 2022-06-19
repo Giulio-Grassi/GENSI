@@ -82,16 +82,21 @@ export default function QuestionStrategy({
       setNetworkCounter(networkCounter +1)
       console.log("network counter : ", networkCounter)
       console.log("relToAdd : ", relToAdd)
-      const newtable = table.addNetworkPairs(questions[currentQuestion].id, relToAdd)
+      // const newtable = table.addNetworkPairs(questions[currentQuestion].id, relToAdd)
       // add the rels to the table
-      setTable(newtable)
-      setRelToAdd([])
-      console.log("relToAdd2 : ", relToAdd)
+      // setTable(newtable)
+      // setRelToAdd([])
+      // console.log("relToAdd2 : ", relToAdd)
 
     }
     else{
-    buttonCallback()
-    setNetworkCounter(2)
+      console.log("FINAL relToAdd : ", relToAdd)
+      const newtable = table.addNetworkPairs(questions[currentQuestion].id, relToAdd)
+      setTable(newtable)
+      console.log(newtable.getAnswers(questions[currentQuestion].id))
+      
+      buttonCallback()
+      setNetworkCounter(2)
     }
   }
   function questionComponentSelector(){

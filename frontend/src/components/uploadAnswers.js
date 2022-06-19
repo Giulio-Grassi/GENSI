@@ -143,6 +143,7 @@ function saveAnswersOnDatabase(surveyId, questions, table, nodes){
         }
         else if(results[0][3] === "network"){
           //For network we save the object containing the relationships
+          console.log(results[0])
           answer = {
             questionType: "network",
             answer: results[0][1],
@@ -151,13 +152,12 @@ function saveAnswersOnDatabase(surveyId, questions, table, nodes){
         totalAnswers.push(answer)
       }
     }
-    const container = (surveyId, totalAnswers)
     
     //Post the event to mongodb
     axios({
       method: 'post',
       url:'http://localhost:8080/api/survey/add', 
-      data: {container}})
+      data: {surveyId, totalAnswers}})
         .then(
             alert("Success.")
         )
@@ -165,7 +165,7 @@ function saveAnswersOnDatabase(surveyId, questions, table, nodes){
             alert("Something went wrong when saving your answers!")
             console.log("Answers uploading error", error)
         });    
-    console.log("Uploaded Answers",totalAnswers)  
+    console.log("Uploaded Answers", {surveyId, totalAnswers})  
   }
 
   export default saveAnswersOnDatabase
