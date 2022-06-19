@@ -160,7 +160,7 @@ function saveAnswersSeparately(surveyId, questions, table, nodes){
     totalAnswers.forEach(x => {
       axios({
         method: 'post',
-        url:'http://backend:8080/api/question/add', 
+        url:'http://localhost:8080/api/question/add', 
         data: {x}})
           .then(
               alert("Success.")

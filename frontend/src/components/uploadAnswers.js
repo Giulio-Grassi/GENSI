@@ -156,7 +156,7 @@ function saveAnswersOnDatabase(surveyId, questions, table, nodes){
     //Post the event to mongodb
     axios({
       method: 'post',
-      url:'http://backend:8080/api/survey/add', 
+      url:'http://localhost:8080/api/survey/add', 
       data: {container}})
         .then(
             alert("Success.")

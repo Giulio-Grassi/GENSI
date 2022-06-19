@@ -29,6 +29,9 @@ const survey = require('./routes/Survey');
 const question = require('./routes/Question');
 
 
+const bodyParser = require("body-parser")
+
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use('/api/survey', survey);
 app.use('/api/question', question);
 
