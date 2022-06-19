@@ -181,14 +181,25 @@ export default function GensiForm(props) {
             //For network we save the object containing the relationships
             answer = {
               questionType: "network",
+              title: questions[i].getText(),
               answer: results[0][1],
             }
           }
+
+          // Save single questions.
+          axios({
+            method: 'post',
+            url:'http://localhost:8080/api/question/add', 
+            data: {surveyId, answer}})
+              .catch((error) => {
+                  alert("Something went wrong when saving the single answer!")
+                  console.log("Answers uploading error", error)
+              });    
           totalAnswers.push(answer)
         }
       }
 
-      //Post the event to mongodb
+      // Save all the survey 
       axios({
         method: 'post',
         url:'http://localhost:8080/api/survey/add', 
@@ -286,13 +297,15 @@ export default function GensiForm(props) {
                 questions={questions}
                 table={table}
                 setTable={setTable}
-                superNext={() => nextStep()}
+                superNext={() => {
+                  saveAnswersOnDatabase()
+                  nextStep()
+                }}
                 darkMode={props.darkMode}
               />
           );
           case 4:
             // saveAnswersOnDatabase(surveyId, questions, table, nodes)
-            saveAnswersOnDatabase()
             // saveAnswersSeparately(surveyId, questions, table, nodes)
             return (
               <Box id="paragraph page" fill= "vertical" justify="center" align="center" pad= "small" height="medium" >

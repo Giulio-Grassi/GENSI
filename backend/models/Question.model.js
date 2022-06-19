@@ -11,11 +11,11 @@ const QuestionSchema = new Mongoose.Schema({
     },
     title: {
         type: String,
-        required: false,
+        required: true,
     },
     answer: {
         type: Object,
-        required: true,
+        required: false,
     }
 }, {
     timestamps: true,
