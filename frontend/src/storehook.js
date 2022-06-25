@@ -34,15 +34,15 @@ class Colour {
     
     constructor(){
         makeAutoObservable(this)
-        this.darkMode = false
+        [this.darkMode, this.setDarkode] = useState(false),
         this.activePalette = lightPalette
-
     }
 
     toggle = () => {
         console.log(this.darkMode)
         console.log(this.activePalette)
-        this.darkMode = !this.darkMode 
+        //this.darkMode = !this.darkMode 
+        this.setDarkMode
         this.darkMode ? this.activePalette = darkPalette : this.activePalette = lightPalette
         console.log("toggle works")
         console.log(this.darkMode)
@@ -51,22 +51,27 @@ class Colour {
 
 }
 
-export const myColour = new Colour()
+const myColour = new Colour()
 
 export const ColourView = observer(({ colour }) => <span>{colour.activePalette}</span>)
 
 
+//const TimerView = observer(({ timer }) => <span>Seconds passed: {timer.secondsPassed}</span>)
 
 
 export const PaletteStoreContext = React.createContext();
 
 
 export const PaletteStoreProvider = ({ children }) => {
+
+  const [darkMode, setDarkMode] = useState(false);
   const store = useLocalStore(() => ({
+    
     myColour
   }));
 
   return (
-    <PaletteStoreContext.Provider value={store}>{children}</PaletteStoreContext.Provider>
+    <PaletteStoreContext.Provider value={{store, darkMode, setDarkMode}}>{children}</PaletteStoreContext.Provider>
   );
 };
+

@@ -6,21 +6,25 @@ import './assets/css/styles.css'
 import { acme } from "./assets/themes/theme";
 import { deepMerge } from "grommet/utils";
 import { grommet } from "grommet";
-const theme = deepMerge(grommet, acme);
+import { myColour, ColourView } from "./../theme.js"
+import { observer, useLocalStore, useObserver } from "mobx-react-lite"
+import { PaletteStoreContext } from './../theme';
 
-export default function  responsiveHeader(props){
-    return(
-      <Grommet
-        theme={theme}
-        themeMode={props.darkMode ? "dark" : "light"}
-      >
+
+export const ResponsiveHeader =  () => {
+  const store = React.useContext(PaletteStoreContext);
+
+  console.log(store)
+ 
+
+      return (
         <Header  background="background-front" pad="medium" height="xxsmall">
           <Anchor
             href="https://tools.grommet.io/"
             icon={<GrommetIcon color="brand" />}
             label="Nice and responsive header with anchors"
           />
-          <ResponsiveContext.Consumer>
+         
             {size =>
               size === 'small' ? (
                 <Box justify="end">
@@ -50,15 +54,22 @@ export default function  responsiveHeader(props){
                 </Box>
               )
             }
-          </ResponsiveContext.Consumer>
+           <ResponsiveContext.Consumer>
           <Button
               label="Toggle Theme"
               primary
               alignSelf="right"
               margin="none"
-              onClick={() => props.setDarkMode(!props.darkMode)}
+              onClick={() => myColour.toggle()}
             />
+          <Button
+              label="Toggle Test"
+              primary
+              alignSelf="right"
+              margin="none"
+              onClick={() => store .myColour.toggle()}
+            />
+            </ResponsiveContext.Consumer>
         </Header>
-      </Grommet>
-    )
+      )
 }

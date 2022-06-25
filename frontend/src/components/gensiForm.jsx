@@ -20,7 +20,7 @@ import axios from 'axios';
 // import saveAnswersOnDatabase from './uploadAnswers'
 // import saveAnswersSeparately from './uploadSingleAnswers'
 
-export default function GensiForm(props) {
+export default function GensiForm() {
   const [step, setStep] = React.useState(1)
   //   const [nodes[], setNodes] = React.useState('');
   const [nodes, setNodes] = React.useState([new Node(1, "You", 0, 200, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
@@ -301,7 +301,7 @@ export default function GensiForm(props) {
                   saveAnswersOnDatabase()
                   nextStep()
                 }}
-                darkMode={props.darkMode}
+                // darkMode={props.darkMode}
               />
           );
           case 4:
