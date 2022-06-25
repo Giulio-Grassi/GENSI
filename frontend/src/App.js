@@ -7,27 +7,27 @@ import { useState } from 'react';
 import { deepMerge } from "grommet/utils";
 import { grommet } from "grommet";
 import { PaletteStoreContext, PaletteStoreProvider } from './theme';
+import { paletteMob } from './PaletteStore';
+import { acme } from './components/assets/themes/theme';
 
 //store.myColour
 
 function App() {
   
-  const store = React.useContext(PaletteStoreContext);
-  console.log(store)
-  const theme = deepMerge(grommet, store.myColour.activePalette);
 
+  const theme = deepMerge(grommet, acme);
+  
   return (
-    <PaletteStoreProvider>
     <Grommet
       full
       theme = {theme}
+      themeMode = {paletteMob.darkMode ? "dark" : "light"}
     >
       <Box fill="vertical"> 
-        <ResponsiveHeader store = {store}/>
+        <ResponsiveHeader/>
         <GensiForm></GensiForm>
       </Box>
     </Grommet>
-    </PaletteStoreProvider>
   );
 }
 

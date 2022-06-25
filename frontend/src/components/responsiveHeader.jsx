@@ -9,12 +9,10 @@ import { grommet } from "grommet";
 import { myColour, ColourView } from "./../theme.js"
 import { observer, useLocalStore, useObserver } from "mobx-react-lite"
 import { PaletteStoreContext } from './../theme';
+import { paletteMob } from '../PaletteStore';
 
 
 export const ResponsiveHeader =  () => {
-  const store = React.useContext(PaletteStoreContext);
-
-  console.log(store)
  
 
       return (
@@ -54,22 +52,20 @@ export const ResponsiveHeader =  () => {
                 </Box>
               )
             }
-           <ResponsiveContext.Consumer>
           <Button
               label="Toggle Theme"
               primary
               alignSelf="right"
               margin="none"
-              onClick={() => myColour.toggle()}
+              onClick={() => paletteMob.toggle()}
             />
           <Button
               label="Toggle Test"
               primary
               alignSelf="right"
               margin="none"
-              onClick={() => store .myColour.toggle()}
+              onClick={() => paletteMob.toggle()}
             />
-            </ResponsiveContext.Consumer>
         </Header>
       )
 }

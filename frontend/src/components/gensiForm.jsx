@@ -17,6 +17,7 @@ import QuestionStrategy from './questionStrategy';
 import getQuestions from './config/questions'
 import './assets/css/styles.css'
 import axios from 'axios';
+import { paletteMob } from '../PaletteStore';
 // import saveAnswersOnDatabase from './uploadAnswers'
 // import saveAnswersSeparately from './uploadSingleAnswers'
 
@@ -301,7 +302,7 @@ export default function GensiForm() {
                   saveAnswersOnDatabase()
                   nextStep()
                 }}
-                // darkMode={props.darkMode}
+                darkMode={paletteMob.darkMode}
               />
           );
           case 4:
