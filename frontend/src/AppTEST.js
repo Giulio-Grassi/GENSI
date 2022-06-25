@@ -1,7 +1,7 @@
 import React from "react"
 import ReactDOM from "react-dom"
 import { makeAutoObservable } from "mobx"
-import { observer } from "mobx-react-lite"
+import { Observer, observer } from "mobx-react-lite"
 
 // import { timerMob } from "./TIMERMOBX"
 import { paletteMob } from "./PaletteStore"
@@ -29,20 +29,29 @@ import { acme } from "./components/assets/themes/theme"
 
 const theme = deepMerge(grommet, acme);
 
-export const PaletteView = observer(() => 
+// export const PaletteView = observer(() => 
 
-<Grommet
-full
-theme = {theme}
-themeMode = {paletteMob.darkMode ? "dark" : "light"}
->
-<Box fill="vertical"> 
-  <ResponsiveHeader/>
-  <GensiForm></GensiForm>
-</Box>
-</Grommet>
+// <Grommet
+// full
+// theme = {theme}
+// themeMode = {paletteMob.darkMode ? "dark" : "light"}
+// >
+// <Box fill="vertical"> 
+//   <ResponsiveHeader/>
+//   <GensiForm></GensiForm>
+// </Box>
+// </Grommet>
 
-) 
+// ) 
+
+
+export default observer(App);
+
+// export const PaletteView = observer(() => 
+
+//      <App paletteMob={paletteMob}/> 
+
+// ) 
 
 
 // setInterval(() => {

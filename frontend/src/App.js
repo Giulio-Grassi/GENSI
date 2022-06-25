@@ -7,8 +7,8 @@ import { useState } from 'react';
 import { deepMerge } from "grommet/utils";
 import { grommet } from "grommet";
 import { PaletteStoreContext, PaletteStoreProvider } from './theme';
-import { paletteMob } from './PaletteStore';
 import { acme } from './components/assets/themes/theme';
+import { paletteMob } from './PaletteStore';
 
 //store.myColour
 

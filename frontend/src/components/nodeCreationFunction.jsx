@@ -6,15 +6,18 @@
 import {select, forceSimulation, forceManyBody, forceCollide, forceCenter, } from 'd3'
 import useResizeObserver from './useResizeObserver'
 import { forceLink } from 'd3-force';
+import { paletteMob } from '../PaletteStore';
+import { observer } from 'mobx-react-lite';
 
 
-export default function NodeCreationPage({
+ function NodeCreationPage({
     nodes,
     onNodeCreation,//callback that gets triggered when the button confirm name button is pressed and a new node should be added
     maxNodes, //number used to calculate angles, got it from the form initially 
     filterYou = false
 }) {
-
+    const mypalette = paletteMob.activePalette
+    console.log( "MYPALETTEEE " ,JSON.stringify(mypalette))
     const [nodeName, setNodeName] = React.useState('');
     const [links, setLinks] = React.useState([])
     // const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map((x) => {
@@ -98,6 +101,7 @@ export default function NodeCreationPage({
 
       // will be called initially and on every data change
     useEffect(() => {
+      console.log("PALETTE", paletteMob.activePalette.primary)
       console.log("current dimension ", dimensions)
 
         if (!dimensions) return;
@@ -143,7 +147,7 @@ export default function NodeCreationPage({
   node.append('circle')
       .join("g")
       .attr("r", 30)
-      .attr("fill", function (d) { return '#42c58a'; })  
+      .attr("fill", function (d) { return mypalette.global.primary })  
 
 
   node.append("text")
@@ -153,6 +157,9 @@ export default function NodeCreationPage({
       .style('fill', '#000')
       .style('font-size', '20px')
       
+      console.log("COLOR", mypalette.primary)
+      console.log( "MYPALETTEEE USEEFFECT" ,JSON.stringify(mypalette))
+
       console.log("nodesRepresentation", nodesRepresentation)
       console.log("simulation", forceSimulation(nodesRepresentation))
     //   const simulation = forceSimulation(nodesRepresentation)
@@ -178,7 +185,7 @@ export default function NodeCreationPage({
 //     //     .attr("transform", d => `translate(${d.x}, ${d.y})`);
 //   });
 
-      }, [nodesRepresentation, links, dimensions]); //TODO check if this nodes param here is right and what it does...
+      }, [nodesRepresentation, links, dimensions, mypalette]); //TODO check if this nodes param here is right and what it does...
 
 
     function createNode() {
@@ -212,3 +219,6 @@ export default function NodeCreationPage({
         )
  
 }
+
+
+export default observer(NodeCreationPage)
