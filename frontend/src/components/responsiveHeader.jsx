@@ -59,13 +59,6 @@ export const ResponsiveHeader =  () => {
               margin="none"
               onClick={() => paletteMob.toggle()}
             />
-          <Button
-              label="Toggle Test"
-              primary
-              alignSelf="right"
-              margin="none"
-              onClick={() => paletteMob.toggle()}
-            />
         </Header>
       )
 }

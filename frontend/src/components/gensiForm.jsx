@@ -18,6 +18,7 @@ import getQuestions from './config/questions'
 import './assets/css/styles.css'
 import axios from 'axios';
 import { paletteMob } from '../PaletteStore';
+import { questionArrayMob } from '../questionArrayStore';
 // import saveAnswersOnDatabase from './uploadAnswers'
 // import saveAnswersSeparately from './uploadSingleAnswers'
 

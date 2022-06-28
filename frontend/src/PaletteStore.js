@@ -1,6 +1,4 @@
 import { makeAutoObservable } from "mobx"
-import { observer, useLocalStore, useObserver } from "mobx-react-lite"
-import React from "react";
 
 
 const ruby =   {
@@ -10,21 +8,19 @@ const ruby =   {
 const darkPalette = {
     global: {
         font: {
-          //family: "Roboto Condensed", //font needs to be supported by default on all computers and operating systems
           size: "14px"
         },
     primary: ruby.dark,
     secondary: "blue",
     accent: "black",
     background: "white",
-    text: "green",
+    text: "purple",
     anchor: "white"
 }}
 
 const lightPalette = {
     global: {
         font: {
-          //family: "Roboto Condensed", //font needs to be supported by default on all computers and operating systems
           size: "14px"
         },
     primary: ruby.light,

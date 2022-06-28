@@ -147,7 +147,7 @@ import { observer } from 'mobx-react-lite';
   node.append('circle')
       .join("g")
       .attr("r", 30)
-      .attr("fill", function (d) { return mypalette.global.primary })  
+      .attr("fill", function (d) { return mypalette.global.primary})  
 
 
   node.append("text")
