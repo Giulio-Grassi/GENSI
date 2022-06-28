@@ -28,14 +28,14 @@ export class QuestionArray {
     }
 
     incrementId = () => {
-        this.currentQuestion = this.currentQuestionId + 1 
+        this.currentQuestionId = this.currentQuestionId + 1 
         if (this.currentQuestionId == this.numberOfQuestion + 1) {
             this.currentQuestionId = 1
         }
     }
 
     decrementId = () => {
-        this.currentQuestion = this.currentQuestionId - 1
+        this.currentQuestionId = this.currentQuestionId - 1
         if (this.currentQuestionId == 0) {
             this.currentQuestionId = 1 
         }
@@ -47,12 +47,12 @@ export class QuestionArray {
     }
 
     prevQuestion = () => {
-        //this.decrementId
+        this.decrementId()
         return this.questionArray[this.currentQuestionId]
     }
 
     nextQuestion = () => {
-        //this.incrementId
+        this.incrementId()
         return this.questionArray[this.currentQuestionId]
     }
 }
