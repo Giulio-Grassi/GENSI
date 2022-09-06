@@ -1,3 +1,7 @@
-theme: jekyll-theme-cayman
+remote_theme: pages-themes/cayman@v0.2.0
+plugins:
+- jekyll-remote-theme # add this line to the plugins list if you already have one
+
+title: GENSI
 description: Graphical Ego-centered Network Survey Interface. <br/> Now easier to use than ever
 show_downloads: true
