@@ -156,7 +156,7 @@ function saveAnswersOnDatabase(surveyId, questions, table, nodes){
     //Post the event to mongodb
     axios({
       method: 'post',
-      url:'http://localhost:8080/api/survey/add', 
+      url:'http://app-network:8080/api/survey/add', 
       data: {surveyId, totalAnswers}})
         .then(
             alert("Success.")
@@ -166,6 +166,8 @@ function saveAnswersOnDatabase(surveyId, questions, table, nodes){
             console.log("Answers uploading error", error)
         });    
     console.log("Uploaded Answers", {surveyId, totalAnswers})  
+    console.log('http://app-network:8080/api/survey/add')  
+
   }
 
   export default saveAnswersOnDatabase

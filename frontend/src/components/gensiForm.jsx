@@ -189,7 +189,7 @@ export default function GensiForm(props) {
           // Save single questions.
           axios({
             method: 'post',
-            url:'http://localhost:8080/api/question/add', 
+            url: process.env.REACT_APP_API_ROOT_URL + '/api/question/add', 
             data: {surveyId, answer}})
               .catch((error) => {
                   alert("Something went wrong when saving the single answer!")
@@ -202,7 +202,7 @@ export default function GensiForm(props) {
       // Save all the survey 
       axios({
         method: 'post',
-        url:'http://localhost:8080/api/survey/add', 
+        url: process.env.REACT_APP_API_ROOT_URL + '/api/survey/add', 
         data: {surveyId, totalAnswers}})
           .then(
               alert("Success.")
@@ -212,6 +212,8 @@ export default function GensiForm(props) {
               console.log("Answers uploading error", error)
           });    
       console.log("Uploaded Answers", {surveyId, totalAnswers})  
+      console.log( process.env.API_ROOT_URL + '/api/survey/add')  
+
     }
   
 
