@@ -21,8 +21,8 @@ export default function getQuestions() {
                 },
                 {
                     "id": 3,
-                    "text" : "Please indicate how often you have contact with these people.",
-                    "type" : "linebox",
+                    "text" : "Please indicate how often you have contact with these people111.",
+                    "type" : "dragndrop",
                     "filterYou": true,
                     "boxes" : [
                         {

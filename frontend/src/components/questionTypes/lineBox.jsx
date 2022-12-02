@@ -9,7 +9,7 @@ import {select, drag, forceSimulation, forceManyBody, forceCollide, forceCenter,
 import useResizeObserver from '../useResizeObserver'
 import { forceLink } from 'd3-force';
 import { colors } from 'grommet/themes/base';
-
+import { drawBoxes } from '../shared/drawboxes';
 
 export default function LineBox({
   nodes,
@@ -156,16 +156,19 @@ export default function LineBox({
         return boxWidth
       }
 
-      const boxWidth = boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding)
+      // const boxWidth = boxWidthWithPadding(dimensions, extraOuterPadding, boxPadding)
+      const boxWidth = 200
   // ------------------
 
+
       //Draws the boxes, positions them and appends necessary callbacks 
-      const dropBoxes = drawBoxes(svg, boxes, boxWidth)
+      const dropBoxes = drawBoxes(svg, boxes, boxWidthFunc, boxHeightFunc, darkMode)
       dropBoxes
       .attr("transform", (d,i) => `translate(${d.x = boxPositionFuncX(dimensions, extraOuterPadding, i ) }, ${d.y = 100 })`)
       .on("mouseover", boxMouseOver)
       .on("mouseout", boxMouseOut)
-      
+      console.log("DRAWN BOXES : ")
+      console.log(dropBoxes)
 
 
       function boxMouseOver(event, d){
@@ -221,41 +224,5 @@ node.append("text")
   return node 
 }
 
-/**
- * Handles the boxes on a graphical side only. position and callbacks are handled on their own
- * TODO parameterised the drawing better, adding colors and how much to round the corners... add height aswell
- * TODO maybe come up with a ratio between height and width
- * TODO find a way to display the text on the box better
- * @param {the svg canvas in which to draw the boxes} svg 
- * @param {the data of the boxes} data 
- * @param {the width of each box} boxWidth 
- * @returns d3 selection with all the boxes so that it is then possible to append callbacks...
- */
-function drawBoxes(svg, data, boxWidth){
-  const dropBox = svg
-  .selectAll(".dropBox")
-  .data(data, d => d.id)
-  .join("g")  //a che serve sto join?
-  .attr('class', 'dropBox')
-  // .attr("transform", (d,i) => `translate(${d.x = (-boxWidth/2 -dimensions.width / 2  + manualPaddingBox + boxOffset/2 + i * boxOffset)}, ${d.y = 100 })`)
-  // .on("mouseover", boxMouseOver)
-  // .on("mouseout", boxMouseOut)
-
-  const boxRect = dropBox.append("rect")		// pre-defined shape
-  .attr("style", d => "fill:#E59866")	// fill color of shape
-    .attr("rx", 25)								// how much to round corners 
-    .attr("ry", 25)								// how much to round corners
-    .attr("width", boxWidth)					
-    .attr("height", 150);
-    
-  dropBox.append("text")
-    .join("g")
-    .text(d => d.id)
-    .attr("x", boxWidth/2)              //Used to center the text in the box  
-    .attr('text-anchor', 'middle')
-    .attr('alignment-baseline', 'ideographic')
-    .style('fill', '#000')
-    .style('font-size', '20px');
-    
-    return dropBox
-}
+const boxWidthFunc = (i) => {return 100}
+const boxHeightFunc = (i) => {return 200}

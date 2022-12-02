@@ -2,7 +2,7 @@ const defaults = {
   id: "ERROR: ID NOT PROVIDED",
   text: "ERROR: TEXT NOT PROVIDED",
   type: "ERROR: QUESTION TYPE NOT PROVIDED",
-  filterYou: false,
+  filterYou: true,
   options: []
 }
 
