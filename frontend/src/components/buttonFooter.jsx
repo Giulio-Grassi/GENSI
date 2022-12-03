@@ -5,7 +5,7 @@
 
 import React, { useState, useEffect } from "react";
 import { Button, Text, Box, RadioButtonGroup } from "grommet";
-
+import {NEXT_BUTTON_TEXT, PREV_BUTTON_TEXT} from "./config/localisation"
 export default function MCQ({
   onNext,
   onPrev,
@@ -17,7 +17,7 @@ export default function MCQ({
           {typeof onPrev === "function" && (
             <Button 
             primary 
-            label="Prev" 
+            label= {PREV_BUTTON_TEXT}
             justify="start" 
             onClick={() => onPrev()} 
             />)}
@@ -27,7 +27,7 @@ export default function MCQ({
           {typeof onNext === "function" &&(
             <Button 
                 primary 
-                label="Next" 
+                label={NEXT_BUTTON_TEXT} 
                 justify="end" 
                 onClick={() => onNext()} 
             />)}

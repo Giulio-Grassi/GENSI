@@ -6,8 +6,10 @@ import './assets/css/styles.css'
 import { acme } from "./assets/themes/theme";
 import { deepMerge } from "grommet/utils";
 import { grommet } from "grommet";
-const theme = deepMerge(grommet, acme);
+import {TOGGLE_THEME_TEXT} from "./config/localisation"
 
+
+const theme = deepMerge(grommet, acme);
 export default function  responsiveHeader(props){
     return(
       <Grommet
@@ -52,7 +54,7 @@ export default function  responsiveHeader(props){
             }
           </ResponsiveContext.Consumer>
           <Button
-              label="Toggle Theme"
+              label={TOGGLE_THEME_TEXT}
               primary
               alignSelf="right"
               margin="none"

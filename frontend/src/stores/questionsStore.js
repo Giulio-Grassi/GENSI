@@ -5,29 +5,48 @@ import getQuestions from '../components/config/questions'
 import { Question } from '../components/models/question';  
 import { makeAutoObservable, runInAction } from 'mobx';
 
+const conf = getQuestions()
 
  class SurveyStore {
-    questionConfig = getQuestions()
+    questionConfig = conf
     allQuestions = this.questionConfig[1].map(q => new Question(q))
     currentQNumber = 0
-    currentQuestion = this.allQuestions[this.currentQNumber]
-    surveyLowerBound = questionConfig[0].lowerBoundNodes
-    surveyUpperBound = questionConfig[0].upperBoundNodes
+    // currentQuestion = this.allQuestions[this.currentQNumber]
+    surveyLowerBound = this.questionConfig[0].lowerBoundNodes
+    surveyUpperBound = this.questionConfig[0].upperBoundNodes
+    surveyId = this.questionConfig[0].surveyId
 
-constructor(){
+constructor(myQuestionConfig){
+    this.questionConfig = myQuestionConfig
     makeAutoObservable(this);
 
 }
-
-    loadNextQuestion = () => {this.currentQNumber = this.currentQNumber + 1 }
-    loadPrevQuestion = () => {this.currentQNumber = this.currentQNumber - 1 }
-    getQId = () => {return this.currentQNumber.id}
-    getQText = () => {return this.currentQNumber.text}
-    getQType = () => {return this.currentQNumber.type}
-    getQBoxes = () => {
-        return this.currentQNumber.boxes ? this.currentQNumber.boxes : []
+//if within bounds loads the next questions, otherwise gives back control to the caller via callback 
+    loadNextQuestion = (OutOfBound_callback) => {
+        if(this.currentQNumber < this.allQuestions.length-1){
+            this.currentQNumber = this.currentQNumber + 1 
+        }
+        else {
+            OutOfBound_callback()
+        }
+    }
+    loadPrevQuestion = (OutOfBound_callback) => {
+        if(this.currentQNumber > 0){
+            this.currentQNumber = this.currentQNumber - 1 
+        }
+        else {
+            OutOfBound_callback()
+        }
+    }
+    get currentQuestion() { return this.allQuestions[this.currentQNumber] }
+    get QID() {return this.currentQuestion.id}
+    get QText() {return this.currentQuestion.text}
+    get QType() {return this.currentQuestion.type}
+    get QBoxes() {
+        return this.currentQuestion.boxes ? this.currentQuestion.boxes : []
       }
 
+    getQfilterYou = () => {return this.currentQuestion.filterYou}
     //  init = () => {
     
 // //     this.allQuestions  = getQuestions()
@@ -39,4 +58,4 @@ constructor(){
 // }
 
 }
-export const survey = new SurveyStore()
+export const survey = new SurveyStore(conf)

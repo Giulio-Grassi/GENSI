@@ -11,216 +11,33 @@ import ButtonFooter from './buttonFooter'
 import { Box } from 'grommet';
 import { Node } from './models/node';
 import { Table } from './models/table';  
-import { Question } from './models/question';  
+// import { Question } from './models/question';  
 import { Grommet, Text, Button } from "grommet";
-import QuestionStrategy from './questionStrategy';
-import getQuestions from './config/questions'
+import {QuestionStrategy} from './questionStrategy';
+// import getQuestions from './config/questions'
 import './assets/css/styles.css'
-import axios from 'axios';
+// import axios from 'axios';
 // import saveAnswersOnDatabase from './uploadAnswers'
 // import saveAnswersSeparately from './uploadSingleAnswers'
+
+import { survey } from '../stores/questionsStore';
+import saveAnswersOnDatabase from "../services/db"
+import { NUM_OF_NODES_OUTSIDE_BOUNDS } from "./config/localisation"
+
 
 export default function GensiForm(props) {
   const [step, setStep] = React.useState(1)
   //   const [nodes[], setNodes] = React.useState('');
   const [nodes, setNodes] = React.useState([new Node(1, "You", 0, 200, true)]); //Array of nodes. 0 and 0 are attributes fx and fx that used by d3 to fix a node in positon
   //   question initaliser from json
-  const myquestionsvar = getQuestions()
-  const questionArray = myquestionsvar[1].map(q => new Question(q))
-  const surveyId = myquestionsvar[0].surveyId
-  const upperBound = myquestionsvar[0].upperBoundNodes
-  const lowerBound = myquestionsvar[0].lowerBoundNodes
-  const [questions, setQuestion] = React.useState(questionArray); //React state containing the array of questions
+  // const myquestionsvar = getQuestions()
+  // const questionArray = myquestionsvar[1].map(q => new Question(q))
+  // const surveyId = myquestionsvar[0].surveyId
+  // const upperBound = myquestionsvar[0].upperBoundNodes
+  // const lowerBound = myquestionsvar[0].lowerBoundNodes
+  // const [questions, setQuestion] = React.useState(questionArray); //React state containing the array of questions
   const [table, setTable] = React.useState(new Table()); //State containing the MxN relationship table
   
-
-
-
-  function saveAnswersOnDatabase(){
-      // e.preventDefault()
-      var counter = 1
-      var anonymizedNames = []
-      nodes.forEach(x => {
-        var t = {
-          name: x.getName(),
-          anonName: counter++,
-        }
-        anonymizedNames.push(t)
-      })
-  
-      const totalAnswers = []
-  
-      for(let i = 0; i < questions.length; i++){
-        var results = table.getAll().filter(x => x[0] === i+1)
-        console.log("Formatting these : ", results)
-        var answer = {}
-  
-        if(results && results.length > 0){
-          if(results[0][3] === "mcq"){
-            /*1: { //mcq
-              questionType: "mcq"
-              title: "How do you like yourself?"
-              answer: "a lot",
-            },*/
-            answer = {
-              questionType: "mcq",
-              title: questions[i].getText(),
-              answer: results[0][2],
-            }
-          }
-          else if(results[0][3] === "ladder"){
-            /*2: { //ladder
-              questionType: "ladder"
-              title: "how do you like these people"
-              answer: [
-                1: {
-                  title: "like a lot"
-                  answer: [1,3]
-                }
-                2: {
-                  title: "like somehow"
-                  answer: [4]
-                }
-              ]
-            }*/
-            console.log("we inside ladder")
-            console.log(results)
-  
-            let boxesLadder  = questions[i].getBoxes()
-            var ans = []
-            boxesLadder.forEach(b => {
-              var ansArray = []
-              var boxResults = results.filter(x => x[2] === b.id)
-              boxResults.forEach(br => {
-                ansArray.push(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
-              })
-  
-              var tempAns = {
-                title: b.id,
-                answer: ansArray
-              }
-  
-              ans.push(tempAns)
-            })
-  
-            answer = {
-              questionType: "ladder",
-              title: questions[i].getText(),
-              answer: ans
-            }
-          }
-          else if(results[0][3] === "linebox"){
-            /*2: {
-              questionType: "linebox"
-              title: "how do you like these people"
-              answer: [
-                1: {
-                  title: "like a lot"
-                  answer: [1,3]
-                }
-                2: {
-                  title: "like somehow"
-                  answer: [4]
-                }
-              ]
-            }*/
-            let boxesLadder  = questions[i].getBoxes()
-            var ans = []
-            boxesLadder.forEach(b => {
-              var ansArray = []
-              var boxResults = results.filter(x => x[2] === b.id)
-              boxResults.forEach(br => {
-                ansArray.push(anonymizedNames.filter(aN => aN.name === br[1])[0].anonName)
-              })
-  
-              var tempAns = {
-                title: b.id,
-                answer: ansArray
-              }
-  
-              ans.push(tempAns)
-            })
-  
-            answer = {
-              questionType: "linebox",
-              title: questions[i].getText(),
-              answer: ans
-            }
-          }
-          else if(results[0][3] === "noderow"){
-            /*{
-                  questionType: "noderow"
-                  title: "Has bullied someone",
-                  answer: {
-                      selected: [3],
-                      unselected: [1,4]
-              }
-            }*/
-            console.log("we inside noderow")
-            console.log(results)
-            var ansSelected = []
-            var andUnselected = []
-            results.forEach(r => {
-              if(r[2]){
-                ansSelected.push(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
-              }else{
-                andUnselected.push(anonymizedNames.filter(aN => aN.name === r[1])[0].anonName)
-              }
-            })
-  
-            answer = {
-              questionType: "noderow",
-              title: questions[i].getText(),
-              answer: {
-                selected: ansSelected,
-                unselected: andUnselected
-              }
-            }
-          }
-          else if(results[0][2] === "network"){
-            //For network we save the object containing the relationships
-            answer = {
-              questionType: "network",
-              title: questions[i].getText(),
-              answer: results[0][1],
-            }
-          }
-
-          // Save single questions.
-          axios({
-            method: 'post',
-            url: process.env.REACT_APP_API_ROOT_URL + '/api/question/add', 
-            data: {surveyId, answer}})
-              .catch((error) => {
-                  alert("Something went wrong when saving the single answer!")
-                  console.log("Answers uploading error", error)
-              });    
-          totalAnswers.push(answer)
-        }
-      }
-
-      // Save all the survey 
-      axios({
-        method: 'post',
-        url: process.env.REACT_APP_API_ROOT_URL + '/api/survey/add', 
-        data: {surveyId, totalAnswers}})
-          .then(
-              alert("Success.")
-          )
-          .catch((error) => {
-              alert("Something went wrong when saving your answers!")
-              console.log("Answers uploading error", error)
-          });    
-      console.log("Uploaded Answers", {surveyId, totalAnswers})  
-      console.log( process.env.API_ROOT_URL + '/api/survey/add')  
-
-    }
-  
-
-
-
-
-
 
   // Proceed to next step
   function nextStep(){
@@ -228,11 +45,11 @@ export default function GensiForm(props) {
   };
 
   function nextStepWithValidator(){
-    if(nodes.length <= upperBound && nodes.length >= lowerBound){
+    if(nodes.length <= survey.surveyUpperBound && nodes.length >= survey.surveyLowerBound){
       setStep(step + 1);
     }
     else{
-      alert("You need to have at least "+lowerBound+" and at most "+upperBound+" nodes.")
+      alert(NUM_OF_NODES_OUTSIDE_BOUNDS(survey.surveyLowerBound, survey.surveyUpperBound))
     }
   };
 
@@ -250,16 +67,16 @@ export default function GensiForm(props) {
   }
 
   function populateTable(){
-    for(var i = 0; i < questions.length; i++){
-      if(questions[i].getType()==='mcq'){
-        table.insertRelation(questions[i].getId(), nodes[0].getName(), false, "mcq")
+    for(var i = 0; i < survey.allQuestions.length; i++){
+      if(survey.allQuestions[i].getType()==='mcq'){
+        table.insertRelation(survey.allQuestions[i].getId(), nodes[0].getName(), false, "mcq")
         continue
       }
-      if(questions[i].getType()==='network'){
+      if(survey.allQuestions[i].getType()==='network'){
         continue
       }
       for(var k = 0; k < nodes.length; k++){
-        table.insertRelation(questions[i].getId(), nodes[k].getName(), false, questions[i].getType())
+        table.insertRelation(survey.allQuestions[i].getId(), nodes[k].getName(), false, survey.allQuestions[i].getType())
       }
     }
     console.log("populateTable", table.getAll())
@@ -281,7 +98,7 @@ export default function GensiForm(props) {
             <NodeCreationFunction
               nodes={nodes}
               onNodeCreation={createNode}
-              maxNodes = {upperBound}
+              maxNodes = {survey.surveyUpperBound}
             />
             <ButtonFooter
             onNext = {() => {
@@ -296,13 +113,12 @@ export default function GensiForm(props) {
               <QuestionStrategy
                 nodes={nodes}
                 setNodes={setNodes}
-                questions={questions}
                 table={table}
                 setTable={setTable}
-                superNext={() => {
-                  saveAnswersOnDatabase()
-                  nextStep()
-                }}
+                // superNext={() => {
+                //   saveAnswersOnDatabase(nodes, survey.allQuestions, table, survey.surveyId)
+                //   nextStep()
+                // }}
                 darkMode={props.darkMode}
               />
           );

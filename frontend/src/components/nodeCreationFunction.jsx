@@ -6,7 +6,7 @@
 import {select, forceSimulation, forceManyBody, forceCollide, forceCenter, } from 'd3'
 import useResizeObserver from './useResizeObserver'
 import { forceLink } from 'd3-force';
-
+import {ADD_NODES_SCREEN_TITLE, ADD_PERSON_BUTTON_TEXT} from "./config/localisation"
 
 export default function NodeCreationPage({
     nodes,
@@ -189,7 +189,7 @@ export default function NodeCreationPage({
 
         return( 
         <Box id="nodeCreation box" fill= "vertical" className="nodeCreation">
-            <p className="title">{"Please add the people as nodes."}</p>
+            <p className="title">{ADD_NODES_SCREEN_TITLE}</p>
             <div className="inputContainer">
                 <TextInput
                     placeholder="Type here..."
@@ -199,7 +199,7 @@ export default function NodeCreationPage({
 
                 <Button
                     primary
-                    label="Add person"
+                    label= {ADD_PERSON_BUTTON_TEXT}
                     onClick={() => createNode()}
                     disabled={nodeName && nodeName.length > 0 ? false : true}
                 />

@@ -7,7 +7,7 @@
  import { Box } from "grommet";
 import {select, forceSimulation} from 'd3'
 import useResizeObserver from '../useResizeObserver'
-
+import {survey} from "../../stores/questionsStore"
 
 export default function NodeRow({
      nodes,
@@ -59,7 +59,8 @@ export default function NodeRow({
         const manualPadding = 100
         const nodeOffset = (dimensions.width - 2* manualPadding)/ nodesRepresentation.length
         console.log("width", dimensions.width)
-        
+        console.log("STRATEGY NODEROW : " + survey.currentQNumber + " " + survey.QID)
+        console.log(survey.currentQuestion)
         const svg = select(svgRef.current);
         svg.selectAll("*").remove(); //Clear canvas so no duplicates are trailed every refresh
 

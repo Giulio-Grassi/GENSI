@@ -6,7 +6,10 @@ import { useState } from 'react';
 import { acme } from "./components/assets/themes/theme";
 import { deepMerge } from "grommet/utils";
 import { grommet } from "grommet";
+import { observer } from "mobx-react-lite"
 
+
+const ObservedGensiForm = observer(({darkMode}) => <GensiForm darkMode={darkMode}></GensiForm>)
 const theme = deepMerge(grommet, acme);
 function App() {
   const [darkMode, setDarkMode] = useState(false);
@@ -19,7 +22,7 @@ function App() {
     >
       <Box fill="vertical"> 
         <ResponsiveHeader darkMode={darkMode} setDarkMode={setDarkMode}/>
-        <GensiForm darkMode={darkMode}></GensiForm>
+        <ObservedGensiForm darkMode={darkMode}></ObservedGensiForm>
       </Box>
     </Grommet>
   );
