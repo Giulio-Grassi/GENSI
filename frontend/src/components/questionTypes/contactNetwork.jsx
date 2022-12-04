@@ -30,22 +30,25 @@ export default function ContactNetwork({
     // const [relToAdd, setRelToAdd] = React.useState([])
     const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.reduce(function (nodReps, nod) {
       if(!(filterYou && (nod.id == 1))){
-
+  
         let sel
          //if the nodes already are in contact with each other selected = true 
-        if( (currentCenterNodeId, nod.getId()) in relationships || (nod.getId(), currentCenterNodeId) in relationships){
-          sel = true
-        }
-        else{
-          sel = false
-          let newNod = {
-            id: nod.getName(),
-            selected: false,
-            preselected: sel,
-            UID: nod.getId()
+  
+      
+          if( (currentCenterNodeId, nod.getId()) in relationships || (nod.getId(), currentCenterNodeId) in relationships){
+              sel = true
           }
-          nodReps.push(newNod)
-        }
+          else{
+              sel = false
+              let newNod = {
+              id: nod.getName(),
+              selected: false,
+              preselected: sel,
+              UID: nod.getId()
+              }
+              nodReps.push(newNod)
+          }
+          
       }
       
       return nodReps
@@ -95,6 +98,8 @@ export default function ContactNetwork({
 
       setNodesRepresentation(nodes.reduce(function (nodReps, nod) {
 
+        if(nod.getId() >= currentCenterNodeId ){
+
         if(!(filterYou && (nod.id == 1))){
           if(!alreadyIn.includes(nod.getId())){
           let newNod = {
@@ -106,6 +111,7 @@ export default function ContactNetwork({
           nodReps.push(newNod)
         }
         }
+      }
         
         return nodReps
       }, []))
