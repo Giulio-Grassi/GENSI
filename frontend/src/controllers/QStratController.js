@@ -16,15 +16,16 @@ import {CANT_GO_BACK_ALERT} from "../components/config/localisation"
 const save = () => {
     alert("placeholder, todo save to db")
 }
-export const next = () => {
+export const next = (superNext) => {
     console.log("called qstrat controller next")
     console.log(survey.QType)
-    survey.loadNextQuestion(save)
+    // console.log(superNext)
+    survey.loadNextQuestion(superNext)
 }
 const displayCantGoBackAlert = () => {
     alert(CANT_GO_BACK_ALERT)
 }
-export const prev = () => {
+export const prev = (superNext) => {
     survey.loadPrevQuestion(displayCantGoBackAlert)
 
 }
@@ -32,7 +33,7 @@ export const prev = () => {
 
 
 
-  export function dragNDropValidation(successCallback, table, nodes){
+  export function dragNDropValidation(successCallback, table, nodes, superNext){
     let valid = true
     let i = 0
     while(valid && i < nodes.length){
@@ -53,13 +54,13 @@ export const prev = () => {
       i++
     }
 
-    valid ? successCallback() : alert("Please put all the nodes in a box before changing page.")
+    valid ? successCallback(superNext) : alert("Please put all the nodes in a box before changing page.")
   }
 
-  export function mcqValidation(successCallback, table, nodes){
+  export function mcqValidation(successCallback, table, nodes, superNext){
     let valid = true;
     if(table.getRelation(survey.getQId(), nodes[0].getName())[0][2] === false){
         valid = false
     }
-    (valid)? successCallback() : alert("please select an option before proceeding")
+    (valid)? successCallback(superNext) : alert("please select an option before proceeding")
   }

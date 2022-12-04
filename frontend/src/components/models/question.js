@@ -13,7 +13,7 @@ export class Question {
     this.text = QuestionJsonObject.text || defaults.text;
     this.type = QuestionJsonObject.type || defaults.type;
     this.filterYou = QuestionJsonObject.filterYou 
-    if(this.type === "dragndrop" || this.type === "ladder" || this.type === "mcq"){
+    if(this.type === "linebox" || this.type === "ladder" || this.type === "mcq"){
       this.boxes = QuestionJsonObject.boxes || defaults.options
     }
     else if(!QuestionJsonObject.type){

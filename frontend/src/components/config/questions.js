@@ -2,27 +2,27 @@ export default function getQuestions() {
     return (
         ([
             {
-                surveyId: "FIRST001-Imke",
+                surveyId: "FIRST_Test-Imke",
                 upperBoundNodes: 10,
-                lowerBoundNodes: 4,
+                lowerBoundNodes: 5,
             },
             [
                 {
                     "id": 1,
-                    "text" : "Who knows who?",
+                    "text" : "Who knows who? Please click on the nodes that are known to the central person",
                     "type" : "network",
                     "filterYou": true,
                 },
                 {
                     "id": 2,
-                    "text" : "Which person did you contact yourself, by taking the initiative?",
+                    "text" : "Which person did you contact yourself during the past week, by taking the initiative?",
                     "type" : "noderow",
                     "filterYou": true,
                 },
                 {
                     "id": 3,
-                    "text" : "Please indicate how often you have contact with these people111.",
-                    "type" : "dragndrop",
+                    "text" : "Please indicate how often you have contact with these people, by dragging and dropping the names in the appropriate boxes.",
+                    "type" : "linebox",
                     "filterYou": true,
                     "boxes" : [
                         {
@@ -49,9 +49,9 @@ export default function getQuestions() {
                 },
                 {
                     "id": 4,
-                    "text" : "Please indicate how often you have contact with this person, by clicking on the name, and dragging/dropping that contact into the appropriate category.",
+                    "text" : "Please indicate your relation with this person, by clicking on the name, and dragging/dropping that contact into the appropriate category.",
                     "type" : "linebox",
-                    "filterYou": false,
+                    "filterYou": true,
                     "boxes" : [
                         {
                             "id": "Partner", 
@@ -89,9 +89,9 @@ export default function getQuestions() {
                 },
                 {
                     "id": 5,
-                    "text" : "Imagine you are in the middle, please indicate the age of your connections, as a little older than you (1 above), or much older than you (2 above), a little younger than you (1 below), much younger (2 below), or the same (also in the middle).",
+                    "text" : "Imagine you are in the middle, please indicate the age of your connections, as a little older than you (max 2 years older;1 above), or much older than you (2 above), a little younger than you (max 2 years younger; 1 below), much younger (2 below), or the same (also in the middle).",
                     "type" : "ladder",
-                    "filterYou": false,
+                    "filterYou": true,
                     "boxes" : [
                         {
                             "id": "Much older", 
@@ -115,6 +115,77 @@ export default function getQuestions() {
                         },
                     ]
                 },
+
+		{
+                    "id": 6,
+                    "text" : " Where did you meet this person?",
+                    "type" : "linebox",
+                    "filterYou": true,
+                    "boxes" : [
+                        {
+                            "id": "At school", 
+                            "colour": "#AED6F1"
+                        },
+                        {
+                            "id": "At university/higher educational institute",
+                            "colour": "#E74C3C"
+                        },
+                        {
+                            "id": "At work", 
+                            "colour": "#C948F5"
+                        },
+                        {
+                            "id": "During sports",
+                            "colour": "#E74C3C"
+                        },
+                        {
+                            "id": "During recreation",
+                            "colour": "#AED6F1"
+                        },
+                        {
+                            "id": "Other",
+                            "colour": "#C948F5"
+                        },
+			{
+                   	    "id": 7,
+                    	    "text" : "Which person do you consider as a very close or best friend?",
+                    	    "type" : "noderow",
+                    	    "filterYou": true,
+                	},
+
+                    ]
+                },
+			{
+                    "id": 8,
+                    "text" : "Imagine you are in the middle, please indicate the Social Economic Status of your connections.",
+                    "type" : "ladder",
+                    "filterYou": true,
+                    "boxes" : [
+                        {
+                            "id": "Much higher SES", 
+                            "colour": "#AED6F1"
+                        },
+                        {
+                            "id": "A little higher SES",
+                            "colour": "#E74C3C"
+                        },
+                        {
+                            "id": "Same SES", 
+                            "colour": "#C948F5"
+                        },
+                        {
+                            "id": "A little lower SES",
+                            "colour": "#E74C3C"
+                        },
+                        {
+                            "id": "Much lower SES",
+                            "colour": "#AED6F1"
+                        },
+                    ]
+                },
+
+
+
             ]]
         )
     )

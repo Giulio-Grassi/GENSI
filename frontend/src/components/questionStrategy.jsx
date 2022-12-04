@@ -81,7 +81,7 @@ export const  QuestionStrategy = observer(({
    * handles the newtork given addToRel 
    * @param {*} buttonCallback 
    */
-  function networkNext(buttonCallback){
+  function networkNext(buttonCallback, superNext){
     console.log("network next")
     if (networkCounter + 1 < nodes.length + 1)
     {
@@ -101,7 +101,7 @@ export const  QuestionStrategy = observer(({
       setTable(newtable)
       console.log(newtable.getAnswers(survey.currentQuestion.id))
       
-      buttonCallback()
+      buttonCallback(superNext)
       setNetworkCounter(2)
     }
   }
@@ -109,7 +109,7 @@ export const  QuestionStrategy = observer(({
     console.log("STRATEGY : " + survey.currentQNumber + " " + survey.QID)
     console.log(survey.currentQuestion)
     switch (survey.QType) {
-        case "dragndrop":
+        case "linebox":
           return (
             <Box id="case 3 box" fill= "vertical">
               <Text size="xxxlarge" className="title">
@@ -124,8 +124,8 @@ export const  QuestionStrategy = observer(({
                 darkMode={darkMode}
               />
               <ButtonFooter
-              onNext = {() => cntrl.dragNDropValidation(cntrl.next, table, nodes)}
-              onPrev = {() => cntrl.dragNDropValidation(cntrl.prev, table, nodes)}
+              onNext = {() => cntrl.dragNDropValidation(cntrl.next, table, nodes, superNext)}
+              onPrev = {() => cntrl.dragNDropValidation(cntrl.prev, table, nodes, superNext)}
               /> 
             </Box>
           );
@@ -144,8 +144,8 @@ export const  QuestionStrategy = observer(({
                 darkMode={darkMode}
               />
               <ButtonFooter
-              onNext = {() => cntrl.dragNDropValidation(cntrl.next, table, nodes)}
-              onPrev = {() => cntrl.dragNDropValidation(cntrl.prev, table, nodes)}
+              onNext = {() => cntrl.dragNDropValidation(cntrl.next, table, nodes, superNext)}
+              onPrev = {() => cntrl.dragNDropValidation(cntrl.prev, table, nodes, superNext)}
               /> 
             </Box>
           );
@@ -163,8 +163,8 @@ export const  QuestionStrategy = observer(({
                 filterYou={survey.QfilterYou}
               />
               <ButtonFooter
-              onNext = {() => cntrl.mcqValidation(cntrl.next, table, nodes)}
-              onPrev = {() => cntrl.mcqValidation(cntrl.prev, table, nodes)}
+              onNext = {() => cntrl.mcqValidation(cntrl.next, table, nodes, superNext)}
+              onPrev = {() => cntrl.mcqValidation(cntrl.prev, table, nodes, superNext)}
               /> 
             </Box>
           );
@@ -186,8 +186,8 @@ export const  QuestionStrategy = observer(({
                   
                 />
                 <ButtonFooter
-                onNext = {() => networkNext(cntrl.next)}
-                onPrev = {() => cntrl.prev()}
+                onNext = {() => networkNext(cntrl.next, superNext)}
+                onPrev = {() => cntrl.prev(superNext)}
                 /> 
               </Box>
             );

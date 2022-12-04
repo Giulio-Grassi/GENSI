@@ -116,10 +116,10 @@ export default function GensiForm(props) {
                 setNodes={setNodes}
                 table={table}
                 setTable={setTable}
-                // superNext={() => {
-                //   saveAnswersOnDatabase(nodes, survey.allQuestions, table, survey.surveyId)
-                //   nextStep()
-                // }}
+                superNext={() => {
+                  saveAnswersOnDatabase(nodes, survey.allQuestions, table, survey.surveyId)
+                  nextStep()
+                }}
                 darkMode={props.darkMode}
               />
           );
