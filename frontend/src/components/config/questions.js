@@ -13,14 +13,7 @@ export default function getQuestions() {
                     "type" : "network",
                     "filterYou": true,
                 },
-                {
-                    "id": 2,
-                    "text" : "Which person did you contact yourself during the past week, by taking the initiative?",
-                    "type" : "noderow",
-                    "filterYou": true,
-                },
-                {
-                    "id": 3,
+                { "id": 2,
                     "text" : "Please indicate how often you have contact with these people, by dragging and dropping the names in the appropriate boxes.",
                     "type" : "linebox",
                     "filterYou": true,
@@ -44,8 +37,16 @@ export default function getQuestions() {
                         {
                             "id": "Less often",
                             "colour": "#AED6F1"
-                        },
+                        }
                     ]
+                    
+                },
+                {
+                   "id": 3,
+                    "text" : "Which person did you contact yourself during the past week, by taking the initiative?",
+                    "type" : "noderow",
+                    "filterYou": true,
+ 
                 },
                 {
                     "id": 4,
@@ -127,7 +128,7 @@ export default function getQuestions() {
                             "colour": "#AED6F1"
                         },
                         {
-                            "id": "At university/higher educational institute",
+                            "id": "At university/higher ed. institute",
                             "colour": "#E74C3C"
                         },
                         {
@@ -146,15 +147,15 @@ export default function getQuestions() {
                             "id": "Other",
                             "colour": "#C948F5"
                         },
-			{
-                   	    "id": 7,
-                    	    "text" : "Which person do you consider as a very close or best friend?",
-                    	    "type" : "noderow",
-                    	    "filterYou": true,
-                	},
-
                     ]
                 },
+                {
+                    "id": 7,
+                    "text" : "Which person do you consider as a very close or best friend?",
+                    "type" : "noderow",
+                    "filterYou": true,
+                },
+
 			{
                     "id": 8,
                     "text" : "Imagine you are in the middle, please indicate the Social Economic Status of your connections.",
