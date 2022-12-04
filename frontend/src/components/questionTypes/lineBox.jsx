@@ -190,7 +190,7 @@ export default function LineBox({
       }
       function boxMouseOut(Event, d){
         select(this).selectChild()
-        .attr("style", "fill:#E59866");
+        .attr("style", "fill:#DADADA");
         setBoxToDropIn("")
       }
 
