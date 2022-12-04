@@ -6,7 +6,8 @@
 import {select, forceSimulation, forceManyBody, forceCollide, forceCenter, } from 'd3'
 import useResizeObserver from './useResizeObserver'
 import { forceLink } from 'd3-force';
-import {ADD_NODES_SCREEN_TITLE, ADD_PERSON_BUTTON_TEXT} from "./config/localisation"
+import {ADD_NODES_SCREEN_TITLE, ADD_PERSON_BUTTON_TEXT, NUM_OF_NODES_OUTSIDE_BOUNDS} from "./config/localisation"
+import { survey } from '../stores/questionsStore';
 
 export default function NodeCreationPage({
     nodes,
@@ -77,8 +78,8 @@ export default function NodeCreationPage({
           return [0,0]
         }
         else{
-          // -1 is used as one node will be in the center
-          const baseAngle = (2 * Math.PI)/(maxNodes -1);
+          // -1 is used as one node will be in the center... but acc no?
+          const baseAngle = (2 * Math.PI)/(maxNodes );
           const angle = baseAngle * d.UID
           const xpos = Math.cos(angle) * 100
           const ypos = Math.sin(angle) * 100
@@ -181,10 +182,24 @@ export default function NodeCreationPage({
       }, [nodesRepresentation, links, dimensions]); //TODO check if this nodes param here is right and what it does...
 
 
+
+      function checkUpperBounds(callback){
+        if(nodes.length -1 < survey.surveyUpperBound){
+          callback()
+        }
+        else{
+          alert(NUM_OF_NODES_OUTSIDE_BOUNDS(survey.surveyLowerBound, survey.surveyUpperBound))
+        }
+      };
+
+      const inputRef = useRef(null);
+
     function createNode() {
         onNodeCreation(nodeName);
         setNodeName('');
+        inputRef.current.focus();
     }
+
 
 
         return( 
@@ -192,15 +207,17 @@ export default function NodeCreationPage({
             <p className="title">{ADD_NODES_SCREEN_TITLE}</p>
             <div className="inputContainer">
                 <TextInput
+                  ref={inputRef}
                     placeholder="Type here..."
                     value={nodeName}
                     onChange={event => setNodeName(event.target.value)}
+                    autoFocus
                 />
 
                 <Button
                     primary
                     label= {ADD_PERSON_BUTTON_TEXT}
-                    onClick={() => createNode()}
+                    onClick={() => checkUpperBounds(createNode)}
                     disabled={nodeName && nodeName.length > 0 ? false : true}
                 />
             </div>

@@ -51,7 +51,7 @@ export default function getQuestions() {
                     "id": 4,
                     "text" : "Please indicate how often you have contact with this person, by clicking on the name, and dragging/dropping that contact into the appropriate category.",
                     "type" : "linebox",
-                    "filterYou": true,
+                    "filterYou": false,
                     "boxes" : [
                         {
                             "id": "Partner", 
@@ -91,7 +91,7 @@ export default function getQuestions() {
                     "id": 5,
                     "text" : "Imagine you are in the middle, please indicate the age of your connections, as a little older than you (1 above), or much older than you (2 above), a little younger than you (1 below), much younger (2 below), or the same (also in the middle).",
                     "type" : "ladder",
-                    "filterYou": true,
+                    "filterYou": false,
                     "boxes" : [
                         {
                             "id": "Much older", 

@@ -23,12 +23,21 @@ export default function LineBox({
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
-    const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map(x => {
+    const [nodesRepresentation, setNodesRepresentation] = React.useState(
+      
+      nodes.filter(function (e) { 
+        if(e.name ==  "You") {
+          const v = filterYou ?  false : true 
+          return v  
+        }
+        else {return true}}).map(x => {
+
       return {
         id: x.getName(),
         selected: false
       }
-    }))
+    })
+    )
 
       //TODO NINAD, HERE THE BOXES ARE DECLERED, MAYBE MAKE A MODEL, IDK HOW U WANT TO MAKE  THE STATE OUT OF THESE.
         //const boxes = [{id: "1", nodeColor: "ffa500"},{id: "22", nodeColor: "ffa500"},{id: "333", nodeColor: "ffa500"}, {id: "4444444", nodeColor: "ffa500"}]

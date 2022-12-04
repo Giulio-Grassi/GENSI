@@ -44,8 +44,9 @@ export default function GensiForm(props) {
     setStep(step + 1);
   };
 
+  //filters you when dealing with amt of partcipants 
   function nextStepWithValidator(){
-    if(nodes.length <= survey.surveyUpperBound && nodes.length >= survey.surveyLowerBound){
+    if(nodes.length -1 <= survey.surveyUpperBound && nodes.length -1 >= survey.surveyLowerBound){
       setStep(step + 1);
     }
     else{

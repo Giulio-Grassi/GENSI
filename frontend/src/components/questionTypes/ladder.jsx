@@ -24,12 +24,21 @@ export default function Ladder({
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
-    const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map(x => {
+    const [nodesRepresentation, setNodesRepresentation] = React.useState(
+      
+      nodes.filter(function (e) { 
+        if(e.name ==  "You") {
+          const v = filterYou ?  false : true 
+          return v  
+        }
+        else {return true}}).map(x => {
+
       return {
         id: x.getName(),
         selected: false
       }
-    }))
+    })
+    )
 
       //TODO NINAD, HERE THE BOXES ARE DECLERED, MAYBE MAKE A MODEL, IDK HOW U WANT TO MAKE  THE STATE OUT OF THESE.
         //const boxes = [{id: "1", nodeColor: "ffa500"},{id: "22", nodeColor: "ffa500"},{id: "333", nodeColor: "ffa500"}, {id: "4444444", nodeColor: "ffa500"}]
@@ -45,6 +54,7 @@ export default function Ladder({
 
     //Temporary solution. ADD PADDING BETWEEN BOXES OF MINIMUM SIZE OF NODE. AND ALSO REDUCE NODE SIZE.
     useEffect(()=> {
+
       if(draggingNode !== ""){
         setTable(table.updateRelation(question.id, draggingNode, boxToDropIn))
         const myboxArr = boxes.filter(box => box.id === boxToDropIn)
@@ -64,8 +74,16 @@ export default function Ladder({
 
       // will be called initially and on every data change
     useEffect(() => {
-      if (!dimensions) return;
+      console.log("LADDER NODES ")
+      console.log("LADDER NODES ")
+      console.log("LADDER NODES ")
+      console.log(nodesRepresentation) 
 
+      if (!dimensions) return;
+      console.log("LADDER NODES ")
+      console.log("LADDER NODES ")
+      console.log("LADDER NODES ")
+      console.log(nodesRepresentation)
         // console.log("width", dimensions.width)
         
         const svg = select(svgRef.current);

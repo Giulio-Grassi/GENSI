@@ -120,7 +120,7 @@ export const  QuestionStrategy = observer(({
                 question={survey.currentQuestion}
                 table={table}
                 setTable={setTable}
-                filterYou={false}
+                filterYou={survey.QfilterYou}
                 darkMode={darkMode}
               />
               <ButtonFooter
@@ -132,7 +132,7 @@ export const  QuestionStrategy = observer(({
         case "ladder":
           return (
             <Box id="case 3 box" fill= "vertical">
-              <Text size="xxxlarge" className="title">
+              <Text size="xxlarge" className="title">
                 {survey.currentQuestion.text}
               </Text>
               <Ladder
@@ -140,7 +140,7 @@ export const  QuestionStrategy = observer(({
                 question={survey.currentQuestion}
                 table={table}
                 setTable={setTable}
-                filterYou={false}
+                filterYou={survey.QfilterYou}
                 darkMode={darkMode}
               />
               <ButtonFooter
@@ -160,7 +160,7 @@ export const  QuestionStrategy = observer(({
                 question={survey.currentQuestion}
                 table={table}
                 setTable={setTable}
-                filterYou={false}
+                filterYou={survey.QfilterYou}
               />
               <ButtonFooter
               onNext = {() => cntrl.mcqValidation(cntrl.next, table, nodes)}
@@ -179,7 +179,7 @@ export const  QuestionStrategy = observer(({
                   question={survey.currentQuestion}
                   table={table}
                   setTable={setTable}
-                  filterYou={true}
+                  filterYou={survey.QfilterYou}
                   relToAdd={relToAdd}
                   setRelToAdd={setRelToAdd}
                   internalCounter={networkCounter}
@@ -204,7 +204,7 @@ export const  QuestionStrategy = observer(({
                 question={survey.currentQuestion}
                 table={table}
                 setTable={setTable}
-                filterYou={true}
+                filterYou={survey.QfilterYou}
                 currentQuestion={currentQuestion}
               />
               <ButtonFooter

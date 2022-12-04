@@ -42,11 +42,14 @@ constructor(myQuestionConfig){
     get QID() {return this.currentQuestion.id}
     get QText() {return this.currentQuestion.text}
     get QType() {return this.currentQuestion.type}
+    get QName() {return this.currentQuestion.name}
     get QBoxes() {
         return this.currentQuestion.boxes ? this.currentQuestion.boxes : []
       }
 
-    getQfilterYou = () => {return this.currentQuestion.filterYou}
+    get QfilterYou() {
+        console.log("REQ FILTERYOU : " + this.currentQuestion.filterYou)
+        return this.currentQuestion.filterYou}
     //  init = () => {
     
 // //     this.allQuestions  = getQuestions()

@@ -15,19 +15,28 @@ export default function NodeRow({
      question,
      table,
      setTable,
-     filterYou = false
+     filterYou
     }) {
     const CIRCLE_RADIUS = 30;
     const [didFilter, setDidFilter] = React.useState(false)
     const svgRef = useRef(); //gets a ref for the svg in which d3 renders in 
     const wrapperRef = useRef();
     const dimensions = useResizeObserver(wrapperRef); //used to resize 
-    const [nodesRepresentation, setNodesRepresentation] = React.useState(nodes.map(x => {
+    const [nodesRepresentation, setNodesRepresentation] = React.useState(
+      
+      nodes.filter(function (e) { 
+        if(e.name ==  "You") {
+          const v = filterYou ?  false : true 
+          return v  
+        }
+        else {return true}}).map(x => {
+
       return {
         id: x.getName(),
         selected: false
       }
-    }))
+    })
+    )
 
     useEffect(() => {
       setNodesRepresentation(nodesRepresentation.map(x => {
@@ -45,14 +54,14 @@ export default function NodeRow({
 
       console.log("prefilter nodes ", nodes)
 
-      if(filterYou && !didFilter){
-        //const filteredNodes = nodes.filter(e => e.id !=  "You") //removing you as we do not need it for this screen, TODO make it a var
+      // if(filterYou && !didFilter){
+      //   //const filteredNodes = nodes.filter(e => e.id !=  "You") //removing you as we do not need it for this screen, TODO make it a var
        
-         setNodes(nodes.filter(e => e.id !==  "You"))
-         setDidFilter(true)
-         console.log("FILTERED")
-        console.log("postfilter nodesRepresentation ", nodesRepresentation)
-      }
+      //    setNodes(nodes.filter(e => e.id !==  "You"))
+      //    setDidFilter(true)
+      //    console.log("FILTERED")
+      //   console.log("postfilter nodesRepresentation ", nodesRepresentation)
+      // }
     
 
 
@@ -60,7 +69,11 @@ export default function NodeRow({
         const nodeOffset = (dimensions.width - 2* manualPadding)/ nodesRepresentation.length
         console.log("width", dimensions.width)
         console.log("STRATEGY NODEROW : " + survey.currentQNumber + " " + survey.QID)
+        console.log("NOOODES")
+        console.log(nodes)
         console.log(survey.currentQuestion)
+        console.log("FILTERYOU? : " + filterYou)
+
         const svg = select(svgRef.current);
         svg.selectAll("*").remove(); //Clear canvas so no duplicates are trailed every refresh
 

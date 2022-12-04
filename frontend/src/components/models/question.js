@@ -2,7 +2,7 @@ const defaults = {
   id: "ERROR: ID NOT PROVIDED",
   text: "ERROR: TEXT NOT PROVIDED",
   type: "ERROR: QUESTION TYPE NOT PROVIDED",
-  filterYou: true,
+  filterYou: false,
   options: []
 }
 
@@ -12,7 +12,7 @@ export class Question {
     this.id = QuestionJsonObject.id || defaults.id;
     this.text = QuestionJsonObject.text || defaults.text;
     this.type = QuestionJsonObject.type || defaults.type;
-    this.filterYou = QuestionJsonObject.filterYou || defaults.filterYou;
+    this.filterYou = QuestionJsonObject.filterYou 
     if(this.type === "dragndrop" || this.type === "ladder" || this.type === "mcq"){
       this.boxes = QuestionJsonObject.boxes || defaults.options
     }
